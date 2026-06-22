@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -76,6 +77,12 @@ export default function RootLayout({
         <SiteHeader />
         <main id="main-content">{children}</main>
         <SiteFooter />
+        <Script
+          defer
+          data-domain="hackathon.tum-blockchain.com"
+          src="https://plausible.rbg.tum-blockchain.com/js/script.js"
+          strategy="afterInteractive"
+        />
         <Analytics />
         <SpeedInsights />
       </body>
