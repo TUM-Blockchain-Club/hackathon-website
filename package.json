@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/keremeskici/hackathon-website.git"
+    "url": "git+https://github.com/TUM-Blockchain-Club/hackathon-website.git"
   },
   "keywords": [],
   "author": "",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/keremeskici/hackathon-website/issues"
+    "url": "https://github.com/TUM-Blockchain-Club/hackathon-website/issues"
   },
-  "homepage": "https://github.com/keremeskici/hackathon-website#readme",
+  "homepage": "https://github.com/TUM-Blockchain-Club/hackathon-website#readme",
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.13",
     "@radix-ui/react-slot": "^1.2.4",
