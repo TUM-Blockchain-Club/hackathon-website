@@ -81,7 +81,7 @@ describe("site component interactions", () => {
     expect(screen.getByText("Partner track slots")).toBeTruthy();
     expect(
       screen.getByText(
-        "No sponsor tracks are public yet, so the page shows only confirmed structure and fallback copy.",
+        "Partner tracks are being finalized, and confirmed program details will be added soon.",
       ),
     ).toBeTruthy();
     expect(screen.getByText("Prize breakdown")).toBeTruthy();

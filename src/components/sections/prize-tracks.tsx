@@ -85,7 +85,7 @@ export function PrizeTracks({
           )}
           compact={compact}
           title="Partner track slots"
-          subtitle="No sponsor tracks are public yet, so the page shows only confirmed structure and fallback copy."
+          subtitle="Partner tracks are being finalized, and confirmed program details will be added soon."
         />
       </div>
     );
