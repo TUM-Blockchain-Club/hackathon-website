@@ -5,8 +5,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FaqsSection } from "@/components/ui/faqs-1";
 import { MiniNavbar } from "@/components/ui/mini-navbar";
 import { PrizeTracks } from "@/components/sections/prize-tracks";
+import { RollingSponsors } from "@/components/sections/rolling-sponsors";
 import { faqGroups, faqResources } from "@/content/faq";
-import type { PrizeTrack } from "@/types/content";
+import type { PrizeTrack, Sponsor } from "@/types/content";
 
 const mockUsePathname = vi.fn(() => "/");
 
@@ -88,6 +89,35 @@ describe("site component interactions", () => {
     expect(
       screen.getByText("Track-specific requirements announced soon."),
     ).toBeTruthy();
+  });
+
+  it("makes both marquee passes link to sponsor websites", () => {
+    const sponsors: Sponsor[] = [
+      {
+        name: "Sui",
+        tier: "Platinum",
+        href: "https://sui.io/",
+      },
+      {
+        name: "Solana",
+        tier: "Gold",
+        href: "https://solana.com/",
+      },
+    ];
+
+    render(<RollingSponsors sponsors={sponsors} />);
+
+    for (const sponsor of sponsors) {
+      const links = screen.getAllByRole("link", {
+        name: `${sponsor.name} official website`,
+      });
+
+      expect(links).toHaveLength(2);
+      expect(links.map((link) => link.getAttribute("href"))).toEqual([
+        sponsor.href,
+        sponsor.href,
+      ]);
+    }
   });
 
   it("updates the prize detail panel when a confirmed track is selected", async () => {

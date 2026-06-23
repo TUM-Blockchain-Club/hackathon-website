@@ -5,10 +5,8 @@ import type { Sponsor } from "@/types/content";
 import { cn } from "@/lib/utils";
 
 function SponsorCard({
-  decorative = false,
   logo,
 }: {
-  decorative?: boolean;
   logo: Sponsor;
 }) {
   const cardContent = (
@@ -17,7 +15,7 @@ function SponsorCard({
         {logo.logoSrc ? (
           <Image
             src={logo.logoSrc}
-            alt={decorative ? "" : `${logo.name} logo`}
+            alt={`${logo.name} logo`}
             fill
             className={cn(
               "object-contain transition-all duration-300",
@@ -39,20 +37,13 @@ function SponsorCard({
     </div>
   );
 
-  if (decorative) {
-    return (
-      <div aria-hidden="true" className="flex-shrink-0">
-        {cardContent}
-      </div>
-    );
-  }
-
   if (logo.href) {
     return (
       <a
         href={logo.href}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
+        aria-label={`${logo.name} official website`}
         className="focus:outline-none focus-visible:ring-2 focus-visible:ring-tbc-yellow rounded-xl block flex-shrink-0"
       >
         {cardContent}
@@ -89,11 +80,7 @@ export function RollingSponsors({ sponsors }: RollingSponsorsProps) {
           ))}
           {/* Render duplicate pass for seamless looping */}
           {row1.map((logo, index) => (
-            <SponsorCard
-              key={`row1-2-${logo.name}-${index}`}
-              logo={logo}
-              decorative
-            />
+            <SponsorCard key={`row1-2-${logo.name}-${index}`} logo={logo} />
           ))}
         </div>
       </div>
@@ -107,11 +94,7 @@ export function RollingSponsors({ sponsors }: RollingSponsorsProps) {
           ))}
           {/* Render duplicate pass for seamless looping */}
           {row2.map((logo, index) => (
-            <SponsorCard
-              key={`row2-2-${logo.name}-${index}`}
-              logo={logo}
-              decorative
-            />
+            <SponsorCard key={`row2-2-${logo.name}-${index}`} logo={logo} />
           ))}
         </div>
       </div>
