@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { FaqsSection } from "@/components/ui/faqs-1";
+import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { MiniNavbar } from "@/components/ui/mini-navbar";
 import { PrizeTracks } from "@/components/sections/prize-tracks";
 import { RollingSponsors } from "@/components/sections/rolling-sponsors";
@@ -118,6 +119,34 @@ describe("site component interactions", () => {
         sponsor.href,
       ]);
     }
+  });
+
+  it("keeps the Devfolio SDK marker while rendering a clickable hero apply link", () => {
+    render(
+      <HeroAsciiOne
+        eyebrow="House of Communication, Munich // 30-31 October 2026"
+        headline="TUM Blockchain Hackathon"
+        subhead="Build in Munich."
+        primaryCta={{
+          label: "Apply",
+          href: "https://tum.devfolio.co",
+        }}
+        devfolioHackathonSlug="tum"
+        secondaryCta={{
+          label: "View Prizes",
+          href: "/prizes",
+        }}
+      />,
+    );
+
+    const applyLink = screen.getByRole("link", {
+      name: "Apply with Devfolio",
+    });
+    expect(applyLink.getAttribute("href")).toBe("https://tum.devfolio.co");
+
+    const sdkMarker = document.querySelector(".apply-button");
+    expect(sdkMarker?.getAttribute("data-hackathon-slug")).toBe("tum");
+    expect(sdkMarker?.getAttribute("data-button-theme")).toBe("light");
   });
 
   it("updates the prize detail panel when a confirmed track is selected", async () => {
