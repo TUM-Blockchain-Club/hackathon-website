@@ -31,6 +31,7 @@ export type Sponsor = {
   tier: SponsorTier;
   href: string;
   logoSrc?: string;
+  logoAlt?: string;
   logoTreatment?: "dark-mark";
   logoScale?: number;
   logoPadding?: string;

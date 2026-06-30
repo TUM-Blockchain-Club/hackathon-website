@@ -16,6 +16,7 @@ type HeroAsciiOneProps = {
     href: string;
     disabled?: boolean;
   };
+  devfolioHackathonSlug?: string;
   secondaryCta: {
     label: string;
     href: string;
@@ -24,6 +25,7 @@ type HeroAsciiOneProps = {
 
 export function HeroAsciiOne({
   eyebrow,
+  devfolioHackathonSlug,
   primaryCta,
   secondaryCta,
 }: HeroAsciiOneProps) {
@@ -85,6 +87,13 @@ export function HeroAsciiOne({
               {primaryCta.label}
               <ArrowRight aria-hidden="true" size={18} />
             </button>
+          ) : devfolioHackathonSlug ? (
+            <div
+              className="apply-button"
+              data-hackathon-slug={devfolioHackathonSlug}
+              data-button-theme="light"
+              style={{ height: 44, width: 312 }}
+            />
           ) : (
             <ShaderCtaLink href={primaryCta.href} size="lg">
               {primaryCta.label}

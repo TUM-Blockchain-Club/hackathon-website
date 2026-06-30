@@ -1,9 +1,9 @@
 import Link from "next/link";
+import Script from "next/script";
 import { ArrowRight, Calendar } from "lucide-react";
 
 import { SectionShell } from "@/components/primitives/section-shell";
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
-import { PrizeTracks } from "@/components/sections/prize-tracks";
 import { SpeakersJudges } from "@/components/sections/speakers-judges";
 import { RollingSponsors } from "@/components/sections/rolling-sponsors";
 import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
@@ -15,7 +15,6 @@ import { scheduleDays } from "@/content/schedule";
 import { allSponsors } from "@/content/sponsors";
 import { siteConfig } from "@/content/site";
 import { cn } from "@/lib/utils";
-import { ScheduleClient } from "@/app/schedule/schedule-client";
 import type { ScheduleSession } from "@/types/content";
 
 const compactScheduleTypeStyles: Record<
@@ -95,10 +94,17 @@ export default function HomePage() {
     <>
       <HeroAsciiOne
         eyebrow={homeContent.eyebrow}
+        devfolioHackathonSlug={siteConfig.devfolioHackathonSlug}
         headline={homeContent.headline}
         subhead={homeContent.subhead}
         primaryCta={homeContent.primaryCta}
         secondaryCta={homeContent.secondaryCta}
+      />
+      <Script
+        defer
+        async
+        src="https://apply.devfolio.co/v2/sdk.js"
+        strategy="afterInteractive"
       />
 
       <SectionShell
@@ -132,7 +138,12 @@ export default function HomePage() {
         description="Tracks and prize details are being finalized with our partners."
       >
         <div className="space-y-6">
-          <PrizeMainPool compact constrained={false} showFaqLink={false} tracks={prizeTracks} />
+          <PrizeMainPool
+            compact
+            constrained={false}
+            showFaqLink={false}
+            tracks={prizeTracks}
+          />
           <div className="flex justify-center">
             <Link
               href="/prizes"
@@ -245,9 +256,12 @@ export default function HomePage() {
         ) : (
           <div className="flex flex-col items-center justify-center py-16 text-center border border-white/10 rounded-xl bg-[#151515] backdrop-blur-md">
             <Calendar className="size-10 text-white/30 mb-3" />
-            <p className="text-base font-semibold text-white">Schedule coming soon</p>
+            <p className="text-base font-semibold text-white">
+              Schedule coming soon
+            </p>
             <p className="text-sm text-white/50 mt-1 max-w-sm px-4">
-              Confirmed session times, workshops, and speaker tracks are being finalized.
+              Confirmed session times, workshops, and speaker tracks are being
+              finalized.
             </p>
           </div>
         )}

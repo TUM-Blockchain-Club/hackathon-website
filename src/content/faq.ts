@@ -10,10 +10,9 @@ export const faqContent = {
 
 export const faqResources: ResourceLink[] = [
   {
-    label: "Applications open soon",
+    label: "Apply",
     href: siteConfig.applicationUrl,
     primary: true,
-    disabled: true,
   },
   {
     label: "Join the Telegram",

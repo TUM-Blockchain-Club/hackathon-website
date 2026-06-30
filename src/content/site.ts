@@ -15,6 +15,7 @@ export const siteConfig = {
   footerLine:
     "TUM Blockchain & AI Hackathon // House of Communication, Munich // 30-31 October 2026",
   applicationUrl: "https://tum.devfolio.co",
+  devfolioHackathonSlug: "tum",
   telegramUrl: "https://t.me/+mY6aLKS8OnlhZjJk",
   conferenceUrl: "https://conference.tum-blockchain.com/",
   clubUrl: "https://www.tum-blockchain.com",
@@ -36,7 +37,11 @@ export const navItems: NavItem[] = [
 ];
 
 export const footerLinks: NavItem[] = [
-  { label: "TUM Blockchain Conference", href: siteConfig.conferenceUrl, external: true },
+  {
+    label: "TUM Blockchain Conference",
+    href: siteConfig.conferenceUrl,
+    external: true,
+  },
   { label: "TUM Blockchain Club", href: siteConfig.clubUrl, external: true },
 ];
 

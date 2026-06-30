@@ -126,6 +126,14 @@ export const partners: Sponsor[] = [
 
 // Top 20 crypto sponsors sorted by size and importance
 export const allSponsors: Sponsor[] = [
+  {
+    name: "Devfolio",
+    tier: "Partner",
+    href: "https://devfolio.co/",
+    logoSrc: "/sponsors/devfolio_logo_black.png",
+    logoAlt: "DEVFOLIO LOGO",
+    logoScale: 1.08,
+  },
   // Top Row (Absolute Giants)
   {
     name: "Sui",
@@ -139,43 +147,43 @@ export const allSponsors: Sponsor[] = [
     name: "Solana",
     tier: "Gold",
     href: "https://solana.com/",
-    logoSrc: "/sponsors/solana_logo.png"
+    logoSrc: "/sponsors/solana_logo.png",
   },
   {
     name: "Base",
     tier: "Gold",
     href: "https://www.base.org/",
-    logoSrc: "/sponsors/base_logo.png"
+    logoSrc: "/sponsors/base_logo.png",
   },
   {
     name: "Ethereum ESP",
     tier: "Gold",
     href: "https://esp.ethereum.foundation/",
-    logoSrc: "/sponsors/ethereum_esp_logo.png"
+    logoSrc: "/sponsors/ethereum_esp_logo.png",
   },
   {
     name: "Starknet",
     tier: "Silver",
     href: "https://www.starknet.io/",
-    logoSrc: "/sponsors/starknet_logo.jpg"
+    logoSrc: "/sponsors/starknet_logo.jpg",
   },
   {
     name: "Polkadot",
     tier: "Silver",
     href: "https://polkadot.com/",
-    logoSrc: "/sponsors/Polkadot_Logo.png"
+    logoSrc: "/sponsors/Polkadot_Logo.png",
   },
   {
     name: "Lido",
     tier: "Partner",
     href: "https://lido.fi/",
-    logoSrc: "/sponsors/lido_logo.png"
+    logoSrc: "/sponsors/lido_logo.png",
   },
   {
     name: "Ledger",
     tier: "Gold",
     href: "https://www.ledger.com/",
-    logoSrc: "/sponsors/ledger_logo.png"
+    logoSrc: "/sponsors/ledger_logo.png",
   },
   {
     name: "1inch",
@@ -189,7 +197,7 @@ export const allSponsors: Sponsor[] = [
     name: "Bitvavo",
     tier: "Platinum",
     href: "https://bitvavo.com/",
-    logoSrc: "/sponsors/bitvavo_logo.png"
+    logoSrc: "/sponsors/bitvavo_logo.png",
   },
 
   // Bottom Row (Next Tier Protocols & Ecosystems)
@@ -197,55 +205,55 @@ export const allSponsors: Sponsor[] = [
     name: "Scroll",
     tier: "Partner",
     href: "https://scroll.io/",
-    logoSrc: "/sponsors/scroll_logo.png"
+    logoSrc: "/sponsors/scroll_logo.png",
   },
   {
     name: "Polygon",
     tier: "Partner",
     href: "https://polygon.technology/",
-    logoSrc: "/sponsors/polygon.png"
+    logoSrc: "/sponsors/polygon.png",
   },
   {
     name: "XRPL Commons",
     tier: "Silver",
     href: "https://www.xrpl-commons.org/",
-    logoSrc: "/sponsors/xrpl.png"
+    logoSrc: "/sponsors/xrpl.png",
   },
   {
     name: "ENS",
     tier: "Partner",
     href: "https://ens.domains/",
-    logoSrc: "/sponsors/ens_logo.png"
+    logoSrc: "/sponsors/ens_logo.png",
   },
   {
     name: "Gnosis",
     tier: "Partner",
     href: "https://www.gnosis.io/",
-    logoSrc: "/sponsors/gnosis_logo.png"
+    logoSrc: "/sponsors/gnosis_logo.png",
   },
   {
     name: "Filecoin",
     tier: "Partner",
     href: "https://fil.org/",
-    logoSrc: "/sponsors/filecoin_foundation_logo.png"
+    logoSrc: "/sponsors/filecoin_foundation_logo.png",
   },
   {
     name: "Fetch.ai",
     tier: "Partner",
     href: "https://fetch.ai/",
-    logoSrc: "/sponsors/fetch_ai_logo.png"
+    logoSrc: "/sponsors/fetch_ai_logo.png",
   },
   {
     name: "IOTA",
     tier: "Silver",
     href: "https://www.iota.org/",
-    logoSrc: "/sponsors/iota_logo.png"
+    logoSrc: "/sponsors/iota_logo.png",
   },
   {
     name: "Arcium",
     tier: "Silver",
     href: "https://www.arcium.com/",
-    logoSrc: "/sponsors/arcium_logo.png"
+    logoSrc: "/sponsors/arcium_logo.png",
   },
   {
     name: "API3",
@@ -254,5 +262,5 @@ export const allSponsors: Sponsor[] = [
     logoSrc: "/sponsors/api3_logo.png",
     logoScale: 1.25,
     logoPadding: "p-0.5",
-  }
+  },
 ];

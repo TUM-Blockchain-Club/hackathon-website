@@ -118,7 +118,7 @@ describe("site content contract", () => {
       faqResources
         .filter((resource) => resource.disabled)
         .map((resource) => resource.label),
-    ).toEqual(["Applications open soon", "Starter Docs"]);
+    ).toEqual(["Starter Docs"]);
   });
 
   it("references only sponsor and speaker assets that exist in public", () => {
@@ -129,6 +129,13 @@ describe("site content contract", () => {
       expect(sponsor.logoSrc).toBeTruthy();
       expect(existsSync(publicAssetPath(sponsor.logoSrc ?? ""))).toBe(true);
     }
+
+    expect(
+      allSponsors.find((sponsor) => sponsor.name === "Devfolio"),
+    ).toMatchObject({
+      logoAlt: "DEVFOLIO LOGO",
+      logoSrc: "/sponsors/devfolio_logo_black.png",
+    });
 
     const publicPeople = people.filter((person) => person.publicCleared);
     expect(publicPeople.length).toBeGreaterThan(0);

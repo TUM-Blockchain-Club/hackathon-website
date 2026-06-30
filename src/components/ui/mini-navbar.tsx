@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { ExternalLink, Menu, X } from "lucide-react";
 import { useState } from "react";
 
-import { navItems } from "@/content/site";
+import { navItems, siteConfig } from "@/content/site";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import tbcLogo from "../../../assets/logos/tbc-logo-header.png";
@@ -116,15 +116,12 @@ export function MiniNavbar() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <button
-            disabled
-            className={cn(
-              buttonVariants({ variant: "outline", size: "sm" }),
-              "cursor-not-allowed border-white/20 bg-white/10 text-white/65 shadow-none disabled:opacity-100",
-            )}
+          <Link
+            href={siteConfig.applicationUrl}
+            className={buttonVariants({ variant: "outline", size: "sm" })}
           >
-            Applications open soon
-          </button>
+            Apply
+          </Link>
         </div>
 
         <button
@@ -170,15 +167,16 @@ export function MiniNavbar() {
             </Link>
           ))}
         </nav>
-        <button
-          disabled
+        <Link
+          href={siteConfig.applicationUrl}
+          onClick={() => setIsOpen(false)}
           className={cn(
             buttonVariants({ variant: "outline", size: "lg" }),
-            "mt-4 w-full cursor-not-allowed border-white/20 bg-white/10 text-white/65 shadow-none disabled:opacity-100",
+            "mt-4 w-full",
           )}
         >
-          Applications open soon
-        </button>
+          Apply
+        </Link>
       </div>
     </header>
   );

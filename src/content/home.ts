@@ -7,9 +7,8 @@ export const homeContent = {
   subhead:
     "An in-person hackathon in Munich, hosted by the team behind Europe's largest student-led Web3 event.",
   primaryCta: {
-    label: "Applications open soon",
+    label: "Apply",
     href: siteConfig.applicationUrl,
-    disabled: true,
   },
   secondaryCta: {
     label: "View Prizes",
