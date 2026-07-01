@@ -267,11 +267,7 @@ export default function HomePage() {
         )}
       </SectionShell>
 
-      <SectionShell
-        eyebrow="Applications"
-        title="Apply with Devfolio"
-        description="Applications are handled through Devfolio."
-      >
+      <SectionShell>
         <div className="flex justify-center">
           <DevfolioApplyButton
             applicationUrl={siteConfig.applicationUrl}

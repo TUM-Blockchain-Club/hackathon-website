@@ -11,7 +11,7 @@ The homepage loads the official Devfolio apply SDK:
 />
 ```
 
-The hero uses a normal `Apply` link to `https://tum.devfolio.co`. A separate
+The hero uses a normal `Apply` link to `https://tum.devfolio.co`. A button-only
 homepage application section sits above the footer and keeps this SDK
 placeholder for the official Devfolio button and verification:
 
