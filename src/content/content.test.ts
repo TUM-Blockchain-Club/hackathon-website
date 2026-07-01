@@ -6,7 +6,7 @@ import { faqGroups, faqResources } from "@/content/faq";
 import { people } from "@/content/people";
 import { prizeContent, prizeTracks } from "@/content/prizes";
 import { scheduleDays } from "@/content/schedule";
-import { allSponsors } from "@/content/sponsors";
+import { allSponsors, currentYearSponsors } from "@/content/sponsors";
 import {
   FALLBACK_TEXT,
   footerLinks,
@@ -123,15 +123,25 @@ describe("site content contract", () => {
 
   it("references only sponsor and speaker assets that exist in public", () => {
     expect(allSponsors.length).toBeGreaterThanOrEqual(20);
+    expect(currentYearSponsors.map((sponsor) => sponsor.name)).toEqual([
+      "Devfolio",
+      "BSV Blockchain",
+    ]);
+    expect(allSponsors.map((sponsor) => sponsor.name)).not.toContain(
+      "Devfolio",
+    );
+    expect(allSponsors.map((sponsor) => sponsor.name)).not.toContain(
+      "BSV Blockchain",
+    );
 
-    for (const sponsor of allSponsors) {
+    for (const sponsor of [...currentYearSponsors, ...allSponsors]) {
       expectAbsoluteUrl(sponsor.href);
       expect(sponsor.logoSrc).toBeTruthy();
       expect(existsSync(publicAssetPath(sponsor.logoSrc ?? ""))).toBe(true);
     }
 
     expect(
-      allSponsors.find((sponsor) => sponsor.name === "Devfolio"),
+      currentYearSponsors.find((sponsor) => sponsor.name === "Devfolio"),
     ).toMatchObject({
       logoAlt: "DEVFOLIO LOGO",
       logoSrc: "/sponsors/devfolio_logo_black.png",

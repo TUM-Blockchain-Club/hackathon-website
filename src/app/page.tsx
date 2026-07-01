@@ -3,6 +3,7 @@ import Script from "next/script";
 import { ArrowRight, Calendar } from "lucide-react";
 
 import { SectionShell } from "@/components/primitives/section-shell";
+import { CurrentYearSponsors } from "@/components/sections/current-year-sponsors";
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
 import { SpeakersJudges } from "@/components/sections/speakers-judges";
 import { RollingSponsors } from "@/components/sections/rolling-sponsors";
@@ -13,7 +14,7 @@ import { homeContent } from "@/content/home";
 import { people, peopleContent } from "@/content/people";
 import { prizeTracks } from "@/content/prizes";
 import { scheduleDays } from "@/content/schedule";
-import { allSponsors } from "@/content/sponsors";
+import { allSponsors, currentYearSponsors } from "@/content/sponsors";
 import { siteConfig } from "@/content/site";
 import { cn } from "@/lib/utils";
 import type { ScheduleSession } from "@/types/content";
@@ -130,6 +131,10 @@ export default function HomePage() {
         }
       >
         <RollingSponsors sponsors={allSponsors} />
+      </SectionShell>
+
+      <SectionShell title="This Year's Sponsors">
+        <CurrentYearSponsors sponsors={currentYearSponsors} />
       </SectionShell>
 
       <SectionShell

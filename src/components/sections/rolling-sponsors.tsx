@@ -4,7 +4,7 @@ import Image from "next/image";
 import type { Sponsor } from "@/types/content";
 import { cn } from "@/lib/utils";
 
-function SponsorCard({ logo }: { logo: Sponsor }) {
+export function SponsorCard({ logo }: { logo: Sponsor }) {
   const cardContent = (
     <div className="group relative w-48 h-20 md:w-[240px] md:h-[96px] flex-shrink-0 bg-white rounded-xl shadow-sm border border-black/5 flex items-center justify-center p-3 md:p-4 transition-all duration-300 hover:scale-[1.03] hover:shadow-md">
       <div className="relative w-full h-full">

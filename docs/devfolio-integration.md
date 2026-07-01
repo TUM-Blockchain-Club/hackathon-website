@@ -37,4 +37,5 @@ hackathon is still under review. Verify the live button on the configured
 production domain, `https://hackathon.tum-blockchain.com`, after the hackathon
 and sponsor logo are accepted in Devfolio.
 
-The sponsor marquee includes the Devfolio logo with `alt="DEVFOLIO LOGO"`, which is required by Devfolio's website verification.
+The static "This Year's Sponsors" section includes the Devfolio logo with
+`alt="DEVFOLIO LOGO"`, which is required by Devfolio's website verification.

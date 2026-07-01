@@ -124,8 +124,7 @@ export const partners: Sponsor[] = [
   },
 ];
 
-// Top 20 crypto sponsors sorted by size and importance
-export const allSponsors: Sponsor[] = [
+export const currentYearSponsors: Sponsor[] = [
   {
     name: "Devfolio",
     tier: "Partner",
@@ -134,6 +133,17 @@ export const allSponsors: Sponsor[] = [
     logoAlt: "DEVFOLIO LOGO",
     logoScale: 1.08,
   },
+  {
+    name: "BSV Blockchain",
+    tier: "Partner",
+    href: "https://bsvblockchain.org/",
+    logoSrc: "/sponsors/bsv_blockchain_logo.svg",
+    logoPadding: "p-4",
+  },
+];
+
+// Top 20 crypto sponsors sorted by size and importance
+export const allSponsors: Sponsor[] = [
   // Top Row (Absolute Giants)
   {
     name: "Sui",

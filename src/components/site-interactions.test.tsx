@@ -6,6 +6,7 @@ import { DevfolioApplyButton } from "@/components/ui/devfolio-apply-button";
 import { FaqsSection } from "@/components/ui/faqs-1";
 import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { MiniNavbar } from "@/components/ui/mini-navbar";
+import { CurrentYearSponsors } from "@/components/sections/current-year-sponsors";
 import { PrizeTracks } from "@/components/sections/prize-tracks";
 import { RollingSponsors } from "@/components/sections/rolling-sponsors";
 import { faqGroups, faqResources } from "@/content/faq";
@@ -119,6 +120,32 @@ describe("site component interactions", () => {
         sponsor.href,
         sponsor.href,
       ]);
+    }
+  });
+
+  it("renders current year sponsors as static centered sponsor cards", () => {
+    const sponsors: Sponsor[] = [
+      {
+        name: "Devfolio",
+        tier: "Partner",
+        href: "https://devfolio.co/",
+        logoSrc: "/sponsors/devfolio_logo_black.png",
+      },
+      {
+        name: "BSV Blockchain",
+        tier: "Partner",
+        href: "https://bsvblockchain.org/",
+        logoSrc: "/sponsors/bsv_blockchain_logo.svg",
+      },
+    ];
+
+    render(<CurrentYearSponsors sponsors={sponsors} />);
+
+    for (const sponsor of sponsors) {
+      const link = screen.getByRole("link", {
+        name: `${sponsor.name} official website`,
+      });
+      expect(link.getAttribute("href")).toBe(sponsor.href);
     }
   });
 
