@@ -148,7 +148,17 @@ describe("site component interactions", () => {
   });
 
   it("renders the official Devfolio SDK marker for the page apply button", () => {
-    render(<DevfolioApplyButton hackathonSlug="tum" />);
+    render(
+      <DevfolioApplyButton
+        applicationUrl="https://tum.devfolio.co"
+        hackathonSlug="tum"
+      />,
+    );
+
+    const applyLink = screen.getByRole("link", {
+      name: "Apply with Devfolio",
+    });
+    expect(applyLink.getAttribute("href")).toBe("https://tum.devfolio.co");
 
     const sdkMarker = document.querySelector(".apply-button");
     expect(sdkMarker?.getAttribute("data-hackathon-slug")).toBe("tum");

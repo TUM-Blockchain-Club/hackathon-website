@@ -12,8 +12,8 @@ The homepage loads the official Devfolio apply SDK:
 ```
 
 The hero uses a normal `Apply` link to `https://tum.devfolio.co`. A separate
-homepage application section keeps this SDK placeholder for the official
-Devfolio button and verification:
+homepage application section sits above the footer and keeps this SDK
+placeholder for the official Devfolio button and verification:
 
 ```html
 <div
@@ -26,6 +26,10 @@ Devfolio button and verification:
 
 The top navigation also keeps a plain `Apply` link to
 `https://tum.devfolio.co`.
+
+The page section also renders a visible `Apply with Devfolio` link to
+`https://tum.devfolio.co` over the SDK marker, because Devfolio can keep the
+iframe button in a disabled initial state until verification is complete.
 
 Devfolio gates the SDK iframe by the configured website URL, so the official
 button may render as an empty reserved area on `localhost` or while the

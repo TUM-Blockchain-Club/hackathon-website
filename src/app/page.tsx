@@ -108,18 +108,6 @@ export default function HomePage() {
       />
 
       <SectionShell
-        eyebrow="Applications"
-        title="Apply with Devfolio"
-        description="Applications are handled through Devfolio."
-      >
-        <div className="flex justify-center">
-          <DevfolioApplyButton
-            hackathonSlug={siteConfig.devfolioHackathonSlug}
-          />
-        </div>
-      </SectionShell>
-
-      <SectionShell
         eyebrow="Sponsors"
         title="Sponsors & Partners"
         description={
@@ -277,6 +265,19 @@ export default function HomePage() {
             </p>
           </div>
         )}
+      </SectionShell>
+
+      <SectionShell
+        eyebrow="Applications"
+        title="Apply with Devfolio"
+        description="Applications are handled through Devfolio."
+      >
+        <div className="flex justify-center">
+          <DevfolioApplyButton
+            applicationUrl={siteConfig.applicationUrl}
+            hackathonSlug={siteConfig.devfolioHackathonSlug}
+          />
+        </div>
       </SectionShell>
     </>
   );
