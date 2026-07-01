@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { DevfolioApplyButton } from "@/components/ui/devfolio-apply-button";
 import { FaqsSection } from "@/components/ui/faqs-1";
 import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { MiniNavbar } from "@/components/ui/mini-navbar";
@@ -121,7 +122,7 @@ describe("site component interactions", () => {
     }
   });
 
-  it("keeps the Devfolio SDK marker while rendering a clickable hero apply link", () => {
+  it("renders the hero apply button as a normal linked CTA", () => {
     render(
       <HeroAsciiOne
         eyebrow="House of Communication, Munich // 30-31 October 2026"
@@ -131,7 +132,6 @@ describe("site component interactions", () => {
           label: "Apply",
           href: "https://tum.devfolio.co",
         }}
-        devfolioHackathonSlug="tum"
         secondaryCta={{
           label: "View Prizes",
           href: "/prizes",
@@ -139,10 +139,16 @@ describe("site component interactions", () => {
       />,
     );
 
-    const applyLink = screen.getByRole("link", {
-      name: "Apply with Devfolio",
-    });
+    const applyLink = screen.getByRole("link", { name: "Apply" });
     expect(applyLink.getAttribute("href")).toBe("https://tum.devfolio.co");
+    expect(screen.queryByRole("link", { name: "Apply with Devfolio" })).toBe(
+      null,
+    );
+    expect(document.querySelector(".apply-button")).toBe(null);
+  });
+
+  it("renders the official Devfolio SDK marker for the page apply button", () => {
+    render(<DevfolioApplyButton hackathonSlug="tum" />);
 
     const sdkMarker = document.querySelector(".apply-button");
     expect(sdkMarker?.getAttribute("data-hackathon-slug")).toBe("tum");

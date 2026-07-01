@@ -1,6 +1,6 @@
 # Devfolio Integration
 
-The homepage uses the official Devfolio apply SDK for the hero call to action:
+The homepage loads the official Devfolio apply SDK:
 
 ```tsx
 <Script
@@ -11,7 +11,9 @@ The homepage uses the official Devfolio apply SDK for the hero call to action:
 />
 ```
 
-The page keeps this SDK placeholder for Devfolio verification:
+The hero uses a normal `Apply` link to `https://tum.devfolio.co`. A separate
+homepage application section keeps this SDK placeholder for the official
+Devfolio button and verification:
 
 ```html
 <div
@@ -22,10 +24,8 @@ The page keeps this SDK placeholder for Devfolio verification:
 ></div>
 ```
 
-The top navigation keeps a plain `Apply` link to `https://tum.devfolio.co`.
-The hero renders a visible `Apply with Devfolio` link to the same application URL
-and styles it to match Devfolio's official light button because Devfolio can keep
-the iframe button in a disabled initial state until verification is complete.
+The top navigation also keeps a plain `Apply` link to
+`https://tum.devfolio.co`.
 
 Devfolio gates the SDK iframe by the configured website URL, so the official
 button may render as an empty reserved area on `localhost` or while the

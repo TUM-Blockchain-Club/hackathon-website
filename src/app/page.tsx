@@ -6,6 +6,7 @@ import { SectionShell } from "@/components/primitives/section-shell";
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
 import { SpeakersJudges } from "@/components/sections/speakers-judges";
 import { RollingSponsors } from "@/components/sections/rolling-sponsors";
+import { DevfolioApplyButton } from "@/components/ui/devfolio-apply-button";
 import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { buttonVariants } from "@/components/ui/button";
 import { homeContent } from "@/content/home";
@@ -94,7 +95,6 @@ export default function HomePage() {
     <>
       <HeroAsciiOne
         eyebrow={homeContent.eyebrow}
-        devfolioHackathonSlug={siteConfig.devfolioHackathonSlug}
         headline={homeContent.headline}
         subhead={homeContent.subhead}
         primaryCta={homeContent.primaryCta}
@@ -106,6 +106,18 @@ export default function HomePage() {
         src="https://apply.devfolio.co/v2/sdk.js"
         strategy="afterInteractive"
       />
+
+      <SectionShell
+        eyebrow="Applications"
+        title="Apply with Devfolio"
+        description="Applications are handled through Devfolio."
+      >
+        <div className="flex justify-center">
+          <DevfolioApplyButton
+            hackathonSlug={siteConfig.devfolioHackathonSlug}
+          />
+        </div>
+      </SectionShell>
 
       <SectionShell
         eyebrow="Sponsors"
