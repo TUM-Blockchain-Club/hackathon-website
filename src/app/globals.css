@@ -26,7 +26,7 @@
   --color-tbc-purple: var(--tbc-purple);
   --color-tbc-warm-white: var(--tbc-warm-white);
   --font-sans: var(--font-tbc-body);
-  --font-display: var(--font-tbc-display);
+  --font-display: var(--font-tbc-body);
   /* Boxy theme: every corner is 90 degrees. The Sponsors & Partners grid
      (logo-cloud-2.tsx) is the shape baseline — hard borders, sharp edges.
      Collapsing the whole radius scale to 0 makes existing rounded-* utilities
@@ -73,15 +73,15 @@
   --tbc-warm-white: #f9e6e1;
   --tbc-charcoal-ui: #1a1918;
   --tbc-burnt-brown-black: #110520; /* Very dark purple-black, matching purple */
-  --tbc-deep-burgundy: #300806;     /* Dark red */
-  --tbc-wine-red: #280a15;          /* Dark purple-red */
-  --tbc-aubergine: #190a36;         /* Dark purple */
-  --tbc-dark-plum: #1c0226;          /* Dark purple */
-  --tbc-magenta-plum: #4a0b2e;      /* Deep red-purple */
-  --tbc-berry-accent: #6b0e2b;      /* Deep red */
-  --tbc-brick-red: #a61a1d;         /* Red */
-  --tbc-copper-orange: #b32c1c;     /* Dark red-orange */
-  --tbc-amber-highlight: #ffc110;   /* Mapped to brand yellow */
+  --tbc-deep-burgundy: #300806; /* Dark red */
+  --tbc-wine-red: #280a15; /* Dark purple-red */
+  --tbc-aubergine: #190a36; /* Dark purple */
+  --tbc-dark-plum: #1c0226; /* Dark purple */
+  --tbc-magenta-plum: #4a0b2e; /* Deep red-purple */
+  --tbc-berry-accent: #6b0e2b; /* Deep red */
+  --tbc-brick-red: #a61a1d; /* Red */
+  --tbc-copper-orange: #b32c1c; /* Dark red-orange */
+  --tbc-amber-highlight: #ffc110; /* Mapped to brand yellow */
 
   --background: #000000;
   --foreground: #ffffff;
@@ -124,7 +124,12 @@
       rgba(111, 61, 226, 0.2),
       transparent 60%
     ),
-    linear-gradient(135deg, #000000, var(--tbc-burnt-brown-black) 42%, var(--tbc-aubergine) 100%);
+    linear-gradient(
+      135deg,
+      #000000,
+      var(--tbc-burnt-brown-black) 42%,
+      var(--tbc-aubergine) 100%
+    );
 }
 
 * {
@@ -418,7 +423,7 @@ select {
   align-items: center;
   color: rgba(255, 255, 255, 0.86);
   display: flex;
-  font-family: var(--font-tbc-display), sans-serif;
+  font-family: var(--font-tbc-body), sans-serif;
   font-size: clamp(2rem, 5vw, 4.5rem);
   font-weight: 700;
   height: 100%;
@@ -446,7 +451,11 @@ select {
 }
 
 .speaker-portrait__shade {
-  background: linear-gradient(180deg, transparent 48%, rgba(0, 0, 0, 0.68) 100%);
+  background: linear-gradient(
+    180deg,
+    transparent 48%,
+    rgba(0, 0, 0, 0.68) 100%
+  );
   z-index: 4;
 }
 
@@ -466,7 +475,9 @@ select {
   opacity: 0.28;
 }
 
-.speaker-portrait-frame:hover .speaker-portrait--single .speaker-portrait__image--base {
+.speaker-portrait-frame:hover
+  .speaker-portrait--single
+  .speaker-portrait__image--base {
   filter: saturate(0.88) contrast(1.04) brightness(0.9);
   mix-blend-mode: normal;
   opacity: 0.94;
@@ -476,7 +487,8 @@ select {
   opacity: 0.94;
 }
 
-.speaker-portrait-frame:is(:hover, :active, :focus-within) .speaker-portrait__pixels {
+.speaker-portrait-frame:is(:hover, :active, :focus-within)
+  .speaker-portrait__pixels {
   opacity: 0;
   transform: scale(1.04);
 }
@@ -495,7 +507,7 @@ select {
 
 .speaker-card__text h3 {
   color: var(--foreground);
-  font-family: var(--font-tbc-display), sans-serif;
+  font-family: var(--font-tbc-body), sans-serif;
   font-size: clamp(1.05rem, 1.55vw, 1.45rem);
   font-weight: 700;
   letter-spacing: 0;
@@ -583,4 +595,3 @@ select {
     transform: none !important;
   }
 }
-

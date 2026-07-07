@@ -13,17 +13,8 @@ import "./globals.css";
 const montserrat = localFont({
   src: "../../assets/fonts/montserrat-latin-variable.woff2",
   variable: "--font-tbc-body",
-  display: "optional",
-  preload: false,
+  display: "swap",
   weight: "100 900",
-});
-
-const spaceGrotesk = localFont({
-  src: "../../assets/fonts/space-grotesk-latin-variable.woff2",
-  variable: "--font-tbc-display",
-  display: "optional",
-  preload: false,
-  weight: "300 700",
 });
 
 export const metadata: Metadata = {
@@ -77,8 +68,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} ${spaceGrotesk.variable}`}
+      className={`${montserrat.variable}`}
       data-scroll-behavior="smooth"
+      suppressHydrationWarning
     >
       <body>
         <a

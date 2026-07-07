@@ -1,0 +1,4639 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TUM Blockchain & AI Hackathon - AI Design Planning Scaffold</title>
+    <meta
+      name="description"
+      content="AI-facing design planning scaffold for the TUM Blockchain & AI Hackathon website. This is not the production landing page."
+    />
+
+    <!--
+    IMPORTANT
+    This file is an AI-facing design and component planning artifact.
+    It is not the production website, not the landing page, and not a source
+    of final visual decisions. Use it to store structure, schemas, component
+    hierarchy, fallback rules, prompts, asset needs, and future design notes.
+
+    Source of truth read for this scaffold:
+    .agents/CONTENT.md
+
+    Visual design notes merged into this scaffold:
+    root design.md
+  -->
+
+    <style id="documentation-ui-css">
+      /*
+      These styles are only for making this planning document readable.
+      They are not the website's visual language.
+    */
+      :root {
+        --doc-bg: #f7f7f2;
+        --doc-ink: #181818;
+        --doc-muted: #64645f;
+        --doc-line: #d8d8cf;
+        --doc-panel: #ffffff;
+        --doc-accent: #0f5f55;
+        --doc-warn: #8a4d00;
+        --doc-radius: 0; /* boxy theme: square 90-degree corners */
+        --doc-space: 18px;
+        --doc-mono:
+          ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+          monospace;
+        --doc-sans:
+          ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--doc-bg);
+        color: var(--doc-ink);
+        font-family: var(--doc-sans);
+        line-height: 1.55;
+      }
+
+      a {
+        color: var(--doc-accent);
+      }
+
+      code,
+      pre,
+      textarea {
+        font-family: var(--doc-mono);
+      }
+
+      .doc-shell {
+        display: grid;
+        grid-template-columns: 280px minmax(0, 1fr);
+        min-height: 100vh;
+      }
+
+      .doc-nav {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+        padding: 24px;
+        border-right: 1px solid var(--doc-line);
+        background: #efefe8;
+      }
+
+      .doc-nav h1 {
+        margin: 0 0 12px;
+        font-size: 19px;
+        line-height: 1.2;
+      }
+
+      .doc-nav p {
+        margin: 0 0 18px;
+        color: var(--doc-muted);
+        font-size: 13px;
+      }
+
+      .doc-nav a {
+        display: block;
+        padding: 7px 0;
+        color: var(--doc-ink);
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .doc-main {
+        max-width: 1240px;
+        padding: 36px;
+      }
+
+      .notice {
+        padding: 16px 18px;
+        border: 1px solid var(--doc-line);
+        border-left: 5px solid var(--doc-accent);
+        border-radius: var(--doc-radius);
+        background: var(--doc-panel);
+      }
+
+      .notice strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      section {
+        margin: 36px 0;
+        padding: 24px;
+        border: 1px solid var(--doc-line);
+        border-radius: var(--doc-radius);
+        background: var(--doc-panel);
+      }
+
+      section > h2 {
+        margin: 0 0 8px;
+        font-size: 24px;
+        line-height: 1.2;
+      }
+
+      section > p {
+        max-width: 850px;
+        color: var(--doc-muted);
+      }
+
+      h3 {
+        margin-top: 26px;
+        margin-bottom: 8px;
+        font-size: 18px;
+      }
+
+      h4 {
+        margin-top: 18px;
+        margin-bottom: 6px;
+        font-size: 15px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 14px 0 22px;
+        font-size: 14px;
+      }
+
+      th,
+      td {
+        vertical-align: top;
+        padding: 10px 12px;
+        border: 1px solid var(--doc-line);
+        text-align: left;
+      }
+
+      th {
+        background: #f0f0e8;
+        font-weight: 700;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 2px 7px;
+        border: 1px solid var(--doc-line);
+        border-radius: 0;
+        background: #fafaf7;
+        color: var(--doc-muted);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .schema-card {
+        padding: 14px;
+        border: 1px solid var(--doc-line);
+        border-radius: var(--doc-radius);
+        background: #fbfbf8;
+      }
+
+      .schema-card h4 {
+        margin-top: 0;
+      }
+
+      .placeholder {
+        min-height: 56px;
+        padding: 12px;
+        border: 1px dashed #aaa99f;
+        border-radius: var(--doc-radius);
+        background: #f9f9f4;
+        color: var(--doc-muted);
+      }
+
+      pre {
+        overflow: auto;
+        padding: 14px;
+        border-radius: var(--doc-radius);
+        background: #20201d;
+        color: #f5f5ed;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      details {
+        margin: 10px 0;
+        padding: 12px 14px;
+        border: 1px solid var(--doc-line);
+        border-radius: var(--doc-radius);
+        background: #fbfbf8;
+      }
+
+      summary {
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .workflow-svg,
+      .component-map-svg {
+        width: 100%;
+        max-width: 980px;
+        height: auto;
+        border: 1px solid var(--doc-line);
+        border-radius: var(--doc-radius);
+        background: #fff;
+      }
+
+      .spatial-stage {
+        position: relative;
+        min-height: 380px;
+        border: 1px dashed #9f9f95;
+        border-radius: var(--doc-radius);
+        background:
+          linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+          linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+        background-size: 40px 40px;
+      }
+
+      .spatial-item {
+        position: absolute;
+        display: grid;
+        place-items: center;
+        min-width: 110px;
+        min-height: 54px;
+        padding: 8px;
+        border: 1px solid var(--doc-line);
+        border-radius: var(--doc-radius);
+        background: rgba(255, 255, 255, 0.92);
+        font-size: 13px;
+        text-align: center;
+      }
+
+      .prompt {
+        width: 100%;
+        min-height: 118px;
+        resize: vertical;
+        padding: 12px;
+        border: 1px solid var(--doc-line);
+        border-radius: var(--doc-radius);
+        background: #fff;
+        color: var(--doc-ink);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 12px 0;
+      }
+
+      .filter-bar button {
+        padding: 7px 10px;
+        border: 1px solid var(--doc-line);
+        border-radius: 0;
+        background: #fff;
+        cursor: pointer;
+      }
+
+      .filter-bar button[aria-pressed="true"] {
+        background: var(--doc-accent);
+        color: #fff;
+      }
+
+      [data-component-row][hidden] {
+        display: none;
+      }
+
+      @media (max-width: 860px) {
+        .doc-shell {
+          display: block;
+        }
+
+        .doc-nav {
+          position: static;
+          height: auto;
+          border-right: 0;
+          border-bottom: 1px solid var(--doc-line);
+        }
+
+        .doc-main {
+          padding: 20px;
+        }
+
+        .grid.two,
+        .grid.three {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+
+    <style id="future-website-token-schema">
+      /*
+      FUTURE WEBSITE DESIGN TOKEN SCHEMA
+      Seeded from root design.md before that file was removed.
+      These values describe the current TBC brand baseline for future website work.
+    */
+      :root {
+        --tbc-yellow: #ffc110;
+        --tbc-red: #f44336;
+        --tbc-purple: #6f3de2;
+        --tbc-black: #000000;
+        --tbc-surface: #1d1d1d;
+        --tbc-white: #ffffff;
+        --tbc-warm-white: #f9e6e1;
+
+        --tbc-charcoal-ui: #1a1918;
+        --tbc-burnt-brown-black: #22100b;
+        --tbc-deep-burgundy: #542121;
+        --tbc-wine-red: #4f1e2e;
+        --tbc-aubergine: #3a172d;
+        --tbc-dark-plum: #510261;
+        --tbc-magenta-plum: #6a0c43;
+        --tbc-berry-accent: #8b2445;
+        --tbc-brick-red: #a9292b;
+        --tbc-copper-orange: #c76e29;
+        --tbc-amber-highlight: #eaa919;
+
+        --site-color-bg: var(--tbc-black);
+        --site-color-bg-atmospheric: var(--tbc-burnt-brown-black);
+        --site-color-surface: rgba(255, 255, 255, 0.08);
+        --site-color-surface-strong: var(--tbc-surface);
+        --site-color-ink: var(--tbc-white);
+        --site-color-muted: var(--tbc-warm-white);
+        --site-color-primary: var(--tbc-red);
+        --site-color-secondary: var(--tbc-yellow);
+        --site-color-accent: var(--tbc-purple);
+        --site-color-border: rgba(255, 255, 255, 0.16);
+        --site-color-border-strong: rgba(255, 255, 255, 0.26);
+        --site-gradient-brand: linear-gradient(
+          135deg,
+          #ffc110 0%,
+          #f44336 49%,
+          #6f3de2 100%
+        );
+        --site-gradient-atmosphere:
+          radial-gradient(
+            1200px 700px at 20% 15%,
+            rgba(255, 193, 16, 0.38),
+            transparent 55%
+          ),
+          radial-gradient(
+            1100px 800px at 22% 45%,
+            rgba(244, 67, 54, 0.55),
+            transparent 58%
+          ),
+          radial-gradient(
+            1200px 800px at 72% 34%,
+            rgba(111, 61, 226, 0.38),
+            transparent 60%
+          ),
+          linear-gradient(135deg, #22100b, #542121 45%, #3a172d 100%);
+
+        --site-font-display: "TBC Montserrat", Montserrat, sans-serif;
+        --site-font-body: "TBC Montserrat", Montserrat, sans-serif;
+        --site-font-mono:
+          ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+        --site-type-hero: clamp(48px, 8vw, 128px);
+        --site-type-h1: clamp(40px, 6vw, 92px);
+        --site-type-h2: clamp(28px, 4vw, 56px);
+        --site-type-body: 18px;
+        --site-type-caption: 13px;
+
+        --site-space-1: 8px;
+        --site-space-2: 12px;
+        --site-space-3: 20px;
+        --site-space-4: 32px;
+        --site-space-5: 56px;
+        --site-space-section: clamp(72px, 10vw, 140px);
+
+        --site-radius-card: 0px; /* boxy theme: 90-degree corners, no radius */
+        --site-radius-control: 0px; /* boxy theme: square buttons/controls, no pills */
+        --site-shadow-card: 0 24px 80px rgba(0, 0, 0, 0.35);
+        --site-motion-fast: 160ms;
+        --site-motion-base: 280ms;
+        --site-motion-page: 700ms;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="doc-shell">
+      <nav class="doc-nav" aria-label="Design scaffold navigation">
+        <h1>AI Design Scaffold</h1>
+        <p>
+          TUM Blockchain & AI Hackathon website planning artifact. Not
+          production HTML.
+        </p>
+        <a href="#purpose">Purpose</a>
+        <a href="#source-rules">Source Rules</a>
+        <a href="#site-map">Site Map</a>
+        <a href="#component-inventory">Component Inventory</a>
+        <a href="#page-blueprints">Page Blueprints</a>
+        <a href="#brand-direction">Brand Direction</a>
+        <a href="#design-token-intake">Design Token Intake</a>
+        <a href="#component-schemas">Component Schemas</a>
+        <a href="#prompt-bank">21st.dev Prompt Bank</a>
+        <a href="#hero-shader-note">Hero Shader Note</a>
+        <a href="#data-models">Data Models</a>
+        <a href="#fallbacks">Fallback System</a>
+        <a href="#interactions">Interactions</a>
+        <a href="#visual-assets">Visual Assets</a>
+        <a href="#workflow-map">Workflow Map</a>
+        <a href="#spatial-planning">Spatial Planning</a>
+        <a href="#open-items">Open Items</a>
+        <a href="#handoff-checklist">Handoff Checklist</a>
+      </nav>
+
+      <main class="doc-main">
+        <header class="notice" id="purpose">
+          <strong>Purpose of this file</strong>
+          <span>
+            This HTML file is a structured AI planning document. It captures the
+            component hierarchy, design-decision slots, data schemas, fallback
+            rules, prompts, asset requirements, and interaction notes needed to
+            design the website later. It is not a landing page and must not be
+            shipped as the website.
+          </span>
+        </header>
+
+        <section id="source-rules">
+          <h2>Source Rules</h2>
+          <p>
+            Use this section as the top-level operating brief for any future AI
+            agent editing design plans or generating components.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Rule</th>
+                <th>Instruction</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Content source</td>
+                <td>
+                  Use <code>.agents/CONTENT.md</code> as the current source of
+                  truth.
+                </td>
+                <td>
+                  It defines the site tree, content, links, fallbacks, and open
+                  confirmations.
+                </td>
+              </tr>
+              <tr>
+                <td>Visual source</td>
+                <td>
+                  Use the visual notes merged from root
+                  <code>design.md</code> as the current brand baseline.
+                </td>
+                <td>
+                  The root markdown file has been consolidated into this
+                  agent-facing design scaffold.
+                </td>
+              </tr>
+              <tr>
+                <td>Visual independence</td>
+                <td>
+                  Use brand tokens and pattern language without copying the
+                  conference site layout wholesale.
+                </td>
+                <td>
+                  The hackathon website needs its own component hierarchy from
+                  CONTENT.md.
+                </td>
+              </tr>
+              <tr>
+                <td>Fallbacks</td>
+                <td>
+                  Every uncertain value must gracefully fall back. Default:
+                  <code>To be announced soon.</code>
+                </td>
+                <td>The event is early in planning. No invented facts.</td>
+              </tr>
+              <tr>
+                <td>Primary CTA</td>
+                <td>
+                  <code>Apply to Hack</code> always links to
+                  <code>https://tum.devfolio.co</code>.
+                </td>
+                <td>Single primary action across the site.</td>
+              </tr>
+              <tr>
+                <td>Community</td>
+                <td>
+                  All community, help, support, and update actions link to
+                  Telegram.
+                </td>
+                <td>No Discord anywhere.</td>
+              </tr>
+              <tr>
+                <td>Sponsors</td>
+                <td>
+                  Do not show fake logos, past sponsors, or filler partners.
+                </td>
+                <td>No partners are confirmed yet.</td>
+              </tr>
+              <tr>
+                <td>Prize data</td>
+                <td>No prize numbers until confirmed.</td>
+                <td>Amounts are unconfirmed and only increase from here.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="site-map">
+          <h2>Site Map And Navigation</h2>
+          <p>
+            Pages, nav, CTAs, and external destinations extracted from the
+            content source.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Page / Link</th>
+                <th>Path / Destination</th>
+                <th>Role</th>
+                <th>Design Notes To Fill Later</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Home</td>
+                <td><code>/</code></td>
+                <td>Landing page and event overview.</td>
+                <td>
+                  Use selected ASCII hero composition: local wordmark,
+                  hero-ascii-one structure, TBC ribbon background, CTAs, prize
+                  fallback, and Platinum sponsor fallback strip.
+                </td>
+              </tr>
+              <tr>
+                <td>Prizes</td>
+                <td><code>/prizes</code></td>
+                <td>Track-card and main-pool page.</td>
+                <td>
+                  TBD: prize card hierarchy, empty-state design, collapsible
+                  requirements.
+                </td>
+              </tr>
+              <tr>
+                <td>Schedule</td>
+                <td><code>/schedule</code></td>
+                <td>Two-day run-of-show.</td>
+                <td>
+                  TBD: day tabs, session cards, filtering, timeline density.
+                </td>
+              </tr>
+              <tr>
+                <td>Speakers & Judges</td>
+                <td><code>/speakers-and-judges</code></td>
+                <td>
+                  People showcase for judges, mentors, workshop leads, and
+                  speakers.
+                </td>
+                <td>
+                  Use the selected testimonial-slider anatomy only for confirmed
+                  public-cleared people; support featured slider, scan-friendly
+                  grid, photo fallback, category grouping, and empty state.
+                </td>
+              </tr>
+              <tr>
+                <td>FAQ</td>
+                <td><code>/faq</code></td>
+                <td>Grouped FAQ and resource links.</td>
+                <td>
+                  Use a dark ASCII-oriented support console with resource strip,
+                  group navigation, nine groups, 45 questions, grouped
+                  accordions, and TBD-safe answers.
+                </td>
+              </tr>
+              <tr>
+                <td>Conference</td>
+                <td><code>https://conference.tum-blockchain.com/</code></td>
+                <td>External cross-link, new tab.</td>
+                <td>TBD: external-link affordance in header and footer.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Global Link Map</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Element</th>
+                <th>Destination</th>
+                <th>Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Apply to Hack</td>
+                <td><code>https://tum.devfolio.co</code></td>
+                <td>Primary CTA everywhere.</td>
+              </tr>
+              <tr>
+                <td>Header logo</td>
+                <td><code>/</code></td>
+                <td>Internal home navigation.</td>
+              </tr>
+              <tr>
+                <td>Telegram</td>
+                <td><code>https://t.me/+mY6aLKS8OnlhZjJk</code></td>
+                <td>Community, updates, help, support.</td>
+              </tr>
+              <tr>
+                <td>Sponsor inquiries</td>
+                <td><code>mailto:sponsors@tum-blockchain.com</code></td>
+                <td>Sponsor CTA only.</td>
+              </tr>
+              <tr>
+                <td>Hackathon questions</td>
+                <td><code>mailto:hackathon@tum-blockchain.com</code></td>
+                <td>General contact.</td>
+              </tr>
+              <tr>
+                <td>Club website</td>
+                <td><code>https://www.tum-blockchain.com</code></td>
+                <td>Footer cross-link.</td>
+              </tr>
+              <tr>
+                <td>Instagram</td>
+                <td><code>https://www.instagram.com/tumblockchain/</code></td>
+                <td>Footer social icon.</td>
+              </tr>
+              <tr>
+                <td>LinkedIn</td>
+                <td>
+                  <code
+                    >https://www.linkedin.com/company/tum-blockchain-club/</code
+                  >
+                </td>
+                <td>Footer social icon.</td>
+              </tr>
+              <tr>
+                <td>X</td>
+                <td><code>https://x.com/tbc_munich</code></td>
+                <td>Footer social icon.</td>
+              </tr>
+              <tr>
+                <td>Imprint</td>
+                <td><code>https://www.tum-blockchain.com/imprint</code></td>
+                <td>Legal footer link.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="component-inventory">
+          <h2>Component Inventory</h2>
+          <p>
+            Component search and generation targets for 21st.dev or similar UI
+            component sources.
+          </p>
+
+          <div class="filter-bar" aria-label="Component filters">
+            <button type="button" data-filter="all" aria-pressed="true">
+              All
+            </button>
+            <button type="button" data-filter="global" aria-pressed="false">
+              Global
+            </button>
+            <button type="button" data-filter="home" aria-pressed="false">
+              Home
+            </button>
+            <button type="button" data-filter="prizes" aria-pressed="false">
+              Prizes
+            </button>
+            <button type="button" data-filter="schedule" aria-pressed="false">
+              Schedule
+            </button>
+            <button type="button" data-filter="people" aria-pressed="false">
+              People
+            </button>
+            <button type="button" data-filter="faq" aria-pressed="false">
+              FAQ
+            </button>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Page / Scope</th>
+                <th>Required Content</th>
+                <th>States</th>
+                <th>21st.dev Search Intent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-component-row data-category="global">
+                <td>Header / navigation bar</td>
+                <td>Global</td>
+                <td>
+                  Logo or wordmark, compact nav links, external Conference link,
+                  persistent Apply to Hack CTA.
+                </td>
+                <td>
+                  Desktop floating bar, mobile collapsed menu, mobile expanded
+                  panel, current page, external-link state, reduced-motion path.
+                </td>
+                <td>TBD: choose or define a header/navigation direction.</td>
+              </tr>
+              <tr data-component-row data-category="global">
+                <td>Footer</td>
+                <td>Global</td>
+                <td>
+                  Wordmark line, organizer, links, Telegram, socials, contacts,
+                  legal, CTA. Selected base: 21st.dev
+                  <code>sshahaider/dotted-surface</code> as footer-only
+                  background layer.
+                </td>
+                <td>
+                  Desktop multi-column, mobile stacked, missing social icon
+                  guard, WebGL available, static dotted fallback, reduced-motion
+                  path, contrast-safe overlay.
+                </td>
+                <td>
+                  Conference footer with social links, contact block, CTA, and
+                  contained dotted surface that never becomes the page
+                  background.
+                </td>
+              </tr>
+              <tr data-component-row data-category="home">
+                <td>Hero banner</td>
+                <td>Home</td>
+                <td>
+                  Local ASCII wordmark asset, date/venue eyebrow, headline
+                  options, subhead, primary and secondary CTAs, prize line,
+                  platinum sponsor strip. Selected base: 21st.dev
+                  <code>larsen66/hero-ascii-one</code>.
+                </td>
+                <td>
+                  ASCII SVG loaded, preview HTML available, prize unknown, no
+                  sponsors, mobile first viewport, reduced-motion/static
+                  background, loaded media.
+                </td>
+                <td>
+                  Adapt hero-ascii-one ASCII/technical-frame/CTA structure into
+                  a TBC dark ribbon hero. Explicitly reject the registry's
+                  embedded background for this site.
+                </td>
+              </tr>
+              <tr data-component-row data-category="home">
+                <td>Platinum sponsor logo strip</td>
+                <td>Home hero area</td>
+                <td>
+                  Platinum logos only, sponsor links. Selected base: 21st.dev
+                  <code>sshahaider/logo-cloud-2</code>.
+                </td>
+                <td>
+                  Empty fallback: Partners announced soon. Replace all demo
+                  logos; never render fake brands.
+                </td>
+                <td>
+                  Use logo-cloud lattice grid as premium sponsor strip; adapt to
+                  dark TBC surfaces and confirmed sponsor data.
+                </td>
+              </tr>
+              <tr data-component-row data-category="home">
+                <td>Sponsors & Partners wall</td>
+                <td>Home</td>
+                <td>
+                  Tiered sponsor wall, intro line, sponsor mail CTA. Can reuse
+                  logo-cloud lattice per tier.
+                </td>
+                <td>
+                  No partners, tier ordering, logo link hover, missing logo,
+                  empty lattice hidden behind fallback copy.
+                </td>
+                <td>
+                  Tiered sponsor wall using the selected logo-cloud card
+                  anatomy, with stronger tier labels and sponsor inquiry CTA.
+                </td>
+              </tr>
+              <tr data-component-row data-category="home prizes">
+                <td>Prize highlight block</td>
+                <td>Home</td>
+                <td>Prize headline, supporting line, View Prize Tracks CTA.</td>
+                <td>Unknown amount fallback, confirmed amount state.</td>
+                <td>
+                  Hackathon prize highlight component with dramatic number slot.
+                </td>
+              </tr>
+              <tr data-component-row data-category="home people">
+                <td>Featured speakers / judges preview</td>
+                <td>Home</td>
+                <td>
+                  Featured confirmed public-cleared people, role line, approved
+                  portrait or branded fallback, CTA to full page. Selected base:
+                  21st.dev <code>kavikatiyar/testimonial-slider-1</code> adapted
+                  away from testimonial copy.
+                </td>
+                <td>
+                  No people, one person static card, partial people, photo
+                  missing, reduced-motion slider, hidden TBD people.
+                </td>
+                <td>
+                  Featured people slider/grid using testimonial-slider
+                  portrait/navigation anatomy and a dignified empty announcement
+                  state.
+                </td>
+              </tr>
+              <tr data-component-row data-category="home schedule">
+                <td>Condensed timeline</td>
+                <td>Home</td>
+                <td>Two confirmed anchors and fallback rows.</td>
+                <td>Known time, unknown time, CTA to full schedule.</td>
+                <td>Compact two-day hackathon timeline with milestone rows.</td>
+              </tr>
+              <tr data-component-row data-category="home">
+                <td>Reasons to Join list</td>
+                <td>Home</td>
+                <td>Numbered reasons, final wording pending.</td>
+                <td>Six draft reasons, final count TBD.</td>
+                <td>Numbered benefits section for builders and students.</td>
+              </tr>
+              <tr data-component-row data-category="home global">
+                <td>Final CTA band</td>
+                <td>Home and page bottoms</td>
+                <td>Ready to build line, Apply to Hack CTA.</td>
+                <td>Default, compact page-bottom variant.</td>
+                <td>Conversion CTA band for event applications.</td>
+              </tr>
+              <tr data-component-row data-category="prizes">
+                <td>Prize page header</td>
+                <td>Prizes</td>
+                <td>Title, intro, page fallback.</td>
+                <td>No tracks, tracks confirmed.</td>
+                <td>Prize tracks page header with fallback message.</td>
+              </tr>
+              <tr data-component-row data-category="prizes">
+                <td>Prize track card</td>
+                <td>Prizes</td>
+                <td>
+                  Sponsor logo, track name, prize breakdown, description, ideas,
+                  requirements. Selected base: 21st.dev
+                  <code>vaib215/category-list</code> via
+                  <code
+                    >npx shadcn@latest add
+                    https://21st.dev/r/vaib215/category-list</code
+                  >.
+                </td>
+                <td>
+                  Amount unknown, collapsed requirements, sponsor logo missing,
+                  no confirmed tracks, right-side demo emoji replacement.
+                </td>
+                <td>
+                  Hackathon prize category list/card hybrid with collapsible
+                  submission requirements and rank/prize right marks.
+                </td>
+              </tr>
+              <tr data-component-row data-category="prizes">
+                <td>Main pool block</td>
+                <td>Prizes</td>
+                <td>Main prize pool copy and amount fallback.</td>
+                <td>Unknown amount, confirmed amount.</td>
+                <td>Main prize pool highlight for multi-sponsor hackathon.</td>
+              </tr>
+              <tr data-component-row data-category="schedule">
+                <td>Schedule page header</td>
+                <td>Schedule</td>
+                <td>Title, note line, optional conference app line.</td>
+                <td>App link unknown, app link known.</td>
+                <td>Agenda page intro for hackathon schedule.</td>
+              </tr>
+              <tr data-component-row data-category="schedule">
+                <td>Day tabs / sections</td>
+                <td>Schedule</td>
+                <td>Day 1 - 30 October, Day 2 - 31 October.</td>
+                <td>Tabs, stacked mobile, section anchors.</td>
+                <td>Two-day event agenda tabs with responsive layout.</td>
+              </tr>
+              <tr data-component-row data-category="schedule">
+                <td>Session type filter</td>
+                <td>Schedule</td>
+                <td>Ceremony, Workshop, Mentoring, Meal, Deadline, Judging.</td>
+                <td>TBD keep/remove, active filter, empty filtered results.</td>
+                <td>Agenda filter chips for event schedule.</td>
+              </tr>
+              <tr data-component-row data-category="schedule">
+                <td>Session card</td>
+                <td>Schedule</td>
+                <td>Time, title, type, host/speaker, location.</td>
+                <td>
+                  Known session, placeholder slot, missing host, missing
+                  location.
+                </td>
+                <td>
+                  Readable agenda session card modeled for hackathon
+                  run-of-show.
+                </td>
+              </tr>
+              <tr data-component-row data-category="people">
+                <td>People page header</td>
+                <td>Speakers & Judges</td>
+                <td>Title, intro, fallback.</td>
+                <td>
+                  No confirmed people, featured people available, grouped people
+                  available, TBD people hidden.
+                </td>
+                <td>
+                  Speaker and judge page intro that can pair with a featured
+                  slider and a dense public-cleared grid.
+                </td>
+              </tr>
+              <tr data-component-row data-category="people">
+                <td>People slider / grid card</td>
+                <td>Speakers & Judges</td>
+                <td>
+                  Name, category, role/title, company, approved photo, optional
+                  topic or session note. Selected base: 21st.dev
+                  <code>kavikatiyar/testimonial-slider-1</code> for featured
+                  carousel behavior.
+                </td>
+                <td>
+                  No photo, one person, judge, mentor, workshop lead, speaker,
+                  hidden until public, no quote approved.
+                </td>
+                <td>
+                  Event people card and optional featured carousel with role
+                  metadata, thumbnails, arrow controls, and static grid
+                  fallback.
+                </td>
+              </tr>
+              <tr data-component-row data-category="faq">
+                <td>FAQ resources block</td>
+                <td>FAQ</td>
+                <td>Apply on Devfolio, Join Telegram, starter docs TBD.</td>
+                <td>
+                  Starter docs missing, resource links available, mail links
+                  available, non-link fallback row.
+                </td>
+                <td>
+                  Dark terminal resource strip with primary Devfolio and
+                  Telegram actions plus starter-doc fallback.
+                </td>
+              </tr>
+              <tr data-component-row data-category="faq">
+                <td>FAQ accordion groups</td>
+                <td>FAQ</td>
+                <td>
+                  Grouped questions and answers across nine groups and 45
+                  questions.
+                </td>
+                <td>
+                  Answered, answer entirely TBD, answer partially TBD,
+                  open/closed, multiple-open state, search optional.
+                </td>
+                <td>
+                  ASCII-oriented sharp FAQ console with group anchors,
+                  restrained rails, grouped accordions, and readable
+                  non-terminal answer text.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="page-blueprints">
+          <h2>Page Blueprints</h2>
+          <p>
+            Section order and component hierarchy. Fill design style,
+            references, and final component selections later.
+          </p>
+
+          <details open>
+            <summary>Home page blueprint</summary>
+            <ol>
+              <li>Global header with persistent Apply to Hack CTA.</li>
+              <li>
+                Hero banner: local ASCII wordmark, date/venue eyebrow, headline,
+                subhead, CTAs, prize fallback, platinum sponsor strip, and TBC
+                atmospheric ribbon background.
+              </li>
+              <li>
+                Sponsors & Partners section immediately after hero, including
+                full tiered sponsor wall and sponsor inquiry CTA.
+              </li>
+              <li>
+                Prize highlight block with amount fallback and View Prize Tracks
+                CTA.
+              </li>
+              <li>
+                Speakers & Judges featured preview using the testimonial-slider
+                anatomy only when confirmed public-cleared people exist;
+                otherwise show the exact people fallback.
+              </li>
+              <li>Condensed timeline with two fixed anchors and TBD rows.</li>
+              <li>Reasons to Join numbered list.</li>
+              <li>Final CTA band.</li>
+              <li>Global footer.</li>
+            </ol>
+            <div class="placeholder">
+              Selected hero notes: use 21st.dev larsen66/hero-ascii-one for
+              ASCII-first layout, technical frame accents, mono metadata, and
+              CTA rhythm. Replace its demo copy and background with the local
+              ASCII wordmark asset and the dark TBC ribbon atmosphere. Keep
+              sponsor wall density, people preview density, and footer
+              dotted-surface contrast notes for later sections.
+            </div>
+          </details>
+
+          <details>
+            <summary>Prizes page blueprint</summary>
+            <ol>
+              <li>Global header.</li>
+              <li>Page header: Prize Tracks, intro, page-level fallback.</li>
+              <li>Prize track cards only after real tracks are signed.</li>
+              <li>
+                Collapsible submission requirements inside each track card.
+              </li>
+              <li>Main prize pool block with amount fallback.</li>
+              <li>Bottom Apply to Hack CTA.</li>
+              <li>Global footer.</li>
+            </ol>
+            <div class="placeholder">
+              Future design notes: card hierarchy, amount treatment, collapsible
+              motion, empty-state dignity.
+            </div>
+          </details>
+
+          <details>
+            <summary>Schedule page blueprint</summary>
+            <ol>
+              <li>Global header.</li>
+              <li>
+                Page header: Schedule, update note, optional conference app
+                line.
+              </li>
+              <li>Day 1 and Day 2 tabs or stacked sections.</li>
+              <li>Optional session type filter.</li>
+              <li>
+                Session cards with confirmed anchors and placeholder slots.
+              </li>
+              <li>
+                Bottom Apply to Hack CTA and conference week secondary link.
+              </li>
+              <li>Global footer.</li>
+            </ol>
+            <div class="placeholder">
+              Future design notes: agenda readability, timeline scanning, card
+              density, filter behavior.
+            </div>
+          </details>
+
+          <details>
+            <summary>Speakers & Judges page blueprint</summary>
+            <ol>
+              <li>Global header.</li>
+              <li>
+                Page header: Speakers & Judges, intro, page-level fallback.
+              </li>
+              <li>
+                Optional featured people slider adapted from the
+                testimonial-slider component; skip it when there are fewer than
+                two featured people.
+              </li>
+              <li>
+                Grouped sections: Judges, Mentors / Workshop leads, Speakers, or
+                Workshop Leads when confirmed data supports them.
+              </li>
+              <li>
+                People grid cards only for confirmed names cleared for public
+                listing; hide TBD people and avoid generated faces.
+              </li>
+              <li>Bottom Apply to Hack CTA.</li>
+              <li>Global footer.</li>
+            </ol>
+            <div class="placeholder">
+              Selected style notes: dark TBC people cards, square 90-degree
+              corners (0 radius) on cards and portraits, approved portraits
+              only, branded non-face placeholder, square category chips,
+              accessible slider controls, static grid fallback.
+            </div>
+          </details>
+
+          <details>
+            <summary>FAQ page blueprint</summary>
+            <ol>
+              <li>Global header.</li>
+              <li>
+                Resources block: Devfolio, Telegram, starter docs if confirmed.
+              </li>
+              <li>
+                Group navigation with compact anchor links and a restrained
+                ASCII signal rail.
+              </li>
+              <li>
+                FAQ groups: About, Eligibility and cost, Teams, Building,
+                Applying and submitting, Judging and prizes, During the event,
+                Rules and legal, Communication and contact.
+              </li>
+              <li>
+                Render all nine groups and 45 questions from structured data;
+                allow readable TBD-safe fallback text inside answers.
+              </li>
+              <li>Bottom Apply to Hack CTA.</li>
+              <li>Global footer.</li>
+            </ol>
+            <div class="placeholder">
+              Selected style notes: dark cinematic support console, terminal
+              labels, ASCII rails, grouped accordions, multiple-open state,
+              resource strip, TBD answer chips, no decorative ASCII wall.
+            </div>
+          </details>
+        </section>
+
+        <section id="brand-direction">
+          <h2>Brand Direction</h2>
+          <p>
+            Consolidated from the former root <code>design.md</code>. This is
+            the current visual baseline for future agents filling component
+            designs.
+          </p>
+
+          <h3>Analyzed Sources</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Source</th>
+                <th>Use</th>
+                <th>Instruction</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>https://conference.tum-blockchain.com</code></td>
+                <td>Brand atmosphere and naming baseline.</td>
+                <td>Use as visual context, not a layout clone.</td>
+              </tr>
+              <tr>
+                <td><code>assets/logos/c26-wordmark-full.svg</code></td>
+                <td>Official wordmark SVG reference.</td>
+                <td>Use approved SVG artwork for exact wordmark treatments.</td>
+              </tr>
+              <tr>
+                <td><code>/Users/ardatas/Desktop/TBC/DocSend.png</code></td>
+                <td>Dark cinematic color sampling and slide tone.</td>
+                <td>Use for atmosphere and contrast guidance only.</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>/hero/mask-group-1.png</code> from the conference site
+                </td>
+                <td>Ribbon imagery and background motion reference.</td>
+                <td>
+                  Use the orbital ribbon idea, not a copied asset unless
+                  approved.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Core Color Tokens</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>Hex</th>
+                <th>RGB</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>TBC Yellow</td>
+                <td><code>#FFC110</code></td>
+                <td><code>255 193 16</code></td>
+                <td>Warm highlight, first gradient stop, glow source.</td>
+              </tr>
+              <tr>
+                <td>TBC Red</td>
+                <td><code>#F44336</code></td>
+                <td><code>244 67 54</code></td>
+                <td>
+                  Hackathon wordmark, active accent, middle gradient stop.
+                </td>
+              </tr>
+              <tr>
+                <td>TBC Purple</td>
+                <td><code>#6F3DE2</code></td>
+                <td><code>111 61 226</code></td>
+                <td>Final gradient stop and contrast accent.</td>
+              </tr>
+              <tr>
+                <td>Black</td>
+                <td><code>#000000</code></td>
+                <td><code>0 0 0</code></td>
+                <td>Page background, logo shadow, image wells.</td>
+              </tr>
+              <tr>
+                <td>Near Black</td>
+                <td><code>#1D1D1D</code></td>
+                <td><code>29 29 29</code></td>
+                <td>Button hover and dark surface state.</td>
+              </tr>
+              <tr>
+                <td>White</td>
+                <td><code>#FFFFFF</code></td>
+                <td><code>255 255 255</code></td>
+                <td>Primary logo and major text color.</td>
+              </tr>
+              <tr>
+                <td>Off White</td>
+                <td><code>#F9E6E1</code></td>
+                <td><code>249 230 225</code></td>
+                <td>Softer readable copy tone sampled from DocSend.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Supporting Atmospheric Palette</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Color</th>
+                <th>Hex</th>
+                <th>Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Charcoal UI</td>
+                <td><code>#1A1918</code></td>
+                <td>Dark site shell and low-emphasis surfaces.</td>
+              </tr>
+              <tr>
+                <td>Burnt Brown Black</td>
+                <td><code>#22100B</code></td>
+                <td>Deep background corners and image falloff.</td>
+              </tr>
+              <tr>
+                <td>Deep Burgundy</td>
+                <td><code>#542121</code></td>
+                <td>Dominant dark background field.</td>
+              </tr>
+              <tr>
+                <td>Wine Red</td>
+                <td><code>#4F1E2E</code></td>
+                <td>Secondary dark field behind logo and text.</td>
+              </tr>
+              <tr>
+                <td>Aubergine</td>
+                <td><code>#3A172D</code></td>
+                <td>Purple-red background pocket.</td>
+              </tr>
+              <tr>
+                <td>Dark Plum</td>
+                <td><code>#510261</code></td>
+                <td>Ribbon shadow and saturated violet base.</td>
+              </tr>
+              <tr>
+                <td>Magenta Plum</td>
+                <td><code>#6A0C43</code></td>
+                <td>Transition between red and purple ribbons.</td>
+              </tr>
+              <tr>
+                <td>Berry Accent</td>
+                <td><code>#8B2445</code></td>
+                <td>Soft magenta highlight in background gradients.</td>
+              </tr>
+              <tr>
+                <td>Brick Red</td>
+                <td><code>#A9292B</code></td>
+                <td>Visible red ribbon body.</td>
+              </tr>
+              <tr>
+                <td>Copper Orange</td>
+                <td><code>#C76E29</code></td>
+                <td>Ribbon highlight and warm glow.</td>
+              </tr>
+              <tr>
+                <td>Amber Highlight</td>
+                <td><code>#EAA919</code></td>
+                <td>Bright gold ribbon edge and thin line accents.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Gradient Schema</h3>
+          <p>
+            The brand repeatedly uses a yellow to red to purple diagonal
+            progression.
+          </p>
+          <pre><code>linear-gradient(135deg, #ffc110 0%, #f44336 49%, #6f3de2 100%)</code></pre>
+          <p>
+            Use this for high-emphasis text masks, borders, CTA accents,
+            circular logo rings, glows, and important numerals. For richer
+            backgrounds, darken the same hue order and blur it into atmospheric
+            fields.
+          </p>
+          <pre><code>background:
+  radial-gradient(1200px 700px at 20% 15%, rgba(255, 193, 16, .38), transparent 55%),
+  radial-gradient(1100px 800px at 22% 45%, rgba(244, 67, 54, .55), transparent 58%),
+  radial-gradient(1200px 800px at 72% 34%, rgba(111, 61, 226, .38), transparent 60%),
+  linear-gradient(135deg, #22100b, #542121 45%, #3a172d 100%);</code></pre>
+
+          <h3>Visual Pattern Language</h3>
+          <ul>
+            <li>
+              Boxy theme: every corner is square (90 degrees, 0 radius). The
+              Sponsors &amp; Partners grid (<code>logo-cloud-2</code>) is the
+              shape baseline — hard borders, sharp edges, boxed cells. Cards,
+              controls, buttons, chips, inputs, panels, and images all follow
+              it. No pills, no rounded cards, no circular avatars.
+            </li>
+            <li>
+              Base pages are black or near-black with white or warm-white
+              foreground typography.
+            </li>
+            <li>
+              Hero backgrounds use oversized, soft orbital ribbon shapes instead
+              of tiny decorative dots or boxed hero cards. For the selected
+              ASCII hero, keep the TBC ribbon field and do not use the
+              hero-ascii-one UnicornStudio background.
+            </li>
+            <li>
+              The strongest energy comes from diagonal or circular sweeps:
+              yellow and orange on one edge, red through the middle, purple on
+              the far edge.
+            </li>
+            <li>
+              Thin contour lines can appear in amber, purple, or rust red at low
+              opacity.
+            </li>
+            <li>
+              The logo treatment pairs three type moods: clean sans TUM,
+              pixel/block BLOCKCHAIN, and red hand-drawn Hackathon.
+            </li>
+            <li>
+              The red Hackathon lettering has a black outline or shadow and
+              should remain SVG artwork, not live text.
+            </li>
+          </ul>
+
+          <h3>Typography Notes</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Font / Asset</th>
+                <th>Use</th>
+                <th>Implementation Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>TBC Montserrat</code></td>
+                <td>Most sans body text and readable UI copy.</td>
+                <td>
+                  Local CSS exists at
+                  <code>assets/fonts/conference-fonts.css</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>TBC Montserrat</code></td>
+                <td>Display and UI font as well as readable body text.</td>
+                <td>
+                  Used across all elements for a unified look matching the
+                  conference site.
+                </td>
+              </tr>
+              <tr>
+                <td><code>assets/logos/</code> SVG wordmarks</td>
+                <td>Exact BLOCKCHAIN and Hackathon wordmark treatments.</td>
+                <td>
+                  Use SVG paths instead of retyping those styles with web fonts.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Usage Rules</h3>
+          <ul>
+            <li>
+              Use black or very dark burgundy as the default page background.
+            </li>
+            <li>
+              Use white and off-white for primary readable copy; reserve pure
+              white for logos and major headings.
+            </li>
+            <li>
+              Use the yellow-red-purple gradient for important actions,
+              dividers, borders, and high-emphasis text only.
+            </li>
+            <li>
+              Use <code>#F44336</code> for Hackathon-specific marks and short
+              accents.
+            </li>
+            <li>
+              Keep orange and amber as edge light, not as a full background
+              palette.
+            </li>
+            <li>
+              Avoid flat purple-gradient SaaS styling. The reference look is
+              darker, warmer, and more atmospheric.
+            </li>
+            <li>
+              Avoid large white cards. If content needs framing, use transparent
+              dark surfaces with <code>#FFFFFF1A</code> or
+              <code>#FFFFFF26</code> borders.
+            </li>
+            <li>
+              Prefer full-bleed hero imagery and ribbons with integrated logo
+              placement over boxed hero cards.
+            </li>
+          </ul>
+
+          <h3>Contrast Guidance</h3>
+          <ul>
+            <li>
+              White on black, burgundy, and plum is safe for primary copy.
+            </li>
+            <li>
+              Gradient text should be used at large sizes only, with enough dark
+              background behind it.
+            </li>
+            <li>
+              Red <code>#F44336</code> on black is strong for display marks but
+              should not be used for long body text.
+            </li>
+            <li>
+              Amber <code>#FFC110</code> can be used for small accents, but
+              avoid placing it over orange or red background areas.
+            </li>
+            <li>
+              Purple <code>#6F3DE2</code> needs black or dark backing to stay
+              legible.
+            </li>
+          </ul>
+        </section>
+
+        <section id="design-token-intake">
+          <h2>Design Token Intake</h2>
+          <p>
+            Use this as the place to fill future visual decisions. The current
+            baseline below is seeded from the former root
+            <code>design.md</code>.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Token Group</th>
+                <th>Fields To Fill</th>
+                <th>Constraints</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Color system</td>
+                <td>
+                  Black, near black, warm white, TBC yellow, TBC red, TBC
+                  purple, atmospheric burgundy/plum support colors.
+                </td>
+                <td>
+                  Dark, warm, cinematic palette. Avoid flat purple SaaS
+                  gradients and large white cards.
+                </td>
+                <td><span class="tag">Seeded</span></td>
+              </tr>
+              <tr>
+                <td>Typography</td>
+                <td>
+                  TBC Montserrat for all typography (body, display, and UI), SVG
+                  wordmarks for BLOCKCHAIN and Hackathon styles.
+                </td>
+                <td>
+                  Use <code>assets/fonts/conference-fonts.css</code>. Do not
+                  recreate logo lettering as live text.
+                </td>
+                <td><span class="tag">Seeded</span></td>
+              </tr>
+              <tr>
+                <td>Spacing and layout</td>
+                <td>
+                  Container widths, section padding, grid gaps, card density,
+                  mobile breakpoints.
+                </td>
+                <td>
+                  Landing page must show a hint of next section in first
+                  viewport where possible.
+                </td>
+                <td><span class="tag">TBD</span></td>
+              </tr>
+              <tr>
+                <td>Radii and borders</td>
+                <td>
+                  Card radius (0), control radius (0), image radius (0), border
+                  weight.
+                </td>
+                <td>
+                  Boxy theme: all corners are square — 0 radius, 90 degrees, no
+                  pills. The Sponsors &amp; Partners grid is the baseline. Keep
+                  1px hard borders on transparent dark surfaces.
+                </td>
+                <td><span class="tag">Set</span></td>
+              </tr>
+              <tr>
+                <td>Motion</td>
+                <td>
+                  Page load, scroll reveal, hover, accordion, tab transitions,
+                  optional ribbon movement.
+                </td>
+                <td>
+                  Motion should feel like diagonal or orbital energy. Respect
+                  reduced motion.
+                </td>
+                <td><span class="tag">Direction set</span></td>
+              </tr>
+              <tr>
+                <td>Iconography</td>
+                <td>
+                  CTA icons, external link icon, social icons, schedule type
+                  icons, FAQ/resource icons.
+                </td>
+                <td>
+                  Use a consistent icon library where implementation permits. No
+                  Discord icon.
+                </td>
+                <td><span class="tag">TBD</span></td>
+              </tr>
+              <tr>
+                <td>Imagery</td>
+                <td>
+                  Hero ASCII wordmark, hero media/ribbons, official wordmark
+                  SVGs, speaker portraits, sponsor logos, partner logos.
+                </td>
+                <td>
+                  No fake sponsors or fake people. Prefer full-bleed ribbons and
+                  integrated logo placement over boxed hero cards.
+                </td>
+                <td><span class="tag">Seeded</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Design Data Slot</h3>
+          <p>
+            Baseline token slot filled from the former root
+            <code>design.md</code>. Future agents may refine scale and component
+            tokens while preserving the brand palette.
+          </p>
+          <pre><code>:root {
+  --tbc-yellow: #ffc110;
+  --tbc-red: #f44336;
+  --tbc-purple: #6f3de2;
+  --tbc-black: #000000;
+  --tbc-surface: #1d1d1d;
+  --tbc-white: #ffffff;
+  --tbc-warm-white: #f9e6e1;
+  --site-gradient-brand: linear-gradient(135deg, #ffc110 0%, #f44336 49%, #6f3de2 100%);
+  --site-font-display: "TBC Montserrat", Montserrat, sans-serif;
+  --site-font-body: "TBC Montserrat", Montserrat, sans-serif;
+  /* Boxy theme: 90-degree corners everywhere. Sponsors & Partners grid is the baseline. */
+  --site-radius-card: 0;
+  --site-radius-control: 0;
+}</code></pre>
+        </section>
+
+        <section id="component-schemas">
+          <h2>Component Schemas</h2>
+          <p>
+            Repeat this schema for every component selected or generated later.
+          </p>
+
+          <div class="grid two">
+            <article class="schema-card">
+              <h4>Component Design Schema</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>Name</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>Page / Scope</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>Purpose</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>Required Data</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>Fallbacks</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>Responsive Behavior</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>Accessibility Requirements</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>Motion / Interaction</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>21st.dev Prompt</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>Reference Links</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>Chosen Component URL</th>
+                    <td>TBD</td>
+                  </tr>
+                  <tr>
+                    <th>Adaptation Notes</th>
+                    <td>TBD</td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+
+            <article class="schema-card">
+              <h4>Design Style Schema</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>Aesthetic Direction</th>
+                    <td>
+                      Dark cinematic conference energy for a blockchain and AI
+                      hackathon.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Mood Keywords</th>
+                    <td>
+                      Atmospheric, high-contrast, warm-black, orbital, ribboned,
+                      technical, student-led but premium.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Typography Character</th>
+                    <td>
+                      TBC Montserrat for readable UI/body, display, and UI, SVG
+                      wordmarks for exact logo lettering.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Color Character</th>
+                    <td>
+                      Black and burgundy base with yellow-red-purple brand
+                      gradient used sparingly for emphasis.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Surface Treatment</th>
+                    <td>
+                      Transparent dark surfaces, subtle white borders at 10-15
+                      percent opacity, no large white cards.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Spatial Composition</th>
+                    <td>
+                      Full-bleed hero/ribbon fields, integrated logos, diagonal
+                      and circular movement cues, dense but readable inner
+                      pages.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Motion Character</th>
+                    <td>
+                      Diagonal or orbital energy; purposeful load and hover
+                      transitions; reduced-motion support required.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Do Not Use</th>
+                    <td>
+                      Flat purple SaaS gradients, fake partner logos, fake
+                      people, boxed hero cards, large white content cards, long
+                      red body text.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Implementation Notes</th>
+                    <td>
+                      Use <code>assets/fonts/conference-fonts.css</code>,
+                      approved SVG logo assets from
+                      <code>assets/logos/</code> or
+                      <code>assets/c26-assets/</code>, and the selected hero
+                      ASCII wordmark from <code>assets/ascii/</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+          </div>
+
+          <h3>Per-Component Scaffold Blocks</h3>
+          <div class="grid three">
+            <article class="schema-card">
+              <h4>Hero</h4>
+              <p>
+                <span class="tag">Home</span> Main event identity and conversion
+                moment. Selected base: 21st.dev
+                <code>larsen66/hero-ascii-one</code>.
+              </p>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>Layout Variant</th>
+                    <td>
+                      ASCII-first full-bleed hero with a technical frame, local
+                      wordmark art as the dominant first-viewport signal, and
+                      CTA/prize/sponsor content arranged in a scan-friendly side
+                      rail or lower rail.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Registry Anatomy</th>
+                    <td>
+                      Client hero shell, black full-screen stage, technical top
+                      and bottom bars, corner frame accents, mono metadata,
+                      right-aligned content stack, dither accents, CTA buttons,
+                      and mobile static star fallback.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Local Wordmark</th>
+                    <td>
+                      Use
+                      <code
+                        >assets/ascii/wordmark-tum-blockchain-hackathon-ascii.svg</code
+                      >
+                      in the hero. The preview file is
+                      <code
+                        >assets/ascii/wordmark-tum-blockchain-hackathon-ascii.html</code
+                      >. The PNG sibling may be used only as a raster fallback
+                      if the implementation needs one.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Background Decision</th>
+                    <td>
+                      Reject the registry UnicornStudio background and its
+                      external script for the hackathon hero. Use the dark TBC
+                      atmospheric/ribbon schema from this file: black, burgundy,
+                      red, amber, and purple with soft orbital motion cues.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Required Data</th>
+                    <td>
+                      Event name, date/venue eyebrow, primary headline, subhead,
+                      Apply to Hack CTA to <code>https://tum.devfolio.co</code>,
+                      View Prizes CTA to <code>/prizes</code>, prize fallback
+                      line, and Platinum sponsor strip.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Fallbacks</th>
+                    <td>
+                      Prize line falls back to
+                      <code>Prize pool announced soon</code>. Sponsor strip
+                      falls back to <code>Partners announced soon</code>. Do not
+                      invent sponsor logos, partner names, prize amounts,
+                      tracks, or numbers.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Responsive Behavior</th>
+                    <td>
+                      Desktop can split ASCII wordmark and content rail; mobile
+                      stacks wordmark, eyebrow, copy, CTAs, prize fallback, and
+                      sponsor fallback with enough viewport room to hint at the
+                      Sponsors section below.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Motion / Interaction</th>
+                    <td>
+                      Optional pointer-reactive ribbon drift, ASCII shimmer, or
+                      dither hover must be subtle, decorative, and disabled or
+                      simplified for reduced motion. CTAs need visible hover and
+                      focus states.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Accessibility Requirements</th>
+                    <td>
+                      Use one semantic H1 from the headline or event name, give
+                      the SVG a descriptive accessible name, hide decorative
+                      ASCII/ribbons from screen readers, keep external CTA
+                      labels clear, and ensure foreground contrast over the
+                      ribbon field.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Implementation Notes</th>
+                    <td>
+                      Preserve the hero-ascii-one structural idea but remove
+                      branding-hiding code, external UnicornStudio loading, demo
+                      coordinates, demo UIMIX copy, random render heights, and
+                      Sisyphus copy.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>Sponsor Wall</h4>
+              <p><span class="tag">Home</span> Tiered partner display.</p>
+              <div class="placeholder">
+                Selected base: 21st.dev <code>sshahaider/logo-cloud-2</code>.
+                Fill: tier hierarchy, empty state, logo sizing, sponsor inquiry
+                placement, TBC dark-surface adaptation.
+              </div>
+            </article>
+            <article class="schema-card">
+              <h4>Prize Track Card</h4>
+              <p>
+                <span class="tag">Prizes</span> Repeatable multi-sponsor prize
+                module.
+              </p>
+              <div class="placeholder">
+                Selected base: 21st.dev <code>vaib215/category-list</code>.
+                Install command to use during implementation:
+                <code
+                  >npx shadcn@latest add
+                  https://21st.dev/r/vaib215/category-list</code
+                >. Replace the registry demo right-side emojis with rank/prize
+                marks such as <code>1st</code>, <code>2nd</code>,
+                <code>3rd</code>, or suitable medal/trophy-style icons if
+                available. Fill: card anatomy, amount styling, collapsible
+                requirements, use-case bullets.
+              </div>
+            </article>
+            <article class="schema-card">
+              <h4>Schedule</h4>
+              <p>
+                <span class="tag">Schedule</span> Two-day agenda and session
+                cards.
+              </p>
+              <div class="placeholder">
+                Fill: tabs vs sections, filter style, time column, TBD session
+                treatment.
+              </div>
+            </article>
+            <article class="schema-card">
+              <h4>People Slider / Grid</h4>
+              <p>
+                <span class="tag">People</span> Speakers, judges, mentors,
+                workshop leads. Selected base: 21st.dev
+                <code>kavikatiyar/testimonial-slider-1</code>.
+              </p>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>Purpose</th>
+                    <td>
+                      Show confirmed public-cleared people in a featured
+                      carousel on high-value pages and a scan-friendly grid on
+                      the full Speakers & Judges page.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Required Data</th>
+                    <td>
+                      Name, category, role or title, company or organization,
+                      approved portrait, portrait alt, optional topic/session
+                      note, public-clearance flag.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Registry Anatomy</th>
+                    <td>
+                      Client component with current index, direction state,
+                      thumbnail navigation, portrait slide, text panel, and
+                      lucide arrow buttons through shadcn Button.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Adaptation</th>
+                    <td>
+                      Rename testimonial language to People, Speakers, Judges,
+                      or active category. Do not render quotes unless explicitly
+                      approved; use role note, topic, or session metadata
+                      instead.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Fallbacks</th>
+                    <td>
+                      Empty array renders
+                      <code>Speakers and judges announced soon.</code>; one
+                      person renders static card; missing portrait uses non-face
+                      branded placeholder; TBD people stay hidden.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Responsive Behavior</th>
+                    <td>
+                      Featured carousel can use desktop portrait/text split;
+                      mobile stacks content and keeps controls within reach.
+                      Full page must keep a conventional grid for many people.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Accessibility Requirements</th>
+                    <td>
+                      Label arrow buttons, keep visible focus, hide or disable
+                      controls for one item, use descriptive portrait alt text,
+                      and optionally announce slide changes politely.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Motion / Interaction</th>
+                    <td>
+                      Use restrained slide/fade movement. Respect reduced motion
+                      with opacity-only or static rendering. If stack stays
+                      GSAP/Swiper, port anatomy rather than adding duplicate
+                      animation systems blindly.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>FAQ ASCII Accordion</h4>
+              <p>
+                <span class="tag">FAQ</span> Grouped event questions with custom
+                dark TBC ASCII-oriented treatment.
+              </p>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>Purpose</th>
+                    <td>
+                      Answer practical participant questions through a sharp
+                      support-console layout that remains readable and
+                      indexable.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Required Data</th>
+                    <td>
+                      FAQ resources, nine FAQ groups, 45 questions, answer
+                      status, fallback text, inline links, group code, group
+                      count.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Layout</th>
+                    <td>
+                      Page header, top resource strip, group anchor nav, thin
+                      ASCII signal rail, grouped accordion stack, and compact
+                      bottom Apply to Hack CTA.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Style</th>
+                    <td>
+                      Dark cinematic TBC surface, mono labels and counters,
+                      restrained ASCII rails using only ASCII-safe characters,
+                      readable body font for questions and answers.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Fallbacks</th>
+                    <td>
+                      Do not expose raw <code>[TO CONFIRM]</code> notes. Entire
+                      TBD answers use <code>To be announced soon.</code>;
+                      partial TBD answers keep confirmed text and append a
+                      graceful fallback sentence.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Responsive Behavior</th>
+                    <td>
+                      Desktop can use left rail or top anchor list. Mobile uses
+                      wrapping anchor links and stacked accordions; avoid fake
+                      tabs unless panes are controlled as tabs.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Accessibility Requirements</th>
+                    <td>
+                      One H1, H2 per group, keyboard-operable accordions,
+                      visible focus, links with clear purpose, decorative ASCII
+                      hidden from screen readers, reduced-motion support.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Motion / Interaction</th>
+                    <td>
+                      Allow multiple FAQ items open unless a final
+                      implementation chooses stricter behavior. Optional search
+                      must announce result count and keep all groups reachable
+                      without JavaScript.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>FAQ Resources Block</h4>
+              <p>
+                <span class="tag">FAQ</span> High-intent links above the
+                accordion stack.
+              </p>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>Required Links</th>
+                    <td>
+                      Apply on Devfolio, Join the Telegram, optional starter
+                      docs, sponsor email, general hackathon email where context
+                      calls for contact.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Fallbacks</th>
+                    <td>
+                      If starter docs are not confirmed, render a non-link row
+                      such as <code>Starter docs announced soon.</code>; never
+                      create an empty href.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Interaction</th>
+                    <td>
+                      Resource rows behave as normal links with clear
+                      external/mail affordance, visible focus, and compact
+                      mobile stacking.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>CTA Band</h4>
+              <p>
+                <span class="tag">Global</span> Application conversion at page
+                bottoms.
+              </p>
+              <div class="placeholder">
+                Fill: line, button treatment, visual contrast, page-specific
+                variants.
+              </div>
+            </article>
+            <article class="schema-card">
+              <h4>Footer</h4>
+              <p>
+                <span class="tag">Global</span> Links, contacts, socials, legal,
+                CTA. Selected base: 21st.dev
+                <code>sshahaider/dotted-surface</code>.
+              </p>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>Purpose</th>
+                    <td>
+                      Close every page with event identity, organizer context,
+                      key links, social/contact paths, legal links, and Apply to
+                      Hack.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Required Data</th>
+                    <td>
+                      Event wordmark, organizer line, Conference, Club website,
+                      Telegram, Instagram, LinkedIn, X, hackathon email, sponsor
+                      email, Imprint, Apply to Hack.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Registry Anatomy</th>
+                    <td>
+                      Three.js client component with a point grid, fog,
+                      transparent renderer, resize listener, animation loop, and
+                      cleanup for geometry, materials, renderer, and canvas.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Adaptation</th>
+                    <td>
+                      Convert the registry from
+                      <code>fixed inset-0 -z-1</code> to a footer-contained
+                      <code>absolute inset-0 z-0</code> layer inside
+                      <code>relative isolate overflow-hidden</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Fallbacks</th>
+                    <td>
+                      When WebGL or motion is unavailable, use a static dotted
+                      CSS radial pattern. Missing social icon renders a text
+                      label; missing CTA href becomes a disabled/TBD-safe CTA.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Responsive Behavior</th>
+                    <td>
+                      Desktop uses multi-column link/contact layout over a
+                      low-opacity dotted surface. Mobile stacks sections, keeps
+                      legal links visible, and reduces point density.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Accessibility Requirements</th>
+                    <td>
+                      Canvas is decorative and pointer-events none. Footer links
+                      need visible focus, clear external/mail labels, adequate
+                      contrast, and no Discord destination.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Motion / Interaction</th>
+                    <td>
+                      Limit renderer pixel ratio, size from the footer
+                      container, pause or replace animation for reduced motion,
+                      and verify z-index so links remain clickable.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+          </div>
+        </section>
+
+        <section id="prompt-bank">
+          <h2>21st.dev Prompt Bank</h2>
+          <p>
+            Starter prompts for finding or generating UI components later. These
+            prompts should be refined after the final visual direction is
+            chosen.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Prompt Draft</th>
+                <th>Must Include</th>
+                <th>Must Avoid</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Hero</td>
+                <td>
+                  <textarea class="prompt">
+Adapt 21st.dev larsen66/hero-ascii-one, install command npx shadcn@latest add https://21st.dev/r/larsen66/hero-ascii-one, into the TUM Blockchain & AI Hackathon home hero. Preserve the ASCII-first hero structure, technical frame accents, mono metadata rhythm, CTA stack, and subtle dither/interactive idea, but replace all demo copy with CONTENT.md hero content. Use assets/ascii/wordmark-tum-blockchain-hackathon-ascii.svg as the dominant wordmark and keep assets/ascii/wordmark-tum-blockchain-hackathon-ascii.html as its preview reference. Explicitly do not use the registry UnicornStudio/background; use the dark TBC atmospheric ribbon background from this design schema. Include primary "Apply to Hack" CTA to https://tum.devfolio.co, secondary "View Prizes" CTA to /prizes, prize fallback "Prize pool announced soon", and a platinum sponsor strip that falls back to "Partners announced soon".</textarea
+                  >
+                </td>
+                <td>
+                  ASCII wordmark, selected hero-ascii-one structure, TBC ribbon
+                  background, fallback states, two CTAs, sponsor strip, reduced
+                  motion.
+                </td>
+                <td>
+                  Registry background, UnicornStudio script, generic SaaS hero,
+                  fake numbers, fake logos, invented sponsors or prizes.
+                </td>
+              </tr>
+              <tr>
+                <td>Sponsor wall</td>
+                <td>
+                  <textarea class="prompt">
+Create a tiered sponsors and partners section for a multi-sponsor hackathon website. It needs Platinum first, then lower tiers, sponsor logo links, an empty state saying "Partners announced soon", and a sponsor inquiry CTA to email sponsors@tum-blockchain.com.</textarea
+                  >
+                </td>
+                <td>Tier hierarchy, logo grid, empty state, email CTA.</td>
+                <td>Past-partner fillers, decorative fake brands.</td>
+              </tr>
+              <tr>
+                <td>Prize track card</td>
+                <td>
+                  <textarea class="prompt">
+Adapt 21st.dev vaib215/category-list, install command npx shadcn@latest add https://21st.dev/r/vaib215/category-list, into the Prizes page for a multi-sponsor hackathon. The component needs sponsor logo, track name, prize breakdown fallback, 2-4 sentence description slot, 3-5 example idea bullets, and collapsible submission requirements. Replace the registry demo right-side emojis with rank/prize marks such as 1st, 2nd, 3rd, or suitable medal/trophy-style icons if available. It should support "Prize amount announced soon" until values are confirmed.</textarea
+                  >
+                </td>
+                <td>
+                  Category-list base, rank/prize right marks, collapsible
+                  requirements, amount fallback, use-case bullets.
+                </td>
+                <td>
+                  Invented tracks, invented prize values, original demo
+                  right-side emojis.
+                </td>
+              </tr>
+              <tr>
+                <td>Schedule agenda</td>
+                <td>
+                  <textarea class="prompt">
+Create a strong two-day hackathon schedule interface with Day 1 - 30 October and Day 2 - 31 October, readable session cards, optional type filters for Ceremony, Workshop, Mentoring, Meal, Deadline, and Judging, and placeholder slots using "To be announced soon" for unconfirmed sessions.</textarea
+                  >
+                </td>
+                <td>Tabs or sections, session cards, filters, TBD sessions.</td>
+                <td>Add-to-calendar link, invented session times.</td>
+              </tr>
+              <tr>
+                <td>People grid</td>
+                <td>
+                  <textarea class="prompt">
+Adapt the 21st.dev testimonial-slider-1 pattern into a speakers and judges people showcase for the TUM Blockchain & AI Hackathon. Use it as an optional featured slider above or beside a scan-friendly grid. Each confirmed public-cleared person supports name, category, role or title, company or organization, approved portrait, and optional topic or session note. Remove testimonial language unless real quotes are approved, hide TBD people, and render the exact "Speakers and judges announced soon." fallback when no public people exist.</textarea
+                  >
+                </td>
+                <td>
+                  Selected slider anatomy, static one-person state, grid
+                  fallback, photo fallback, category grouping, reduced motion,
+                  empty state.
+                </td>
+                <td>
+                  Fake headshots, fake names, unapproved quotes, rendering TBD
+                  people.
+                </td>
+              </tr>
+              <tr>
+                <td>FAQ</td>
+                <td>
+                  <textarea class="prompt">
+Design a dark cinematic, ASCII-oriented FAQ support console for the TUM Blockchain & AI Hackathon. Include a top resources strip for Devfolio and Telegram, a non-link starter-docs fallback, group anchor navigation, a restrained ASCII signal rail, and grouped accordions for all nine FAQ groups and 45 questions. Keep long answers in readable body typography, use mono labels only for codes/chips/counters, and convert TBD planning notes into graceful fallback copy.</textarea
+                  >
+                </td>
+                <td>
+                  Nine groups, 45 questions, resource CTAs, anchor nav, ASCII
+                  accents, TBD answer styling, keyboard access.
+                </td>
+                <td>
+                  Overly decorative cards, hidden essential answers, raw [TO
+                  CONFIRM] notes, ASCII walls, constant glitch motion.
+                </td>
+              </tr>
+              <tr>
+                <td>Footer</td>
+                <td>
+                  <textarea class="prompt">
+Adapt the 21st.dev dotted-surface component into a footer-only end-of-site surface for the TUM Blockchain & AI Hackathon. Build a dark TBC footer with event wordmark line, organizer, Conference site, Club website, Telegram, Instagram, LinkedIn, X, contact emails, legal links, and persistent Apply to Hack CTA. The dotted Three.js layer must be contained behind the footer content, never fixed behind the whole app, and must include static/reduced-motion and WebGL fallbacks. The footer must not include Discord.</textarea
+                  >
+                </td>
+                <td>
+                  Dotted surface, contacts, legal, socials, Telegram, CTA,
+                  contrast, reduced motion, static fallback.
+                </td>
+                <td>
+                  Discord, unconfirmed partner logos, app-wide background
+                  canvas, unreadable low-contrast links.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Internet Research Targets For Later</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Use For</th>
+                <th>Do Not Copy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>https://chain.link/hackathon</code></td>
+                <td>Hero and page-flow structure reference only.</td>
+                <td>Do not borrow colors, exact styling, copy, or assets.</td>
+              </tr>
+              <tr>
+                <td><code>https://www.midwestblockchain.org/#agenda</code></td>
+                <td>Schedule readability and agenda organization reference.</td>
+                <td>Do not copy visual styling or schedule details.</td>
+              </tr>
+              <tr>
+                <td><code>https://conference.tum-blockchain.com/</code></td>
+                <td>Brand and naming baseline.</td>
+                <td>
+                  Do not assume hackathon design must match exactly without
+                  approval.
+                </td>
+              </tr>
+              <tr>
+                <td><code>https://21st.dev</code></td>
+                <td>
+                  Component discovery and generation using prompt bank above.
+                </td>
+                <td>
+                  Do not import components without adapting to content rules and
+                  fallbacks.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Selected Component: Hero ASCII One</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Decision / Finding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Registry URL</td>
+                <td><code>https://21st.dev/r/larsen66/hero-ascii-one</code></td>
+              </tr>
+              <tr>
+                <td>CLI attempted</td>
+                <td>
+                  <code
+                    >npx shadcn@latest add
+                    https://21st.dev/r/larsen66/hero-ascii-one</code
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Install result</td>
+                <td>
+                  Not installed. The CLI stopped at the shadcn setup gate and
+                  asked to create <code>components.json</code>. Do not
+                  initialize broad app or shadcn config from this design task;
+                  install after the actual framework scaffold exists.
+                </td>
+              </tr>
+              <tr>
+                <td>Registry component</td>
+                <td>
+                  <code>AnimationPage</code>, registry file path
+                  <code>src/components/ui/hero-ascii-one.tsx</code>; expected
+                  app path after framework setup
+                  <code>src/components/ui/hero-ascii-one.tsx</code>.
+                </td>
+              </tr>
+              <tr>
+                <td>Registry anatomy to keep</td>
+                <td>
+                  Full-viewport black hero stage, technical top bar, corner
+                  frame accents, mono detail labels, right-side content rail,
+                  dither pattern accents, strong CTA buttons, and mobile-safe
+                  static atmosphere.
+                </td>
+              </tr>
+              <tr>
+                <td>Registry parts to reject</td>
+                <td>
+                  Do not use the embedded UnicornStudio script,
+                  <code>data-us-project</code> canvas background,
+                  branding-hiding code, demo UIMIX identity, demo coordinates,
+                  Sisyphus copy, or random bar heights in render output.
+                </td>
+              </tr>
+              <tr>
+                <td>Local hero assets</td>
+                <td>
+                  Use
+                  <code
+                    >assets/ascii/wordmark-tum-blockchain-hackathon-ascii.svg</code
+                  >. Keep
+                  <code
+                    >assets/ascii/wordmark-tum-blockchain-hackathon-ascii.html</code
+                  >
+                  as the dark preview reference. Use
+                  <code
+                    >assets/ascii/wordmark-tum-blockchain-hackathon-ascii.png</code
+                  >
+                  only if a raster fallback is required.
+                </td>
+              </tr>
+              <tr>
+                <td>Hackathon adaptation</td>
+                <td>
+                  Hero is a dark TBC atmospheric/ribbon composition with the
+                  ASCII wordmark as the main signal, CONTENT.md
+                  headline/subhead, Apply to Hack and View Prizes CTAs, prize
+                  fallback, and Platinum sponsor fallback strip.
+                </td>
+              </tr>
+              <tr>
+                <td>Fallback behavior</td>
+                <td>
+                  Prize amount unknown renders
+                  <code>Prize pool announced soon</code>. Empty sponsor data
+                  renders <code>Partners announced soon</code>. Never invent
+                  sponsor names, logos, prize amounts, tracks, or partner
+                  brands.
+                </td>
+              </tr>
+              <tr>
+                <td>Accessibility notes</td>
+                <td>
+                  Expose a semantic H1, descriptive SVG alt/name,
+                  keyboard-visible CTA focus, reduced-motion support, and
+                  <code>aria-hidden</code> for decorative ASCII/ribbon layers.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 id="hero-shader-note">Hero Shader Implementation Note</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Decision / Finding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Production component</td>
+                <td>
+                  Use <code>src/components/ui/hero-logo-shader.tsx</code> inside
+                  <code>HeroAsciiOne</code> for the homepage logo mark. The
+                  component is client-only because it renders two Three.js
+                  shader canvases clipped by PNG masks. Use
+                  <code>src/components/ui/shader-cta-link.tsx</code> for the
+                  hero Apply to Hack CTA so the button shares the same shader
+                  sweep implementation.
+                </td>
+              </tr>
+              <tr>
+                <td>Runtime masks</td>
+                <td>
+                  Keep <code>public/hero-shader/hero-composite-mask.png</code>,
+                  <code>public/hero-shader/hero-composite-mask-top.png</code>,
+                  and
+                  <code>public/hero-shader/hero-composite-mask-bottom.png</code
+                  >. These are required for the base logo image and top/bottom
+                  shader clipping. The temporary
+                  <code>/shader-showcase</code> route is not part of production.
+                </td>
+              </tr>
+              <tr>
+                <td>Visual behavior</td>
+                <td>
+                  Preserve original logo colors as the base layer. Overlay
+                  orange-purple shader shimmer on the TUM / BLOCKCHAIN mask and
+                  a softer white/pale shimmer on the Hackathon 26 mask. The
+                  Apply to Hack CTA keeps the red/yellow flow-button behavior;
+                  its reusable shader layer stays hidden at rest, then fades in
+                  under the label on hover or focus with faster orange-purple
+                  tuning.
+                </td>
+              </tr>
+              <tr>
+                <td>Approved tuning</td>
+                <td>
+                  Use <code>speed: 0.32</code>, <code>lineWidth: 0.0024</code>,
+                  <code>spacing: 0.13</code>, <code>intensity: 0.95</code>, and
+                  <code>zoom: 0.85</code>.
+                </td>
+              </tr>
+              <tr>
+                <td>CTA hover tuning</td>
+                <td>
+                  Use <code>src/components/ui/shader-cta-link.tsx</code> as the
+                  reusable button feature. Keep the shader canvas at
+                  <code>opacity: 0</code> while idle, then reveal it as a
+                  one-time <code>760ms</code> burst on hover or focus with
+                  <code>speed: 1.35</code>, <code>lineWidth: 0.003</code>,
+                  <code>spacing: 0.09</code>, <code>intensity: 1.25</code>, and
+                  <code>zoom: 0.78</code>. Set the shader direction to
+                  <code>from-bottom-right</code> so it follows the same
+                  lower-right entry direction as the orange/yellow flow-button
+                  fill. Only the homepage hero Apply to Hack button uses this
+                  variant for now.
+                </td>
+              </tr>
+              <tr>
+                <td>Accessibility and layout</td>
+                <td>
+                  The wrapper exposes
+                  <code>aria-label="TUM Blockchain Hackathon 26"</code>; the
+                  internal image/canvases are decorative. Keep the aspect ratio
+                  <code>720 / 350</code> and responsive width constraints so the
+                  mark fits mobile without horizontal page overflow.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Selected Component: Sponsor Logo Cloud</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Decision / Finding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Registry URL</td>
+                <td><code>https://21st.dev/r/sshahaider/logo-cloud-2</code></td>
+              </tr>
+              <tr>
+                <td>CLI attempted</td>
+                <td>
+                  <code
+                    >npx shadcn@latest add
+                    https://21st.dev/r/sshahaider/logo-cloud-2</code
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Install result</td>
+                <td>
+                  Not installed yet. The shadcn CLI could not detect a supported
+                  framework in this repository. Configure the actual app
+                  framework first, then rerun the command.
+                </td>
+              </tr>
+              <tr>
+                <td>Registry component</td>
+                <td>
+                  <code>LogoCloud</code>, expected file path
+                  <code>src/components/ui/logo-cloud-2.tsx</code>.
+                </td>
+              </tr>
+              <tr>
+                <td>Dependencies</td>
+                <td>
+                  <code>lucide-react</code> for plus icons and local
+                  <code>@/lib/utils</code> <code>cn</code> helper.
+                </td>
+              </tr>
+              <tr>
+                <td>Component anatomy</td>
+                <td>
+                  Responsive grid with 2 columns on mobile and 4 columns on
+                  medium screens, border lattice, alternating background cells,
+                  centered logos, and decorative plus markers at selected grid
+                  intersections.
+                </td>
+              </tr>
+              <tr>
+                <td>Demo content to remove</td>
+                <td>
+                  Nvidia, Supabase, GitHub, OpenAI, Turso, Clerk, Claude AI, and
+                  Vercel logo URLs are demo data only and must be replaced with
+                  confirmed sponsor records.
+                </td>
+              </tr>
+              <tr>
+                <td>Hackathon adaptation</td>
+                <td>
+                  Use for the hero Platinum sponsor strip and as a repeatable
+                  tier block in the full Sponsors & Partners section. Retain the
+                  lattice/grid concept, but restyle backgrounds to transparent
+                  dark TBC surfaces with warm-white borders.
+                </td>
+              </tr>
+              <tr>
+                <td>Fallback behavior</td>
+                <td>
+                  If the relevant sponsor array is empty, do not render empty
+                  logo cards. Render the copy fallback
+                  <code>Partners announced soon</code>.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Selected Component: Footer Dotted Surface</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Decision / Finding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Registry URL</td>
+                <td>
+                  <code>https://21st.dev/r/sshahaider/dotted-surface</code>
+                </td>
+              </tr>
+              <tr>
+                <td>CLI attempted</td>
+                <td>
+                  <code
+                    >npx shadcn@latest add
+                    https://21st.dev/r/sshahaider/dotted-surface</code
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Install result</td>
+                <td>
+                  Not installed. The CLI reached the shadcn setup prompt for
+                  <code>components.json</code>; final install must wait until
+                  the Next/shadcn app scaffold exists.
+                </td>
+              </tr>
+              <tr>
+                <td>Registry component</td>
+                <td>
+                  <code>DottedSurface</code>, expected path
+                  <code>src/components/ui/dotted-surface.tsx</code>.
+                </td>
+              </tr>
+              <tr>
+                <td>Dependencies</td>
+                <td>
+                  <code>three</code>, optional <code>next-themes</code>, React
+                  client runtime, and local <code>@/lib/utils</code>
+                  <code>cn</code> helper.
+                </td>
+              </tr>
+              <tr>
+                <td>Component anatomy</td>
+                <td>
+                  Three.js point grid with fog, perspective camera, transparent
+                  renderer, animated y positions, resize listener, animation
+                  loop, and explicit cleanup.
+                </td>
+              </tr>
+              <tr>
+                <td>Hackathon adaptation</td>
+                <td>
+                  Use only inside the global footer. Convert fixed full-viewport
+                  placement to a contained absolute footer layer behind
+                  wordmark, link columns, socials, legal, contacts, and CTA.
+                </td>
+              </tr>
+              <tr>
+                <td>Fallback behavior</td>
+                <td>
+                  Respect reduced motion and WebGL failure with a static dotted
+                  CSS radial pattern. Keep opacity low enough that footer copy
+                  and links pass contrast.
+                </td>
+              </tr>
+              <tr>
+                <td>Implementation notes</td>
+                <td>
+                  Size from footer bounds with <code>ResizeObserver</code> or
+                  container measurements, cap renderer pixel ratio, reduce point
+                  density on mobile, and keep the canvas
+                  <code>pointer-events: none</code>.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Selected Component: People Testimonial Slider/Grid</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Decision / Finding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Registry URL</td>
+                <td>
+                  <code
+                    >https://21st.dev/r/kavikatiyar/testimonial-slider-1</code
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>CLI attempted</td>
+                <td>
+                  <code
+                    >npx shadcn@latest add
+                    https://21st.dev/r/kavikatiyar/testimonial-slider-1</code
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Install result</td>
+                <td>
+                  Not installed. The CLI reached the shadcn setup prompt because
+                  this repo currently lacks <code>components.json</code> and
+                  app/shadcn framework setup.
+                </td>
+              </tr>
+              <tr>
+                <td>Registry component</td>
+                <td>
+                  <code>TestimonialSlider</code>, expected path
+                  <code>src/components/ui/testimonial-slider-1.tsx</code>.
+                </td>
+              </tr>
+              <tr>
+                <td>Dependencies</td>
+                <td>
+                  <code>framer-motion</code>, <code>lucide-react</code>, shadcn
+                  <code>Button</code>, <code>@radix-ui/react-slot</code>,
+                  <code>class-variance-authority</code>, and
+                  <code>@/lib/utils</code> <code>cn</code>.
+                </td>
+              </tr>
+              <tr>
+                <td>Component anatomy</td>
+                <td>
+                  Client slider with current index, direction state, desktop
+                  portrait/text split, thumbnail navigation, and circular arrow
+                  buttons.
+                </td>
+              </tr>
+              <tr>
+                <td>Hackathon adaptation</td>
+                <td>
+                  Use as a people showcase, not as a testimonial module. Map
+                  name, category, role/title, company, portrait, and optional
+                  topic/session note; omit quotes unless approved.
+                </td>
+              </tr>
+              <tr>
+                <td>Fallback behavior</td>
+                <td>
+                  Empty confirmed people array renders
+                  <code>Speakers and judges announced soon.</code>; one person
+                  hides prev/next and thumbnails; missing portrait uses non-face
+                  branded placeholder.
+                </td>
+              </tr>
+              <tr>
+                <td>Implementation notes</td>
+                <td>
+                  Filter on <code>isPubliclyCleared</code> before render. If the
+                  production stack keeps GSAP/Swiper rather than Motion,
+                  preserve the selected layout anatomy while using the approved
+                  animation/carousel system.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Selected Component: FAQ ASCII-Oriented Sharp Section</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Decision / Finding</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Source type</td>
+                <td>
+                  Custom design spec aligned with the dark TBC schema; no
+                  external registry component selected.
+                </td>
+              </tr>
+              <tr>
+                <td>Content source</td>
+                <td>
+                  <code>.agents/CONTENT.md</code> defines nine FAQ groups and 45
+                  questions.
+                </td>
+              </tr>
+              <tr>
+                <td>Component anatomy</td>
+                <td>
+                  FAQ header, resources block, group navigation, ASCII signal
+                  rail, grouped accordion stack, readable answer bodies, TBD
+                  status chips, and compact bottom CTA.
+                </td>
+              </tr>
+              <tr>
+                <td>Style decision</td>
+                <td>
+                  Dark cinematic support console with mono labels, counters,
+                  short ASCII rails, warm-white body copy, and restrained
+                  yellow/red/purple accents.
+                </td>
+              </tr>
+              <tr>
+                <td>Data rules</td>
+                <td>
+                  Use structured <code>faqResources</code>,
+                  <code>faqGroups</code>, and <code>faqItems</code>. Generate
+                  counts from data so the nine-group and 45-question totals stay
+                  correct.
+                </td>
+              </tr>
+              <tr>
+                <td>Fallback behavior</td>
+                <td>
+                  Never render raw <code>[TO CONFIRM]</code> notes. Entire TBD
+                  answers become <code>To be announced soon.</code>; partial TBD
+                  answers keep confirmed text plus a graceful fallback sentence.
+                </td>
+              </tr>
+              <tr>
+                <td>Accessibility notes</td>
+                <td>
+                  Use semantic headings, keyboard-operable accordions, visible
+                  focus, decorative ASCII with <code>aria-hidden</code>, clear
+                  link purpose, and reduced-motion support.
+                </td>
+              </tr>
+              <tr>
+                <td>Implementation notes</td>
+                <td>
+                  Prefer anchor navigation over client-only filtering. Optional
+                  search must announce result count and keep content reachable
+                  without JavaScript.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="data-models">
+          <h2>Data Models</h2>
+          <p>
+            Use structured data instead of hard-coded strings wherever the
+            implementation allows it.
+          </p>
+
+          <h3>Component Data JSON</h3>
+          <script type="application/json" id="component-data-schema">
+            {
+              "event": {
+                "name": "TUM Blockchain & AI Hackathon",
+                "parentEvent": "TUM Blockchain Conference + Hackathon 26",
+                "dates": "30-31 October 2026",
+                "venue": "House of Communication, Munich",
+                "primaryCta": {
+                  "label": "Apply to Hack",
+                  "href": "https://tum.devfolio.co"
+                },
+                "community": {
+                  "label": "Join us on Telegram",
+                  "href": "https://t.me/+mY6aLKS8OnlhZjJk"
+                }
+              },
+              "fallbacks": {
+                "default": "To be announced soon.",
+                "sponsors": "Partners announced soon",
+                "prizePool": "Prize pool announced soon",
+                "prizePoolGrowing": "Prize pool announced soon and growing.",
+                "speakers": "Speakers and judges announced soon.",
+                "tracks": "Prize tracks announced soon.",
+                "times": "Times announced soon",
+                "starterDocs": "Starter docs announced soon.",
+                "faqAnswer": "To be announced soon.",
+                "footerCanvas": "Static dotted footer surface"
+              },
+              "headerNav": [
+                {
+                  "label": "Home",
+                  "href": "/",
+                  "isExternal": false,
+                  "showInHeader": true
+                },
+                {
+                  "label": "Prizes",
+                  "href": "/prizes",
+                  "isExternal": false,
+                  "showInHeader": true
+                },
+                {
+                  "label": "Schedule",
+                  "href": "/schedule",
+                  "isExternal": false,
+                  "showInHeader": true
+                },
+                {
+                  "label": "Speakers & Judges",
+                  "href": "/speakers-and-judges",
+                  "isExternal": false,
+                  "showInHeader": true
+                },
+                {
+                  "label": "FAQ",
+                  "href": "/faq",
+                  "isExternal": false,
+                  "showInHeader": true
+                },
+                {
+                  "label": "Conference",
+                  "href": "https://conference.tum-blockchain.com/",
+                  "isExternal": true,
+                  "showInHeader": true
+                }
+              ],
+              "heroAsciiOne": {
+                "selectedComponent": "21st.dev larsen66/hero-ascii-one",
+                "registryUrl": "https://21st.dev/r/larsen66/hero-ascii-one",
+                "installCommand": "npx shadcn@latest add https://21st.dev/r/larsen66/hero-ascii-one",
+                "expectedPathAfterFrameworkSetup": "src/components/ui/hero-ascii-one.tsx",
+                "installStatus": "Not installed. CLI asked to create components.json; do not initialize broad app config until the framework scaffold exists.",
+                "localAsciiWordmarkSvg": "assets/ascii/wordmark-tum-blockchain-hackathon-ascii.svg",
+                "localAsciiWordmarkHtmlPreview": "assets/ascii/wordmark-tum-blockchain-hackathon-ascii.html",
+                "localAsciiWordmarkPngFallback": "assets/ascii/wordmark-tum-blockchain-hackathon-ascii.png",
+                "backgroundDecision": "Reject the registry UnicornStudio background and use the dark TBC atmospheric ribbon schema from design.html.",
+                "registryAnatomyToKeep": [
+                  "ASCII-first hero stage",
+                  "technical frame accents",
+                  "mono metadata",
+                  "CTA content rail",
+                  "dither accents",
+                  "mobile-safe static atmosphere"
+                ],
+                "registryAnatomyToRemove": [
+                  "UnicornStudio script",
+                  "data-us-project canvas",
+                  "branding-hiding code",
+                  "demo UIMIX copy",
+                  "demo coordinates",
+                  "Sisyphus copy",
+                  "random render heights"
+                ],
+                "eyebrow": "House of Communication, Munich // 30-31 October 2026",
+                "headline": "Where blockchain meets AI, and ideas become reality overnight.",
+                "alternateHeadlines": [
+                  "Build at the edge of blockchain and AI.",
+                  "Two days. One room. The future of onchain AI."
+                ],
+                "subhead": "An in-person hackathon in Munich, hosted by the team behind Europe's largest student-led Web3 event.",
+                "primaryCta": {
+                  "label": "Apply to Hack",
+                  "href": "https://tum.devfolio.co"
+                },
+                "secondaryCta": {
+                  "label": "View Prizes",
+                  "href": "/prizes"
+                },
+                "prizeFallback": "Prize pool announced soon",
+                "sponsorFallback": "Partners announced soon",
+                "sponsorFilter": "tier === 'Platinum' && isConfirmed",
+                "doNotInvent": [
+                  "sponsors",
+                  "partner logos",
+                  "prize amounts",
+                  "tracks",
+                  "people",
+                  "dates beyond CONTENT.md"
+                ],
+                "reducedMotionFallback": "static ribbon field with no ASCII shimmer or pointer-reactive movement"
+              },
+              "sponsor": {
+                "tier": "Platinum | Gold | Silver | Bronze | Community | TBD",
+                "name": "TBD",
+                "logoSrc": "TBD",
+                "href": "TBD",
+                "logoAlt": "TBD sponsor logo",
+                "isConfirmed": false
+              },
+              "sponsorLogoCloud": {
+                "selectedComponent": "21st.dev sshahaider/logo-cloud-2",
+                "registryUrl": "https://21st.dev/r/sshahaider/logo-cloud-2",
+                "installCommand": "npx shadcn@latest add https://21st.dev/r/sshahaider/logo-cloud-2",
+                "expectedPathAfterFrameworkSetup": "src/components/ui/logo-cloud-2.tsx",
+                "dependencies": ["lucide-react", "@/lib/utils cn"],
+                "emptyFallback": "Partners announced soon",
+                "heroFilter": "tier === 'Platinum' && isConfirmed",
+                "fullWallOrdering": [
+                  "Platinum",
+                  "Gold",
+                  "Silver",
+                  "Bronze",
+                  "Community"
+                ]
+              },
+              "footerDottedSurface": {
+                "selectedComponent": "21st.dev sshahaider/dotted-surface",
+                "registryUrl": "https://21st.dev/r/sshahaider/dotted-surface",
+                "installCommand": "npx shadcn@latest add https://21st.dev/r/sshahaider/dotted-surface",
+                "expectedPathAfterFrameworkSetup": "src/components/ui/dotted-surface.tsx",
+                "dependencies": [
+                  "three",
+                  "React client runtime",
+                  "@/lib/utils cn",
+                  "optional next-themes"
+                ],
+                "placement": "footer-only contained background",
+                "canvasLayer": "absolute inset-0 z-0 pointer-events-none",
+                "contentLayer": "relative z-10",
+                "reducedMotionFallback": "static CSS dotted radial pattern",
+                "mobileDensity": "reduced point count and capped pixel ratio"
+              },
+              "person": {
+                "name": "TBD",
+                "role": "TBD",
+                "roleTitle": "TBD",
+                "company": "TBD",
+                "category": "Judge | Mentor | Workshop Lead | Speaker | TBD",
+                "photoSrc": "TBD",
+                "photoAlt": "TBD",
+                "topicOrSession": "TBD",
+                "quote": null,
+                "isPubliclyCleared": false
+              },
+              "peopleTestimonialSlider": {
+                "selectedComponent": "21st.dev kavikatiyar/testimonial-slider-1",
+                "registryUrl": "https://21st.dev/r/kavikatiyar/testimonial-slider-1",
+                "installCommand": "npx shadcn@latest add https://21st.dev/r/kavikatiyar/testimonial-slider-1",
+                "expectedPathAfterFrameworkSetup": "src/components/ui/testimonial-slider-1.tsx",
+                "dependencies": [
+                  "framer-motion",
+                  "lucide-react",
+                  "shadcn Button",
+                  "@radix-ui/react-slot",
+                  "class-variance-authority",
+                  "@/lib/utils cn"
+                ],
+                "renderFilter": "isPubliclyCleared === true && category !== 'TBD'",
+                "emptyFallback": "Speakers and judges announced soon.",
+                "oneItemBehavior": "static card, no prev/next controls, no thumbnails",
+                "photoFallback": "non-face branded placeholder"
+              },
+              "session": {
+                "day": "2026-10-30 | 2026-10-31",
+                "time": "TBD",
+                "title": "TBD",
+                "type": "Ceremony | Workshop | Mentoring | Meal | Deadline | Judging | TBD",
+                "host": "TBD",
+                "location": "TBD",
+                "isConfirmed": false
+              },
+              "prizeTrack": {
+                "trackName": "TBD",
+                "sponsorName": "TBD",
+                "sponsorLogoSrc": "TBD",
+                "amount": "TBD",
+                "rightMark": "1st | 2nd | 3rd | trophy/medal icon | TBD",
+                "description": "TBD",
+                "exampleIdeas": [],
+                "requirements": [],
+                "isConfirmed": false
+              },
+              "footerLinks": [
+                {
+                  "label": "Apply to Hack",
+                  "href": "https://tum.devfolio.co",
+                  "kind": "cta",
+                  "isExternal": true
+                },
+                {
+                  "label": "Conference",
+                  "href": "https://conference.tum-blockchain.com/",
+                  "kind": "external",
+                  "isExternal": true
+                },
+                {
+                  "label": "Club website",
+                  "href": "https://www.tum-blockchain.com",
+                  "kind": "external",
+                  "isExternal": true
+                },
+                {
+                  "label": "Telegram",
+                  "href": "https://t.me/+mY6aLKS8OnlhZjJk",
+                  "kind": "community",
+                  "isExternal": true
+                },
+                {
+                  "label": "Instagram",
+                  "href": "https://www.instagram.com/tumblockchain/",
+                  "kind": "social",
+                  "isExternal": true
+                },
+                {
+                  "label": "LinkedIn",
+                  "href": "https://www.linkedin.com/company/tum-blockchain-club/",
+                  "kind": "social",
+                  "isExternal": true
+                },
+                {
+                  "label": "X",
+                  "href": "https://x.com/tbc_munich",
+                  "kind": "social",
+                  "isExternal": true
+                },
+                {
+                  "label": "Hackathon questions",
+                  "href": "mailto:hackathon@tum-blockchain.com",
+                  "kind": "contact",
+                  "isExternal": false
+                },
+                {
+                  "label": "Sponsor inquiries",
+                  "href": "mailto:sponsors@tum-blockchain.com",
+                  "kind": "contact",
+                  "isExternal": false
+                },
+                {
+                  "label": "Imprint",
+                  "href": "https://www.tum-blockchain.com/imprint",
+                  "kind": "legal",
+                  "isExternal": true
+                }
+              ],
+              "faqResources": [
+                {
+                  "label": "Apply on Devfolio",
+                  "href": "https://tum.devfolio.co",
+                  "kind": "primary",
+                  "isConfirmed": true,
+                  "fallback": null
+                },
+                {
+                  "label": "Join the Telegram",
+                  "href": "https://t.me/+mY6aLKS8OnlhZjJk",
+                  "kind": "community",
+                  "isConfirmed": true,
+                  "fallback": null
+                },
+                {
+                  "label": "Starter docs",
+                  "href": null,
+                  "kind": "docs",
+                  "isConfirmed": false,
+                  "fallback": "Starter docs announced soon."
+                }
+              ],
+              "faqGroups": [
+                {
+                  "id": "about",
+                  "label": "About the hackathon",
+                  "code": "FAQ.01",
+                  "count": 4
+                },
+                {
+                  "id": "eligibility-cost",
+                  "label": "Eligibility and cost",
+                  "code": "FAQ.02",
+                  "count": 7
+                },
+                {
+                  "id": "teams",
+                  "label": "Teams",
+                  "code": "FAQ.03",
+                  "count": 4
+                },
+                {
+                  "id": "building",
+                  "label": "Building your project",
+                  "code": "FAQ.04",
+                  "count": 5
+                },
+                {
+                  "id": "applying-submitting",
+                  "label": "Applying and submitting",
+                  "code": "FAQ.05",
+                  "count": 4
+                },
+                {
+                  "id": "judging-prizes",
+                  "label": "Judging and prizes",
+                  "code": "FAQ.06",
+                  "count": 6
+                },
+                {
+                  "id": "during-event",
+                  "label": "During the event",
+                  "code": "FAQ.07",
+                  "count": 9
+                },
+                {
+                  "id": "rules-legal",
+                  "label": "Rules and legal",
+                  "code": "FAQ.08",
+                  "count": 3
+                },
+                {
+                  "id": "communication-contact",
+                  "label": "Communication and contact",
+                  "code": "FAQ.09",
+                  "count": 3
+                }
+              ],
+              "faqItem": {
+                "question": "TBD",
+                "answer": "TBD",
+                "status": "confirmed | partial-tbd | tbd",
+                "fallback": "To be announced soon.",
+                "links": []
+              }
+            }
+          </script>
+
+          <h3>Schema Tables</h3>
+          <div class="grid two">
+            <article class="schema-card">
+              <h4>Header Link Object</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>label</th>
+                    <td>
+                      Short nav label; avoid long copy inside the compact bar.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>href</th>
+                    <td>Internal route or confirmed external destination.</td>
+                  </tr>
+                  <tr>
+                    <th>isExternal</th>
+                    <td>
+                      Use <code>true</code> for Conference and add visible or
+                      announced external-link affordance.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>showInHeader</th>
+                    <td>Allows footer-only links to stay out of the header.</td>
+                  </tr>
+                  <tr>
+                    <th>active state</th>
+                    <td>
+                      Derived from current route for internal pages; external
+                      links do not become active.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>Hero Object</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>selectedComponent</th>
+                    <td>
+                      Use <code>21st.dev larsen66/hero-ascii-one</code> as the
+                      structural basis only.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>wordmarkSrc</th>
+                    <td>
+                      Local ASCII SVG path. Required for the primary hero art.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>wordmarkPreview</th>
+                    <td>
+                      Local preview HTML path for visual QA on a dark TBC-safe
+                      background.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>background</th>
+                    <td>
+                      Dark TBC ribbon schema. Never the registry UnicornStudio
+                      background.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>headline / subhead</th>
+                    <td>
+                      Use CONTENT.md draft copy or confirmed replacements only.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>primaryCta / secondaryCta</th>
+                    <td>
+                      Apply to Hack to Devfolio and View Prizes to
+                      <code>/prizes</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>prizeFallback</th>
+                    <td>
+                      <code>Prize pool announced soon</code> until a real amount
+                      is confirmed.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>sponsorFallback</th>
+                    <td>
+                      <code>Partners announced soon</code> when the Platinum
+                      sponsor array is empty.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>Sponsor Object</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>tier</th>
+                    <td>Platinum first, then remaining tiers.</td>
+                  </tr>
+                  <tr>
+                    <th>name</th>
+                    <td>Only confirmed partner names.</td>
+                  </tr>
+                  <tr>
+                    <th>logoSrc</th>
+                    <td>Approved logo asset path.</td>
+                  </tr>
+                  <tr>
+                    <th>logoAlt</th>
+                    <td>
+                      Accessible sponsor logo alt text, usually
+                      <code>{Sponsor name} logo</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>href</th>
+                    <td>Sponsor website URL.</td>
+                  </tr>
+                  <tr>
+                    <th>fallback</th>
+                    <td>Partners announced soon.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>Person Object</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>name</th>
+                    <td>Confirmed public-cleared person name only.</td>
+                  </tr>
+                  <tr>
+                    <th>category</th>
+                    <td>
+                      Judge, Mentor, Workshop Lead, Speaker, or TBD. Public
+                      rendering filters out TBD.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>roleTitle</th>
+                    <td>
+                      Compact public role line such as Judge, Mentor, Workshop
+                      Lead, or session title.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>company</th>
+                    <td>Confirmed company or organization.</td>
+                  </tr>
+                  <tr>
+                    <th>photoSrc</th>
+                    <td>
+                      Approved portrait asset path. Never use stock or generated
+                      face imagery.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>photoAlt</th>
+                    <td>
+                      Descriptive portrait alt text. Decorative non-face
+                      placeholders use empty alt and visible name text.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>topicOrSession</th>
+                    <td>
+                      Optional confirmed topic, judging focus, workshop, or
+                      session note.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>isPubliclyCleared</th>
+                    <td>
+                      Required boolean gate before rendering in slider or grid.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>Footer Link Object</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>label</th>
+                    <td>Human-readable footer link label.</td>
+                  </tr>
+                  <tr>
+                    <th>href</th>
+                    <td>
+                      Confirmed URL or mailto destination from CONTENT.md.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>kind</th>
+                    <td>
+                      external, community, social, contact, legal, or cta.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>isExternal</th>
+                    <td>
+                      Use true for external URLs and provide visible or
+                      announced affordance.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>icon</th>
+                    <td>
+                      Optional lucide/social icon key. If missing, render the
+                      text label instead of hiding the link.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>Session Object</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>time</th>
+                    <td>Confirmed time or fallback.</td>
+                  </tr>
+                  <tr>
+                    <th>title</th>
+                    <td>Confirmed title or announcement copy.</td>
+                  </tr>
+                  <tr>
+                    <th>type</th>
+                    <td>
+                      Ceremony, Workshop, Mentoring, Meal, Deadline, Judging.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>host</th>
+                    <td>Optional confirmed speaker or partner.</td>
+                  </tr>
+                  <tr>
+                    <th>location</th>
+                    <td>Venue room or fallback.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>FAQ Resource Object</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>label</th>
+                    <td>
+                      Apply on Devfolio, Join the Telegram, Starter docs, or
+                      contact resource.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>href</th>
+                    <td>
+                      Confirmed URL/mailto, or null when the resource is not
+                      confirmed.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>kind</th>
+                    <td>
+                      primary, community, docs, sponsor, contact, or secondary.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>isConfirmed</th>
+                    <td>
+                      Controls whether the row is a link or non-link fallback.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>fallback</th>
+                    <td>
+                      Graceful non-link copy such as
+                      <code>Starter docs announced soon.</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>FAQ Group And Item Objects</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>group.id</th>
+                    <td>
+                      Stable slug used for anchor navigation and accordion IDs.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>group.label</th>
+                    <td>One of the nine CONTENT.md FAQ group labels.</td>
+                  </tr>
+                  <tr>
+                    <th>group.code</th>
+                    <td>
+                      Short mono code such as <code>FAQ.01</code> for the ASCII
+                      console treatment.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>group.count</th>
+                    <td>
+                      Generated item count; current total is nine groups and 45
+                      questions.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>item.status</th>
+                    <td>confirmed, partial-tbd, or tbd.</td>
+                  </tr>
+                  <tr>
+                    <th>item.fallback</th>
+                    <td>
+                      Fallback answer text. Do not render raw CONTENT.md
+                      planning brackets.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>item.links</th>
+                    <td>
+                      Inline link references for Devfolio, Telegram, contact
+                      emails, rules, or docs.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+            <article class="schema-card">
+              <h4>Dotted Surface Config</h4>
+              <table>
+                <tbody>
+                  <tr>
+                    <th>placement</th>
+                    <td>
+                      Footer-only contained layer, never global app background.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>density</th>
+                    <td>
+                      Desktop and mobile point count settings tuned after visual
+                      QA.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>colors</th>
+                    <td>
+                      Low-opacity warm-white points with restrained
+                      yellow/red/purple accents.
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>fallback</th>
+                    <td>
+                      Static CSS dotted radial pattern for reduced motion or
+                      WebGL failure.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+          </div>
+        </section>
+
+        <section id="fallbacks">
+          <h2>Fallback System</h2>
+          <p>
+            Fallbacks are a design requirement, not just copy. Every component
+            must have an intentional empty, partial, and confirmed state.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Unknown Content</th>
+                <th>Fallback Text</th>
+                <th>Impacted Components</th>
+                <th>Design Treatment To Fill</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Hero ASCII wordmark asset unavailable</td>
+                <td>TUM Blockchain &amp; AI Hackathon</td>
+                <td>Home hero.</td>
+                <td>
+                  Render the event name as accessible text on the same dark TBC
+                  ribbon surface; do not substitute a fake logo, generated mark,
+                  or the registry demo identity.
+                </td>
+              </tr>
+              <tr>
+                <td>Default unknown value</td>
+                <td>To be announced soon.</td>
+                <td>All dynamic components.</td>
+                <td>
+                  Neutral warm-white copy on dark surface; optional small mono
+                  <code>[PENDING]</code> chip only when it improves scanability.
+                </td>
+              </tr>
+              <tr>
+                <td>Sponsor logos / partners</td>
+                <td>Partners announced soon</td>
+                <td>Hero sponsor strip, sponsor wall.</td>
+                <td>
+                  Do not render empty logo lattice cards. Show compact partner
+                  announcement copy and sponsor inquiry CTA where relevant.
+                </td>
+              </tr>
+              <tr>
+                <td>Prize amount</td>
+                <td>Prize pool announced soon</td>
+                <td>Hero, prize highlight, prize cards.</td>
+                <td>
+                  In the hero, render as a compact mono status line or badge
+                  near the CTAs. Do not show fake numerals, blurred digits, or
+                  invented ranges.
+                </td>
+              </tr>
+              <tr>
+                <td>Prize highlight amount</td>
+                <td>Prize pool announced soon and growing.</td>
+                <td>Home prize highlight.</td>
+                <td>TBD: exciting but credible empty state.</td>
+              </tr>
+              <tr>
+                <td>Speakers / judges</td>
+                <td>Speakers and judges announced soon.</td>
+                <td>Home preview, people page.</td>
+                <td>
+                  Render a dignified empty state; do not mount the slider, do
+                  not show fake portraits, and hide all TBD or
+                  not-publicly-cleared people.
+                </td>
+              </tr>
+              <tr>
+                <td>Prize tracks</td>
+                <td>Prize tracks announced soon.</td>
+                <td>Prizes page.</td>
+                <td>TBD: page-level empty state.</td>
+              </tr>
+              <tr>
+                <td>Timeline times</td>
+                <td>Times announced soon</td>
+                <td>Home condensed timeline, schedule page.</td>
+                <td>TBD: placeholder time chip.</td>
+              </tr>
+              <tr>
+                <td>Workshop schedule</td>
+                <td>Full schedule coming soon</td>
+                <td>Schedule, FAQ.</td>
+                <td>
+                  Slot card or announcement strip; in FAQ answers, preserve
+                  confirmed context and append fallback sentence.
+                </td>
+              </tr>
+              <tr>
+                <td>FAQ answer entirely TBD</td>
+                <td>To be announced soon.</td>
+                <td>FAQ accordion.</td>
+                <td>
+                  Render fallback copy and optional
+                  <code>[PENDING]</code> status chip; never expose raw
+                  <code>[TO CONFIRM]</code> text.
+                </td>
+              </tr>
+              <tr>
+                <td>FAQ answer partially TBD</td>
+                <td>Confirmed sentence plus graceful fallback sentence.</td>
+                <td>FAQ accordion.</td>
+                <td>
+                  Keep confirmed answer text, remove planning brackets, and add
+                  a short fallback such as details are announced soon.
+                </td>
+              </tr>
+              <tr>
+                <td>FAQ starter docs</td>
+                <td>Starter docs announced soon.</td>
+                <td>FAQ resources block.</td>
+                <td>
+                  Render a non-link resource row. Do not create disabled anchors
+                  with empty hrefs.
+                </td>
+              </tr>
+              <tr>
+                <td>Footer WebGL or motion unavailable</td>
+                <td>Static dotted footer surface</td>
+                <td>Global footer.</td>
+                <td>
+                  Replace animated Three.js dots with a static CSS radial
+                  pattern and keep all footer links fully interactive.
+                </td>
+              </tr>
+              <tr>
+                <td>Footer social icon missing</td>
+                <td>Text social label</td>
+                <td>Global footer.</td>
+                <td>
+                  Render Instagram, LinkedIn, or X as text with the same link
+                  destination rather than hiding the link silently.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="interactions">
+          <h2>Interactions</h2>
+          <p>
+            Interaction planning slots. These are documentation prototypes only
+            and are not production website components.
+          </p>
+
+          <div class="grid two">
+            <article class="schema-card">
+              <h4>Hero ASCII Pattern</h4>
+              <div class="placeholder">
+                Selected behavior: preserve the hero-ascii-one technical stage
+                and CTA rhythm, but use the local ASCII wordmark and TBC ribbon
+                field. Optional pointer/ribbon/ASCII shimmer is decorative only,
+                must never block CTAs, and falls back to a static dark ribbon
+                field for reduced motion.
+              </div>
+            </article>
+            <article class="schema-card">
+              <h4>Accordion Pattern</h4>
+              <details>
+                <summary>Submission requirements placeholder</summary>
+                <ul>
+                  <li>A working demo of your project.</li>
+                  <li>A public source code repository.</li>
+                  <li>A short demo video. Max length TBD.</li>
+                  <li>A README describing what you built and how to run it.</li>
+                </ul>
+              </details>
+              <div class="placeholder">
+                Selected behavior: FAQ and prize accordions must be
+                keyboard-operable, visibly focused, reduced-motion aware, and
+                clear about open state. FAQ should allow multiple items open
+                unless implementation constraints require single-open behavior.
+              </div>
+            </article>
+
+            <article class="schema-card">
+              <h4>Schedule Filter Pattern</h4>
+              <div
+                class="filter-bar"
+                aria-label="Schedule type filter placeholder"
+              >
+                <button type="button" aria-pressed="true">All</button>
+                <button type="button" aria-pressed="false">Workshop</button>
+                <button type="button" aria-pressed="false">Mentoring</button>
+                <button type="button" aria-pressed="false">Deadline</button>
+              </div>
+              <div class="placeholder">
+                Fill later: whether filters survive final scope, active state,
+                empty filtered state.
+              </div>
+            </article>
+            <article class="schema-card">
+              <h4>People Slider Pattern</h4>
+              <div class="placeholder">
+                Selected behavior: arrow buttons have explicit labels, thumbnail
+                buttons expose person names, one-person state hides controls,
+                slide changes can use polite announcements, and reduced motion
+                falls back to static or opacity-only transitions.
+              </div>
+            </article>
+            <article class="schema-card">
+              <h4>Footer Dotted Surface Pattern</h4>
+              <div class="placeholder">
+                Selected behavior: dotted canvas is decorative, pointer-events
+                none, contained to footer bounds, reduced-motion safe, and
+                replaceable by static CSS dots when WebGL fails.
+              </div>
+            </article>
+          </div>
+
+          <h3>Interaction Notes Table</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Interaction</th>
+                <th>Component</th>
+                <th>Expected Behavior</th>
+                <th>Accessibility Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Hero ASCII/ribbon atmosphere</td>
+                <td>Hero</td>
+                <td>
+                  Use subtle decorative ribbon drift, dither hover, or ASCII
+                  shimmer only if it improves the selected hero-ascii-one
+                  structure; keep Apply to Hack and View Prizes immediately
+                  clickable.
+                </td>
+                <td>
+                  Decorative SVG/ribbon layers are ignored by screen readers,
+                  reduced motion switches to static, focus states remain
+                  visible, and the accessible name does not duplicate noisy
+                  ASCII characters.
+                </td>
+              </tr>
+              <tr>
+                <td>Mobile navigation</td>
+                <td>Header</td>
+                <td>
+                  Open/close the navigation panel, preserve Apply to Hack CTA,
+                  expose external Conference link, avoid layout overlap below
+                  fixed header.
+                </td>
+                <td>
+                  Labelled hamburger/close button, keyboard close, visible
+                  focus, reduced-motion fallback for height/opacity transitions.
+                </td>
+              </tr>
+              <tr>
+                <td>Accordion</td>
+                <td>FAQ, prize requirements</td>
+                <td>
+                  Open and close content without layout confusion; FAQ can keep
+                  multiple answers open and must preserve anchor navigation
+                  across all nine groups.
+                </td>
+                <td>
+                  Use native details/summary or equivalent button ARIA; keep
+                  links out of summary, expose visible focus, and hide
+                  decorative ASCII from assistive tech.
+                </td>
+              </tr>
+              <tr>
+                <td>People carousel</td>
+                <td>People preview, Speakers & Judges page</td>
+                <td>
+                  Move between featured people with arrow controls and
+                  thumbnails; fall back to static one-person card or grid when
+                  interaction is unnecessary.
+                </td>
+                <td>
+                  Label controls, support keyboard focus, hide disabled controls
+                  from tab order, use descriptive portrait alt text, and respect
+                  reduced motion.
+                </td>
+              </tr>
+              <tr>
+                <td>Tabs</td>
+                <td>Schedule</td>
+                <td>Switch Day 1 and Day 2, or jump to anchored sections.</td>
+                <td>Keyboard arrow support if true tabs.</td>
+              </tr>
+              <tr>
+                <td>Filters</td>
+                <td>Schedule</td>
+                <td>Filter session cards by type if feature is kept.</td>
+                <td>Announce result count or visible state.</td>
+              </tr>
+              <tr>
+                <td>CTA hover/focus</td>
+                <td>Buttons and links</td>
+                <td>
+                  Make primary action clear without relying only on color.
+                </td>
+                <td>Visible focus ring required.</td>
+              </tr>
+              <tr>
+                <td>Dotted footer motion</td>
+                <td>Footer</td>
+                <td>
+                  Animate low-opacity points only when motion and WebGL are
+                  available; content links remain above the canvas and
+                  clickable.
+                </td>
+                <td>
+                  Decorative canvas should be ignored by screen readers, set to
+                  pointer-events none, and replaced with a static pattern for
+                  reduced motion.
+                </td>
+              </tr>
+              <tr>
+                <td>Resource links</td>
+                <td>FAQ resources, footer</td>
+                <td>
+                  External and mail links use confirmed destinations and clear
+                  labels; missing resources render non-link fallback rows.
+                </td>
+                <td>
+                  Visible focus, clear link purpose, external/mail affordance,
+                  and no empty anchors.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <script>
+            // Documentation-only component inventory filter.
+            // This helps future agents inspect component groups inside this scaffold.
+            document.addEventListener("click", function (event) {
+              const button = event.target.closest("[data-filter]");
+              if (!button) return;
+
+              const filter = button.getAttribute("data-filter");
+              const buttons = document.querySelectorAll("[data-filter]");
+              const rows = document.querySelectorAll("[data-component-row]");
+
+              buttons.forEach((item) => {
+                item.setAttribute("aria-pressed", String(item === button));
+              });
+
+              rows.forEach((row) => {
+                const categories = row.getAttribute("data-category") || "";
+                row.hidden =
+                  filter !== "all" && !categories.split(" ").includes(filter);
+              });
+            });
+          </script>
+        </section>
+
+        <section id="visual-assets">
+          <h2>Visual Assets</h2>
+          <p>
+            Asset requirements and image slots. Do not fabricate confirmed
+            sponsors, people, or partner brands.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Asset Type</th>
+                <th>Where Used</th>
+                <th>Requirements</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Event logo / wordmark</td>
+                <td>Header, hero, footer.</td>
+                <td>
+                  Approved event naming: TUM Blockchain & AI Hackathon. Use SVG
+                  wordmarks where exact logo lettering is needed.
+                </td>
+                <td><span class="tag">Available</span></td>
+              </tr>
+              <tr>
+                <td>Hero ASCII wordmark</td>
+                <td>Home hero.</td>
+                <td>
+                  Use
+                  <code
+                    >assets/ascii/wordmark-tum-blockchain-hackathon-ascii.svg</code
+                  >
+                  as the selected hero wordmark. Keep
+                  <code
+                    >assets/ascii/wordmark-tum-blockchain-hackathon-ascii.html</code
+                  >
+                  as the dark preview reference. Use the PNG sibling only as an
+                  implementation fallback if needed.
+                </td>
+                <td><span class="tag">Available</span></td>
+              </tr>
+              <tr>
+                <td>Hero media</td>
+                <td>Home hero.</td>
+                <td>
+                  Use full-bleed dark atmospheric ribbon imagery or generated
+                  equivalent behind the ASCII wordmark. Avoid boxed hero cards
+                  and do not use the hero-ascii-one registry background.
+                </td>
+                <td><span class="tag">Direction set</span></td>
+              </tr>
+              <tr>
+                <td>Sponsor logos</td>
+                <td>Hero platinum strip, sponsor wall, prize cards.</td>
+                <td>
+                  Only confirmed sponsors. Need tier, URL, approved logo file.
+                </td>
+                <td><span class="tag">None confirmed</span></td>
+              </tr>
+              <tr>
+                <td>Speaker portraits</td>
+                <td>People grid, featured people slider.</td>
+                <td>
+                  Only confirmed and public-cleared people. Need name, category,
+                  role/title, company, image permission, and descriptive alt
+                  text. Missing portraits use non-face branded placeholders
+                  only.
+                </td>
+                <td><span class="tag">None confirmed</span></td>
+              </tr>
+              <tr>
+                <td>Social icons</td>
+                <td>Footer.</td>
+                <td>
+                  Instagram, LinkedIn, X. No Discord. If an icon is unavailable,
+                  render text label fallback with the same link.
+                </td>
+                <td><span class="tag">Needed</span></td>
+              </tr>
+              <tr>
+                <td>Footer dotted surface</td>
+                <td>Global footer background layer.</td>
+                <td>
+                  Generated at runtime by the selected Three.js component or
+                  replaced by CSS radial dots. No bitmap asset required.
+                </td>
+                <td><span class="tag">Component selected</span></td>
+              </tr>
+              <tr>
+                <td>FAQ ASCII accents</td>
+                <td>FAQ resources, group nav, accordion labels.</td>
+                <td>
+                  Use HTML text, CSS borders, and mono labels only. Do not
+                  generate or commit binary ASCII art assets for the FAQ.
+                </td>
+                <td><span class="tag">Direction set</span></td>
+              </tr>
+              <tr>
+                <td>Schedule type icons</td>
+                <td>Schedule filters and session cards.</td>
+                <td>Ceremony, Workshop, Mentoring, Meal, Deadline, Judging.</td>
+                <td><span class="tag">Optional</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Image Tag Placeholders</h3>
+          <p>
+            These tags document image needs only. Replace paths later with real
+            approved assets.
+          </p>
+          <div class="grid three">
+            <figure class="schema-card">
+              <img
+                src="../assets/logos/c26-wordmark-full.svg"
+                alt="C26 wordmark asset reference"
+                width="240"
+                height="80"
+              />
+              <figcaption>
+                Official wordmark reference from the former design notes.
+              </figcaption>
+            </figure>
+            <figure class="schema-card">
+              <img
+                src="../assets/logos/wordmark-hackathon.svg"
+                alt="Hackathon wordmark asset reference"
+                width="240"
+                height="140"
+              />
+              <figcaption>
+                Use Hackathon lettering as SVG artwork, not live text.
+              </figcaption>
+            </figure>
+            <figure class="schema-card">
+              <img
+                src="../assets/ascii/wordmark-tum-blockchain-hackathon-ascii.svg"
+                alt="TUM Blockchain and AI Hackathon ASCII wordmark asset reference"
+                width="240"
+                height="168"
+              />
+              <figcaption>
+                Selected hero ASCII wordmark. Preview at
+                <code
+                  >assets/ascii/wordmark-tum-blockchain-hackathon-ascii.html</code
+                >.
+              </figcaption>
+            </figure>
+            <figure class="schema-card">
+              <img
+                src="assets/tbd-speaker-photo.jpg"
+                alt="TBD speaker portrait asset slot"
+                width="160"
+                height="160"
+              />
+              <figcaption>
+                Portrait slot. Use only public-cleared people; otherwise use a
+                non-face branded placeholder.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section id="workflow-map">
+          <h2>Workflow Map</h2>
+          <p>SVG and HTML workflow map for future agents.</p>
+
+          <svg
+            class="workflow-svg"
+            viewBox="0 0 980 300"
+            role="img"
+            aria-labelledby="workflow-title workflow-desc"
+          >
+            <title id="workflow-title">AI design workflow</title>
+            <desc id="workflow-desc">
+              Flow from content source to component prompts, design selection,
+              implementation, and verification.
+            </desc>
+            <defs>
+              <marker
+                id="arrow"
+                viewBox="0 0 10 10"
+                refX="8"
+                refY="5"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f5f55"></path>
+              </marker>
+            </defs>
+            <rect
+              x="30"
+              y="70"
+              width="160"
+              height="90"
+              rx="8"
+              fill="#f7f7f2"
+              stroke="#181818"
+            ></rect>
+            <text
+              x="110"
+              y="106"
+              text-anchor="middle"
+              font-size="15"
+              font-weight="700"
+            >
+              CONTENT.md
+            </text>
+            <text x="110" y="130" text-anchor="middle" font-size="12">
+              site tree + copy
+            </text>
+
+            <line
+              x1="190"
+              y1="115"
+              x2="280"
+              y2="115"
+              stroke="#0f5f55"
+              stroke-width="2"
+              marker-end="url(#arrow)"
+            ></line>
+
+            <rect
+              x="280"
+              y="70"
+              width="170"
+              height="90"
+              rx="8"
+              fill="#f7f7f2"
+              stroke="#181818"
+            ></rect>
+            <text
+              x="365"
+              y="102"
+              text-anchor="middle"
+              font-size="15"
+              font-weight="700"
+            >
+              design.html
+            </text>
+            <text x="365" y="126" text-anchor="middle" font-size="12">
+              AI planning scaffold
+            </text>
+            <text x="365" y="146" text-anchor="middle" font-size="12">
+              schemas + prompts
+            </text>
+
+            <line
+              x1="450"
+              y1="115"
+              x2="540"
+              y2="115"
+              stroke="#0f5f55"
+              stroke-width="2"
+              marker-end="url(#arrow)"
+            ></line>
+
+            <rect
+              x="540"
+              y="70"
+              width="170"
+              height="90"
+              rx="8"
+              fill="#f7f7f2"
+              stroke="#181818"
+            ></rect>
+            <text
+              x="625"
+              y="102"
+              text-anchor="middle"
+              font-size="15"
+              font-weight="700"
+            >
+              21st.dev
+            </text>
+            <text x="625" y="126" text-anchor="middle" font-size="12">
+              component search
+            </text>
+            <text x="625" y="146" text-anchor="middle" font-size="12">
+              prompt refinement
+            </text>
+
+            <line
+              x1="710"
+              y1="115"
+              x2="800"
+              y2="115"
+              stroke="#0f5f55"
+              stroke-width="2"
+              marker-end="url(#arrow)"
+            ></line>
+
+            <rect
+              x="800"
+              y="70"
+              width="150"
+              height="90"
+              rx="8"
+              fill="#f7f7f2"
+              stroke="#181818"
+            ></rect>
+            <text
+              x="875"
+              y="102"
+              text-anchor="middle"
+              font-size="15"
+              font-weight="700"
+            >
+              Final Design
+            </text>
+            <text x="875" y="126" text-anchor="middle" font-size="12">
+              tokens + comps
+            </text>
+            <text x="875" y="146" text-anchor="middle" font-size="12">
+              implementation ready
+            </text>
+
+            <rect
+              x="280"
+              y="205"
+              width="430"
+              height="56"
+              rx="8"
+              fill="#fff"
+              stroke="#d8d8cf"
+            ></rect>
+            <text x="495" y="238" text-anchor="middle" font-size="13">
+              Never invent dates, amounts, people, sponsors, tracks, or
+              partners.
+            </text>
+          </svg>
+        </section>
+
+        <section id="spatial-planning">
+          <h2>Spatial Planning</h2>
+          <p>
+            Spatial placeholders for future layout exploration. These are not
+            final layout decisions.
+          </p>
+
+          <h3>Home Page Section Stack Map</h3>
+          <div
+            class="spatial-stage"
+            aria-label="Home page spatial map placeholder"
+          >
+            <div
+              class="spatial-item"
+              style="left: 4%; top: 24px; width: 42%; height: 82px"
+            >
+              Header + ASCII hero
+            </div>
+            <div
+              class="spatial-item"
+              style="left: 52%; top: 24px; width: 38%; height: 82px"
+            >
+              CTA + fallbacks
+            </div>
+            <div
+              class="spatial-item"
+              style="left: 8%; top: 132px; width: 76%; height: 54px"
+            >
+              Sponsors & Partners
+            </div>
+            <div
+              class="spatial-item"
+              style="left: 12%; top: 212px; width: 30%; height: 58px"
+            >
+              Prize Highlight
+            </div>
+            <div
+              class="spatial-item"
+              style="left: 48%; top: 212px; width: 34%; height: 58px"
+            >
+              Speakers Preview
+            </div>
+            <div
+              class="spatial-item"
+              style="left: 8%; top: 300px; width: 32%; height: 52px"
+            >
+              Timeline
+            </div>
+            <div
+              class="spatial-item"
+              style="left: 46%; top: 300px; width: 38%; height: 52px"
+            >
+              Reasons + CTA
+            </div>
+          </div>
+
+          <h3>Canvas Slot For Future Composition Sketch</h3>
+          <canvas
+            id="layout-canvas"
+            width="980"
+            height="260"
+            aria-label="Canvas placeholder for future layout sketch"
+          ></canvas>
+          <script>
+            // Documentation-only canvas sketch.
+            // Replace with a real layout diagram if useful for future design planning.
+            (function () {
+              const canvas = document.getElementById("layout-canvas");
+              if (!canvas) return;
+              const ctx = canvas.getContext("2d");
+              ctx.fillStyle = "#ffffff";
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.strokeStyle = "#d8d8cf";
+              ctx.lineWidth = 1;
+
+              for (let x = 20; x < canvas.width; x += 60) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+              }
+
+              ctx.fillStyle = "#f7f7f2";
+              ctx.strokeStyle = "#181818";
+              const boxes = [
+                [40, 40, 260, 80, "ASCII wordmark"],
+                [330, 40, 220, 80, "CTA + prize fallback"],
+                [580, 40, 330, 80, "TBC ribbon field"],
+                [90, 160, 780, 54, "Next section hint / sponsor wall"],
+              ];
+
+              ctx.font = "15px sans-serif";
+              boxes.forEach(([x, y, w, h, label]) => {
+                ctx.fillRect(x, y, w, h);
+                ctx.strokeRect(x, y, w, h);
+                ctx.fillStyle = "#181818";
+                ctx.fillText(label, x + 16, y + 32);
+                ctx.fillStyle = "#f7f7f2";
+              });
+            })();
+          </script>
+        </section>
+
+        <section id="open-items">
+          <h2>Open Items And Confirmation Slots</h2>
+          <p>
+            These items must either be confirmed before launch or rendered with
+            a fallback. This is a planning table, not final content.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Open Data Needed</th>
+                <th>Fallback / Current Handling</th>
+                <th>Components Impacted</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Hero</td>
+                <td>
+                  Final headline, subhead approval, prize figure decision,
+                  platinum logos, and production tuning of the ASCII/ribbon hero
+                  motion.
+                </td>
+                <td>
+                  Use local ASCII wordmark asset, draft copy, and prize/sponsor
+                  fallbacks until confirmed. Do not use the hero-ascii-one
+                  registry background.
+                </td>
+                <td>Hero, sponsor strip.</td>
+              </tr>
+              <tr>
+                <td>Sponsors</td>
+                <td>Confirmed partners, logos, tier ordering, sponsor URLs.</td>
+                <td>Partners announced soon.</td>
+                <td>Sponsor wall, hero strip, prize cards.</td>
+              </tr>
+              <tr>
+                <td>Prizes</td>
+                <td>
+                  Track names, sponsors, amounts, descriptions, ideas,
+                  requirements, main pool.
+                </td>
+                <td>
+                  Prize tracks announced soon. Prize amount announced soon.
+                </td>
+                <td>Prizes page, home prize highlight.</td>
+              </tr>
+              <tr>
+                <td>Schedule</td>
+                <td>
+                  Whether filters stay, workshop times, mentoring, meals,
+                  overnight access, judging, demos, awards, app link.
+                </td>
+                <td>Times announced soon. Full schedule coming soon.</td>
+                <td>Home timeline, schedule page, FAQ.</td>
+              </tr>
+              <tr>
+                <td>People</td>
+                <td>
+                  Judges, mentors, workshop leads, speakers, roles, companies,
+                  photos, optional topics/session notes, public clearance.
+                </td>
+                <td>Speakers and judges announced soon.</td>
+                <td>
+                  Home people preview, testimonial-slider/grid, Speakers &
+                  Judges page.
+                </td>
+              </tr>
+              <tr>
+                <td>FAQ resources</td>
+                <td>
+                  Starter docs/resource links beyond Devfolio and Telegram.
+                </td>
+                <td>Starter docs announced soon.</td>
+                <td>FAQ resources block.</td>
+              </tr>
+              <tr>
+                <td>FAQ eligibility</td>
+                <td>
+                  Open to everyone or students, TUM requirement, deposit, review
+                  process, capacity, age requirement.
+                </td>
+                <td>Inline TBD or default fallback.</td>
+                <td>FAQ accordion.</td>
+              </tr>
+              <tr>
+                <td>FAQ build rules</td>
+                <td>
+                  Frontend requirement, allowed chains/tools/models, exact
+                  submission requirements, video length.
+                </td>
+                <td>Inline TBD or default fallback.</td>
+                <td>FAQ, prize requirements.</td>
+              </tr>
+              <tr>
+                <td>Legal / rules</td>
+                <td>
+                  Code of conduct link, rule link, payout process, identity
+                  verification, accessibility arrangements.
+                </td>
+                <td>Inline TBD or default fallback.</td>
+                <td>FAQ, footer legal area.</td>
+              </tr>
+              <tr>
+                <td>Footer</td>
+                <td>
+                  Final social icon strategy, contact link placement, WebGL
+                  performance, static dotted fallback, mobile contrast.
+                </td>
+                <td>
+                  Text social labels and static dotted surface when needed.
+                </td>
+                <td>Global footer.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="handoff-checklist">
+          <h2>Handoff Checklist</h2>
+          <p>
+            Use this checklist before turning the scaffold into concrete visual
+            selections or implementation tasks.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Check</th>
+                <th>Pass Criteria</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Content source respected</td>
+                <td>
+                  No content details invented beyond .agents/CONTENT.md; visual
+                  details should follow the brand direction merged from root
+                  design.md.
+                </td>
+                <td><span class="tag">Required</span></td>
+              </tr>
+              <tr>
+                <td>Fallbacks designed</td>
+                <td>
+                  Every dynamic component has empty, partial, and confirmed
+                  states.
+                </td>
+                <td><span class="tag">Required</span></td>
+              </tr>
+              <tr>
+                <td>Component prompts refined</td>
+                <td>
+                  21st.dev prompts include hero-ascii-one, sponsor logo-cloud,
+                  footer dotted-surface, people testimonial-slider/grid, and
+                  custom FAQ ASCII section constraints.
+                </td>
+                <td><span class="tag">Seeded</span></td>
+              </tr>
+              <tr>
+                <td>Visual direction selected</td>
+                <td>
+                  Brand color, typography, gradient, surface, contrast, and
+                  asset approach are documented in this scaffold.
+                </td>
+                <td><span class="tag">Seeded</span></td>
+              </tr>
+              <tr>
+                <td>References checked</td>
+                <td>
+                  Structural references reviewed without copying protected
+                  content or visual design.
+                </td>
+                <td><span class="tag">Future</span></td>
+              </tr>
+              <tr>
+                <td>Accessibility planned</td>
+                <td>
+                  Keyboard, focus, contrast, reduced motion, semantic headings,
+                  link purpose, carousel controls, decorative canvas, and
+                  decorative ASCII handling covered.
+                </td>
+                <td><span class="tag">Seeded</span></td>
+              </tr>
+              <tr>
+                <td>Implementation-ready specs</td>
+                <td>
+                  Each selected MVP component has data fields, states,
+                  responsive behavior, fallbacks, and asset requirements.
+                </td>
+                <td><span class="tag">Seeded</span></td>
+              </tr>
+              <tr>
+                <td>FAQ count verified</td>
+                <td>
+                  FAQ scaffold reflects CONTENT.md's nine groups and 45
+                  questions.
+                </td>
+                <td><span class="tag">Complete</span></td>
+              </tr>
+              <tr>
+                <td>Selected components documented</td>
+                <td>
+                  Hero ASCII one, sponsor logo-cloud, footer dotted-surface,
+                  people testimonial-slider/grid, and FAQ ASCII section have
+                  selected-component notes.
+                </td>
+                <td><span class="tag">Complete</span></td>
+              </tr>
+              <tr>
+                <td>Framework setup blocker tracked</td>
+                <td>
+                  21st.dev shadcn components are not installed until Next app,
+                  Tailwind, aliases, shadcn config, and
+                  <code>components.json</code> exist.
+                </td>
+                <td><span class="tag">Blocked</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
