@@ -179,6 +179,7 @@ describe("site component interactions", () => {
       <DevfolioApplyButton
         applicationUrl="https://tum.devfolio.co"
         hackathonSlug="tum"
+        productionHost="hackathon.tum-blockchain.com"
       />,
     );
 

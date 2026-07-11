@@ -277,6 +277,7 @@ export default function HomePage() {
           <DevfolioApplyButton
             applicationUrl={siteConfig.applicationUrl}
             hackathonSlug={siteConfig.devfolioHackathonSlug}
+            productionHost={siteConfig.domain}
           />
         </div>
       </SectionShell>
