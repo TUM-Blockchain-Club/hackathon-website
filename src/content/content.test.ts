@@ -144,7 +144,7 @@ describe("site content contract", () => {
       currentYearSponsors.find((sponsor) => sponsor.name === "Devfolio"),
     ).toMatchObject({
       logoAlt: "DEVFOLIO LOGO",
-      logoSrc: "/sponsors/devfolio_logo_black.png",
+      logoSrc: "/sponsors/devfolio_logo_colored.svg",
     });
 
     const publicPeople = people.filter((person) => person.publicCleared);

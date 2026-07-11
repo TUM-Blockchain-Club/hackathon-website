@@ -129,7 +129,7 @@ describe("site component interactions", () => {
         name: "Devfolio",
         tier: "Partner",
         href: "https://devfolio.co/",
-        logoSrc: "/sponsors/devfolio_logo_black.png",
+        logoSrc: "/sponsors/devfolio_logo_colored.svg",
       },
       {
         name: "BSV Blockchain",
@@ -183,7 +183,7 @@ describe("site component interactions", () => {
     );
 
     const applyLink = screen.getByRole("link", {
-      name: "Apply with Devfolio",
+      name: "Apply on Devfolio",
     });
     expect(applyLink.getAttribute("href")).toBe("https://tum.devfolio.co");
 

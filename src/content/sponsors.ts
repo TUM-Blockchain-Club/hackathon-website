@@ -129,7 +129,7 @@ export const currentYearSponsors: Sponsor[] = [
     name: "Devfolio",
     tier: "Partner",
     href: "https://devfolio.co/",
-    logoSrc: "/sponsors/devfolio_logo_black.png",
+    logoSrc: "/sponsors/devfolio_logo_colored.svg",
     logoAlt: "DEVFOLIO LOGO",
     logoScale: 1.08,
   },
