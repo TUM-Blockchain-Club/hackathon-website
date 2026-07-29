@@ -137,8 +137,8 @@ export const currentYearSponsors: Sponsor[] = [
     name: "BSV Blockchain",
     tier: "Partner",
     href: "https://bsvblockchain.org/",
-    logoSrc: "/sponsors/bsv_blockchain_logo.svg",
-    logoPadding: "p-4",
+    logoSrc: "/sponsors/bsv_blockchain_logo.png",
+    logoPadding: "p-2",
   },
 ];
 
