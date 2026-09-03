@@ -33,13 +33,24 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
     tracks[0]?.slug ?? "",
   );
 
-  // Sync active tab with URL hash (e.g. /prizes#cardano)
+  // Sync active tab with URL hash (e.g. /prizes#cardano) without awkward jump scrolling
   useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hash) {
-      const hash = window.location.hash.replace("#", "");
-      if (tracks.some((t) => t.slug === hash)) {
-        setActiveSlug(hash);
-      }
+    if (typeof window !== "undefined") {
+      const syncFromHash = () => {
+        const hash = window.location.hash.replace("#", "");
+        if (hash && tracks.some((t) => t.slug === hash)) {
+          setActiveSlug(hash);
+        }
+      };
+
+      syncFromHash();
+      // Keep page positioned at the top on entry so the header banner and layout remain in view
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+
+      window.addEventListener("hashchange", syncFromHash);
+      return () => {
+        window.removeEventListener("hashchange", syncFromHash);
+      };
     }
   }, [tracks]);
 
@@ -91,7 +102,7 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
         <div className="flex flex-col bg-black/40">
           <div className="hidden border-b border-white/10 px-6 py-5 md:block">
             <h3 className="font-display text-xl font-bold tracking-tight text-white">
-              {tracks.length} Prizes
+              {tracks.length} {tracks.length === 1 ? "Prize" : "Prizes"}
             </h3>
           </div>
 

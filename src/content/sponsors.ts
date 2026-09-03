@@ -138,14 +138,6 @@ export const trackSponsors: Sponsor[] = [
     logoAlt: "BSV Association logo",
     logoPadding: "p-1",
   },
-  {
-    name: "Cardano",
-    tier: "Platinum",
-    href: "https://cardano.org/",
-    logoSrc: "/sponsors/cardano_logo.svg",
-    logoAlt: "Cardano logo",
-    logoPadding: "p-1",
-  },
 ];
 
 /**

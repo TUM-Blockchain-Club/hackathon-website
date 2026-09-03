@@ -61,6 +61,7 @@ export function PrizeMainPool({
                 <Link
                   key={track.slug}
                   href={`/prizes#${track.slug}`}
+                  scroll={false}
                   className="group inline-flex items-center gap-3.5 rounded-[9999px] border border-white/15 bg-white/[0.06] py-2.5 pl-3 pr-5 backdrop-blur-md transition-all hover:border-white/35 hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   {markSrc ? (
@@ -130,6 +131,7 @@ export function PrizeMainPool({
                   <Link
                     key={track.slug}
                     href={`/prizes#${track.slug}`}
+                    scroll={false}
                     className="group inline-flex items-center gap-3.5 rounded-[9999px] border border-white/15 bg-white/[0.06] py-2.5 pl-3 pr-5 backdrop-blur-md transition-all hover:border-white/35 hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98]"
                   >
                     {markSrc ? (

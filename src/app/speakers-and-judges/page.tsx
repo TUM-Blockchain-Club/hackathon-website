@@ -24,10 +24,7 @@ export default function SpeakersAndJudgesPage() {
         title={peopleContent.title}
         description={peopleContent.description}
       />
-      <SectionShell
-        title="Roster Preview"
-        description="Prior-event portraits are wired as temporary preview data while the confirmed 2026 roster is approved for public listing."
-      >
+      <SectionShell>
         <SpeakersJudges
           people={publicPeople}
           fallback={peopleContent.fallback}

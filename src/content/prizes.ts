@@ -3,7 +3,7 @@ import type { PrizeTrack } from "@/types/content";
 export const prizeContent = {
   title: "Prize Tracks",
   description:
-    "A €10,000 prize pool, split across premium partner tracks. Track briefs, prize breakdowns, and judging criteria are announced soon.",
+    "A €4,000 prize pool, split across premium partner tracks. Track briefs, prize breakdowns, and judging criteria are announced soon.",
   fallback: "Prize tracks announced soon.",
   trackAmountFallback: "Prize amount announced soon.",
   trackDescriptionFallback: "Track brief announced soon.",
@@ -11,7 +11,7 @@ export const prizeContent = {
   trackRequirementsFallback: "Track-specific requirements announced soon.",
   mainPoolDescription:
     "The total prize pool is split across our premium partner tracks.",
-  mainPoolAmount: "€10,000",
+  mainPoolAmount: "€4,000",
   mainPoolSubhead: "Available in prizes",
   mainPoolNote: undefined,
   comingSoonLabel: "Track details coming soon",
@@ -37,20 +37,6 @@ export const prizeTracks: PrizeTrack[] = [
       "BSV Blockchain supports the growth of the BSV network, a scalable public blockchain built for high-throughput data and micropayment applications.",
     rightMark: "BSV",
     amount: "€4,000",
-    status: "coming-soon",
-  },
-  {
-    slug: "cardano",
-    sponsor: "Cardano",
-    trackName: "Cardano Track",
-    sponsorLogoSrc: "/sponsors/cardano_logo.svg",
-    sponsorLogoPadding: "p-2.5",
-    sponsorMarkSrc: "/sponsors/cardano_icon.svg",
-    sponsorHref: "https://cardano.org/",
-    about:
-      "Cardano is a proof-of-stake blockchain platform built on peer-reviewed research, with a focus on security, sustainability, and formal methods.",
-    rightMark: "ADA",
-    amount: "€6,000",
     status: "coming-soon",
   },
 ];
