@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Script from "next/script";
 import { ArrowRight, Calendar } from "lucide-react";
 
 import { SectionShell } from "@/components/primitives/section-shell";
@@ -7,7 +6,6 @@ import { CurrentYearSponsors } from "@/components/sections/current-year-sponsors
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
 import { SpeakersJudges } from "@/components/sections/speakers-judges";
 import { RollingSponsors } from "@/components/sections/rolling-sponsors";
-import { DevfolioApplyButton } from "@/components/ui/devfolio-apply-button";
 import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { buttonVariants } from "@/components/ui/button";
 import { homeContent } from "@/content/home";
@@ -102,12 +100,6 @@ export default function HomePage() {
         subhead={homeContent.subhead}
         primaryCta={homeContent.primaryCta}
         secondaryCta={homeContent.secondaryCta}
-      />
-      <Script
-        defer
-        async
-        src="https://apply.devfolio.co/v2/sdk.js"
-        strategy="afterInteractive"
       />
       {/* 1. Prize Pool */}
       <SectionShell>
@@ -271,16 +263,6 @@ export default function HomePage() {
         description="A look back at the teams that powered previous editions of the hackathon."
       >
         <RollingSponsors sponsors={allSponsors} variant="compact" />
-      </SectionShell>
-
-      <SectionShell>
-        <div className="flex justify-center">
-          <DevfolioApplyButton
-            applicationUrl={siteConfig.applicationUrl}
-            hackathonSlug={siteConfig.devfolioHackathonSlug}
-            productionHost={siteConfig.domain}
-          />
-        </div>
       </SectionShell>
     </>
   );
