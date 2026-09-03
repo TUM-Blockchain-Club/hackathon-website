@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 type SectionShellProps = {
   eyebrow?: string;
@@ -6,6 +7,7 @@ type SectionShellProps = {
   description?: ReactNode;
   action?: ReactNode;
   children: ReactNode;
+  className?: string;
 };
 
 export function SectionShell({
@@ -14,9 +16,10 @@ export function SectionShell({
   description,
   action,
   children,
+  className,
 }: SectionShellProps) {
   return (
-    <section className="site-container py-12 md:py-16">
+    <section className={cn("site-container py-12 md:py-16", className)}>
       {eyebrow || title || description || action ? (
         <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl">

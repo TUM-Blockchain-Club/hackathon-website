@@ -13,6 +13,10 @@ tsconfig.tsbuildinfo
 # vercel
 .vercel/
 
+# raw brand kits and retired assets — kept locally, never served or deployed.
+# Only web-ready exports that the site actually references belong in public/.
+asset-archive/
+
 # env
 .env
 .env.*
@@ -25,3 +29,5 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vercel
+.DS_Store
+

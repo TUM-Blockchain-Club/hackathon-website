@@ -12,9 +12,9 @@ import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { buttonVariants } from "@/components/ui/button";
 import { homeContent } from "@/content/home";
 import { people, peopleContent } from "@/content/people";
-import { prizeTracks } from "@/content/prizes";
+import { prizeContent, prizeTracks } from "@/content/prizes";
 import { scheduleDays } from "@/content/schedule";
-import { allSponsors, currentYearSponsors } from "@/content/sponsors";
+import { allSponsors, platformPartners, trackSponsors } from "@/content/sponsors";
 import { siteConfig } from "@/content/site";
 import { cn } from "@/lib/utils";
 import type { ScheduleSession } from "@/types/content";
@@ -95,7 +95,9 @@ export default function HomePage() {
   return (
     <>
       <HeroAsciiOne
-        eyebrow={homeContent.eyebrow}
+        date={homeContent.date}
+        location={homeContent.location}
+        partnerInquiry={homeContent.partnerInquiry}
         headline={homeContent.headline}
         subhead={homeContent.subhead}
         primaryCta={homeContent.primaryCta}
@@ -107,10 +109,15 @@ export default function HomePage() {
         src="https://apply.devfolio.co/v2/sdk.js"
         strategy="afterInteractive"
       />
+      {/* 1. Prize Pool */}
+      <SectionShell>
+        <PrizeMainPool tracks={prizeTracks} showDetailsLink />
+      </SectionShell>
 
+      {/* 2. 2026 Sponsors */}
       <SectionShell
         eyebrow="Sponsors"
-        title="Sponsors & Partners"
+        title="2026 Sponsors"
         description={
           <>
             Interested in powering the hackathon or running your own track?
@@ -130,50 +137,21 @@ export default function HomePage() {
           </Link>
         }
       >
-        <RollingSponsors sponsors={allSponsors} />
-      </SectionShell>
-
-      <SectionShell title="This Year's Sponsors">
-        <CurrentYearSponsors sponsors={currentYearSponsors} />
-      </SectionShell>
-
-      <SectionShell
-        eyebrow="Prizes"
-        title="Prize pool announced soon and growing."
-        description="Tracks and prize details are being finalized with our partners."
-      >
-        <div className="space-y-6">
-          <PrizeMainPool
-            compact
-            constrained={false}
-            showFaqLink={false}
-            tracks={prizeTracks}
+        <div className="space-y-4">
+          <CurrentYearSponsors
+            sponsors={trackSponsors}
+            label="Premium track sponsors"
+            size="large"
           />
-          <div className="flex justify-center">
-            <Link
-              href="/prizes"
-              className={buttonVariants({ variant: "flow" })}
-            >
-              View Prize Tracks
-              <ArrowRight aria-hidden="true" size={16} />
-            </Link>
-          </div>
+          <CurrentYearSponsors
+            sponsors={platformPartners}
+            label="Platform partner"
+            size="compact"
+          />
         </div>
       </SectionShell>
 
-      <SectionShell
-        eyebrow="People"
-        title="Speakers & Judges"
-        description="here are our past speakers in our conference"
-      >
-        <SpeakersJudges
-          people={publicPeople}
-          fallback={peopleContent.fallback}
-          limit={8}
-          showCta
-        />
-      </SectionShell>
-
+      {/* 3. Timeline / Agenda */}
       <SectionShell
         eyebrow="Timeline"
         title="Two-day build window"
@@ -270,6 +248,29 @@ export default function HomePage() {
             </p>
           </div>
         )}
+      </SectionShell>
+
+      {/* 4. Speakers & Judges */}
+      <SectionShell
+        eyebrow="People"
+        title="Speakers & Judges"
+        description="here are our past speakers in our conference"
+      >
+        <SpeakersJudges
+          people={publicPeople}
+          fallback={peopleContent.fallback}
+          limit={8}
+          showCta
+        />
+      </SectionShell>
+
+      {/* 5. Past Sponsors */}
+      <SectionShell
+        eyebrow="Last year"
+        title="Past Sponsors & Partners"
+        description="A look back at the teams that powered previous editions of the hackathon."
+      >
+        <RollingSponsors sponsors={allSponsors} variant="compact" />
       </SectionShell>
 
       <SectionShell>

@@ -124,7 +124,35 @@ export const partners: Sponsor[] = [
   },
 ];
 
-export const currentYearSponsors: Sponsor[] = [
+/**
+ * Partners running their own premium prize track. Each entry here has a
+ * matching track in `@/content/prizes`.
+ */
+export const trackSponsors: Sponsor[] = [
+  {
+    name: "BSV Blockchain",
+    tier: "Platinum",
+    href: "https://bsvblockchain.org/",
+    // Primary stacked lockup, exported from the BSVA brand kit at 1400px.
+    logoSrc: "/sponsors/bsv_blockchain_logo.png",
+    logoAlt: "BSV Association logo",
+    logoPadding: "p-1",
+  },
+  {
+    name: "Cardano",
+    tier: "Platinum",
+    href: "https://cardano.org/",
+    logoSrc: "/sponsors/cardano_logo.svg",
+    logoAlt: "Cardano logo",
+    logoPadding: "p-1",
+  },
+];
+
+/**
+ * Partners powering the event itself rather than a prize track — kept separate
+ * so the premium track sponsors stay the visual headline.
+ */
+export const platformPartners: Sponsor[] = [
   {
     name: "Devfolio",
     tier: "Partner",
@@ -133,14 +161,11 @@ export const currentYearSponsors: Sponsor[] = [
     logoAlt: "DEVFOLIO LOGO",
     logoScale: 1.08,
   },
-  {
-    name: "BSV Blockchain",
-    tier: "Partner",
-    href: "https://bsvblockchain.org/",
-    logoSrc: "/sponsors/bsv_blockchain_logo.png",
-    logoScale: 1.4,
-    logoPadding: "p-0",
-  },
+];
+
+export const currentYearSponsors: Sponsor[] = [
+  ...trackSponsors,
+  ...platformPartners,
 ];
 
 // Top 20 crypto sponsors sorted by size and importance

@@ -38,14 +38,25 @@ export type Sponsor = {
 };
 
 export type PrizeTrack = {
+  /** Anchor id used to jump from the summary cards to the detail section. */
+  slug: string;
   sponsor: string;
   trackName: string;
   sponsorLogoSrc?: string;
+  sponsorLogoScale?: number;
+  sponsorLogoPadding?: string;
+  /** Square mark for tight spots (summary chips); falls back to the wordmark. */
+  sponsorMarkSrc?: string;
+  sponsorHref?: string;
+  /** Short primer on the partner itself, shown above the track brief. */
+  about?: string;
   amount?: string;
   rightMark?: string;
   description?: string;
   ideas?: string[];
   requirements?: string[];
+  /** "coming-soon" renders the track brief, ideas, and breakdown as pending. */
+  status?: "confirmed" | "coming-soon";
 };
 
 export type ScheduleSessionType =

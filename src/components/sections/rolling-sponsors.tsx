@@ -4,9 +4,35 @@ import Image from "next/image";
 import type { Sponsor } from "@/types/content";
 import { cn } from "@/lib/utils";
 
-export function SponsorCard({ logo }: { logo: Sponsor }) {
+export type SponsorCardSize = "large" | "default" | "compact";
+
+const sponsorCardSizeClasses: Record<SponsorCardSize, string> = {
+  large: "w-64 h-32 md:w-[360px] md:h-[176px] p-4 md:p-6",
+  default: "w-48 h-20 md:w-[240px] md:h-[96px] p-3 md:p-4",
+  compact: "w-36 h-14 md:w-[168px] md:h-[64px] p-2.5 md:p-3",
+};
+
+/** Keeps Next.js from downloading a thumbnail for a card it renders large. */
+const sponsorCardSizeHints: Record<SponsorCardSize, string> = {
+  large: "(min-width: 768px) 360px, 256px",
+  default: "(min-width: 768px) 240px, 192px",
+  compact: "(min-width: 768px) 168px, 144px",
+};
+
+export function SponsorCard({
+  logo,
+  size = "default",
+}: {
+  logo: Sponsor;
+  size?: SponsorCardSize;
+}) {
   const cardContent = (
-    <div className="group relative w-48 h-20 md:w-[240px] md:h-[96px] flex-shrink-0 bg-white rounded-xl shadow-sm border border-black/5 flex items-center justify-center p-3 md:p-4 transition-all duration-300 hover:scale-[1.03] hover:shadow-md">
+    <div
+      className={cn(
+        "group relative flex-shrink-0 bg-white rounded-xl shadow-sm border border-black/5 flex items-center justify-center transition-all duration-300 hover:scale-[1.03] hover:shadow-md",
+        sponsorCardSizeClasses[size],
+      )}
+    >
       <div className="relative w-full h-full">
         {logo.logoSrc ? (
           <Image
@@ -22,7 +48,7 @@ export function SponsorCard({ logo }: { logo: Sponsor }) {
                 ? `scale(${logo.logoScale})`
                 : undefined,
             }}
-            sizes="(min-width: 768px) 208px, 168px"
+            sizes={sponsorCardSizeHints[size]}
           />
         ) : (
           <span className="text-black font-mono text-xs font-semibold uppercase tracking-wider text-center block truncate px-2">
@@ -50,50 +76,100 @@ export function SponsorCard({ logo }: { logo: Sponsor }) {
   return cardContent;
 }
 
-interface RollingSponsorsProps {
-  sponsors: Sponsor[];
+function MarqueeRow({
+  items,
+  direction,
+  size,
+  keyPrefix,
+}: {
+  items: Sponsor[];
+  direction: "left" | "right";
+  size: SponsorCardSize;
+  keyPrefix: string;
+}) {
+  return (
+    <div className="w-full overflow-hidden py-1">
+      <div
+        className={cn(
+          "flex gap-6 w-max hover:[animation-play-state:paused] active:[animation-play-state:paused]",
+          direction === "left"
+            ? "animate-marquee-left"
+            : "animate-marquee-right",
+        )}
+      >
+        {/* Render first pass */}
+        {items.map((logo, index) => (
+          <SponsorCard
+            key={`${keyPrefix}-1-${logo.name}-${index}`}
+            logo={logo}
+            size={size}
+          />
+        ))}
+        {/* Render duplicate pass for seamless looping */}
+        {items.map((logo, index) => (
+          <SponsorCard
+            key={`${keyPrefix}-2-${logo.name}-${index}`}
+            logo={logo}
+            size={size}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
-export function RollingSponsors({ sponsors }: RollingSponsorsProps) {
-  const midIndex = Math.ceil(sponsors.length / 2);
-  const row1 = sponsors.slice(0, midIndex);
-  const row2 = sponsors.slice(midIndex);
+interface RollingSponsorsProps {
+  sponsors: Sponsor[];
+  /**
+   * "default" renders two full-size rolling rows (the hero treatment).
+   * "compact" collapses everything into a single, smaller rolling strip —
+   * used for past-edition sponsors so this year's list stays the highlight.
+   */
+  variant?: "default" | "compact";
+}
+
+export function RollingSponsors({
+  sponsors,
+  variant = "default",
+}: RollingSponsorsProps) {
+  const isCompact = variant === "compact";
 
   return (
-    <div className="relative w-screen left-1/2 -translate-x-1/2 overflow-hidden py-4 flex flex-col gap-6 select-none">
+    <div
+      className={cn(
+        "relative w-screen left-1/2 -translate-x-1/2 overflow-hidden flex flex-col select-none",
+        isCompact ? "py-2 gap-0" : "py-4 gap-6",
+      )}
+    >
       {/* Left Fade Overlay */}
       <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-20 md:w-44 bg-gradient-to-r from-black via-black/30 to-transparent" />
 
       {/* Right Fade Overlay */}
       <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-20 md:w-44 bg-gradient-to-l from-black via-black/30 to-transparent" />
 
-      {/* Top Row: Scroll Left */}
-      <div className="w-full overflow-hidden py-1">
-        <div className="flex gap-6 w-max animate-marquee-left hover:[animation-play-state:paused] active:[animation-play-state:paused]">
-          {/* Render first pass */}
-          {row1.map((logo, index) => (
-            <SponsorCard key={`row1-1-${logo.name}-${index}`} logo={logo} />
-          ))}
-          {/* Render duplicate pass for seamless looping */}
-          {row1.map((logo, index) => (
-            <SponsorCard key={`row1-2-${logo.name}-${index}`} logo={logo} />
-          ))}
-        </div>
-      </div>
-
-      {/* Bottom Row: Scroll Right */}
-      <div className="w-full overflow-hidden py-1">
-        <div className="flex gap-6 w-max animate-marquee-right hover:[animation-play-state:paused] active:[animation-play-state:paused]">
-          {/* Render first pass */}
-          {row2.map((logo, index) => (
-            <SponsorCard key={`row2-1-${logo.name}-${index}`} logo={logo} />
-          ))}
-          {/* Render duplicate pass for seamless looping */}
-          {row2.map((logo, index) => (
-            <SponsorCard key={`row2-2-${logo.name}-${index}`} logo={logo} />
-          ))}
-        </div>
-      </div>
+      {isCompact ? (
+        <MarqueeRow
+          items={sponsors}
+          direction="left"
+          size="compact"
+          keyPrefix="compact"
+        />
+      ) : (
+        <>
+          <MarqueeRow
+            items={sponsors.slice(0, Math.ceil(sponsors.length / 2))}
+            direction="left"
+            size="default"
+            keyPrefix="row1"
+          />
+          <MarqueeRow
+            items={sponsors.slice(Math.ceil(sponsors.length / 2))}
+            direction="right"
+            size="default"
+            keyPrefix="row2"
+          />
+        </>
+      )}
     </div>
   );
 }

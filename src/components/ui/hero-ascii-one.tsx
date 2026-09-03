@@ -8,9 +8,11 @@ import { ShaderCtaLink } from "@/components/ui/shader-cta-link";
 import { cn } from "@/lib/utils";
 
 type HeroAsciiOneProps = {
-  eyebrow: string;
-  headline: string;
-  subhead: string;
+  eyebrow?: string;
+  date?: string;
+  location?: string;
+  headline?: string;
+  subhead?: string;
   primaryCta: {
     label: string;
     href: string;
@@ -20,13 +22,32 @@ type HeroAsciiOneProps = {
     label: string;
     href: string;
   };
+  partnerInquiry?: {
+    label: string;
+    href: string;
+  };
 };
 
 export function HeroAsciiOne({
   eyebrow,
+  date,
+  location,
   primaryCta,
   secondaryCta,
+  partnerInquiry,
 }: HeroAsciiOneProps) {
+  const displayDate =
+    date ??
+    (eyebrow?.includes("//")
+      ? eyebrow.split("//")[1]?.trim()
+      : eyebrow);
+
+  const displayLocation =
+    location ??
+    (eyebrow?.includes("//")
+      ? eyebrow.split("//")[0]?.trim()
+      : undefined);
+
   return (
     <section className="relative isolate flex min-h-svh items-center justify-center overflow-hidden border-b border-border bg-black">
       {/* Falling pattern background */}
@@ -67,36 +88,67 @@ export function HeroAsciiOne({
           />
         </div>
 
-        {/* Date · Venue line */}
-        <p className="mt-8 font-mono text-sm font-medium tracking-wide text-white/70 md:text-base">
-          {eyebrow}
-        </p>
+        {/* Semi-transparent frosted box for date, location & CTAs */}
+        <div className="relative mt-8 w-full max-w-xl overflow-hidden rounded-[24px] border border-white/15 bg-black/70 p-6 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:p-8 md:p-9">
+          {/* Subtle top sheen highlight */}
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"
+            aria-hidden="true"
+          />
 
-        {/* CTA buttons */}
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          {primaryCta.disabled ? (
-            <button
-              disabled
-              className={cn(
-                buttonVariants({ variant: "outline", size: "lg" }),
-                "cursor-not-allowed border-white/20 bg-white/10 text-white/65 shadow-none disabled:opacity-100",
+          {/* Date & Location block */}
+          <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+            {displayDate && (
+              <p className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl">
+                {displayDate}
+              </p>
+            )}
+            {displayLocation && (
+              <p className="text-sm font-medium text-white/75 sm:text-base md:text-lg">
+                {displayLocation}
+              </p>
+            )}
+          </div>
+
+          {/* CTA buttons */}
+          <div className="mt-7 flex flex-col items-center gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row">
+              {primaryCta.disabled ? (
+                <button
+                  disabled
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "lg" }),
+                    "cursor-not-allowed border-white/20 bg-white/10 text-white/65 shadow-none disabled:opacity-100",
+                  )}
+                >
+                  {primaryCta.label}
+                  <ArrowRight aria-hidden="true" size={18} />
+                </button>
+              ) : (
+                <ShaderCtaLink href={primaryCta.href} size="lg">
+                  {primaryCta.label}
+                  <ArrowRight aria-hidden="true" size={18} />
+                </ShaderCtaLink>
               )}
-            >
-              {primaryCta.label}
-              <ArrowRight aria-hidden="true" size={18} />
-            </button>
-          ) : (
-            <ShaderCtaLink href={primaryCta.href} size="lg">
-              {primaryCta.label}
-              <ArrowRight aria-hidden="true" size={18} />
-            </ShaderCtaLink>
-          )}
-          <Link
-            href={secondaryCta.href}
-            className={buttonVariants({ variant: "outline", size: "lg" })}
-          >
-            {secondaryCta.label}
-          </Link>
+              <Link
+                href={secondaryCta.href}
+                className={buttonVariants({ variant: "outline", size: "lg" })}
+              >
+                {secondaryCta.label}
+              </Link>
+            </div>
+
+            {partnerInquiry && (
+              <Link
+                href={partnerInquiry.href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-white/50 transition-colors hover:text-white sm:text-sm"
+              >
+                <span>{partnerInquiry.label}</span>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </section>

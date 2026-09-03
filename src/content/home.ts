@@ -2,6 +2,12 @@ import type { ContentSection } from "@/types/content";
 import { siteConfig } from "@/content/site";
 
 export const homeContent = {
+  date: "October 30 – 31, 2026",
+  location: "House of Communication, Munich",
+  partnerInquiry: {
+    label: "Interested in partnering? Reach out to us →",
+    href: siteConfig.sponsorFormUrl,
+  },
   eyebrow: `${siteConfig.venue} // ${siteConfig.dateLabel}`,
   headline: "Where blockchain meets AI, and ideas become reality overnight.",
   subhead:

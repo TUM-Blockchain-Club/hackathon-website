@@ -3,15 +3,18 @@ import type { PrizeTrack } from "@/types/content";
 export const prizeContent = {
   title: "Prize Tracks",
   description:
-    "Prizes are organized into tracks, each backed by one of our partners, which combine to make up the total prize pool. Tracks and amounts are announced soon.",
+    "A €10,000 prize pool, split across premium partner tracks. Track briefs, prize breakdowns, and judging criteria are announced soon.",
   fallback: "Prize tracks announced soon.",
   trackAmountFallback: "Prize amount announced soon.",
   trackDescriptionFallback: "Track brief announced soon.",
   trackIdeasFallback: "Example ideas announced soon.",
   trackRequirementsFallback: "Track-specific requirements announced soon.",
   mainPoolDescription:
-    "The total prize pool is composed of all partner tracks combined.",
-  mainPoolFallback: "Announced soon.",
+    "The total prize pool is split across our premium partner tracks.",
+  mainPoolAmount: "€10,000",
+  mainPoolSubhead: "Available in prizes",
+  mainPoolNote: undefined,
+  comingSoonLabel: "Track details coming soon",
   defaultRequirements: [
     "A working demo of your project.",
     "A public source code repository.",
@@ -21,4 +24,33 @@ export const prizeContent = {
   ],
 };
 
-export const prizeTracks: PrizeTrack[] = [];
+export const prizeTracks: PrizeTrack[] = [
+  {
+    slug: "bsv-blockchain",
+    sponsor: "BSV Blockchain",
+    trackName: "BSV Blockchain Track",
+    sponsorLogoSrc: "/sponsors/bsv_blockchain_logo.png",
+    sponsorLogoPadding: "p-1",
+    sponsorMarkSrc: "/sponsors/bsv_icon.png",
+    sponsorHref: "https://bsvblockchain.org/",
+    about:
+      "BSV Blockchain supports the growth of the BSV network, a scalable public blockchain built for high-throughput data and micropayment applications.",
+    rightMark: "BSV",
+    amount: "€4,000",
+    status: "coming-soon",
+  },
+  {
+    slug: "cardano",
+    sponsor: "Cardano",
+    trackName: "Cardano Track",
+    sponsorLogoSrc: "/sponsors/cardano_logo.svg",
+    sponsorLogoPadding: "p-2.5",
+    sponsorMarkSrc: "/sponsors/cardano_icon.svg",
+    sponsorHref: "https://cardano.org/",
+    about:
+      "Cardano is a proof-of-stake blockchain platform built on peer-reviewed research, with a focus on security, sustainability, and formal methods.",
+    rightMark: "ADA",
+    amount: "€6,000",
+    status: "coming-soon",
+  },
+];

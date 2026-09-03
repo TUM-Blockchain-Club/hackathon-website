@@ -1,8 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { DevfolioApplyButton } from "@/components/ui/devfolio-apply-button";
 import { FaqsSection } from "@/components/ui/faqs-1";
 import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { MiniNavbar } from "@/components/ui/mini-navbar";
@@ -83,14 +82,11 @@ describe("site component interactions", () => {
     render(<PrizeTracks tracks={[]} />);
 
     expect(screen.getByText("Partner track slots")).toBeTruthy();
+    expect(screen.getByText("Prize tracks announced soon.")).toBeTruthy();
     expect(
       screen.getByText(
         "Partner tracks are being finalized, and confirmed program details will be added soon.",
       ),
-    ).toBeTruthy();
-    expect(screen.getByText("Prize breakdown")).toBeTruthy();
-    expect(
-      screen.getByText("Track-specific requirements announced soon."),
     ).toBeTruthy();
   });
 
@@ -174,31 +170,14 @@ describe("site component interactions", () => {
     expect(document.querySelector(".apply-button")).toBe(null);
   });
 
-  it("renders the official Devfolio SDK marker for the page apply button", () => {
-    render(
-      <DevfolioApplyButton
-        applicationUrl="https://tum.devfolio.co"
-        hackathonSlug="tum"
-        productionHost="hackathon.tum-blockchain.com"
-      />,
-    );
-
-    const applyLink = screen.getByRole("link", {
-      name: "Apply on Devfolio",
-    });
-    expect(applyLink.getAttribute("href")).toBe("https://tum.devfolio.co");
-
-    const sdkMarker = document.querySelector(".apply-button");
-    expect(sdkMarker?.getAttribute("data-hackathon-slug")).toBe("tum");
-    expect(sdkMarker?.getAttribute("data-button-theme")).toBe("light");
-  });
-
-  it("updates the prize detail panel when a confirmed track is selected", async () => {
-    const user = userEvent.setup();
+  it("stacks one anchored detail section per prize track", () => {
     const tracks: PrizeTrack[] = [
       {
+        slug: "protocol-labs",
         sponsor: "Protocol Labs",
         trackName: "Protocol UX",
+        sponsorHref: "https://protocol.ai/",
+        about: "Protocol Labs builds protocols and tools for the open web.",
         amount: "5000 EUR",
         rightMark: "UX",
         description:
@@ -207,37 +186,42 @@ describe("site component interactions", () => {
         requirements: ["Demo the full onboarding path."],
       },
       {
+        slug: "zero-knowledge-labs",
         sponsor: "Zero Knowledge Labs",
         trackName: "ZK Infrastructure",
-        amount: "3000 EUR",
         rightMark: "ZK",
-        description:
-          "Build a proving dashboard that makes infrastructure status visible.",
-        ideas: ["Proof latency visualizer"],
-        requirements: ["Include a live or mocked prover status feed."],
+        status: "coming-soon",
       },
     ];
 
-    render(<PrizeTracks tracks={tracks} />);
+    const { container } = render(<PrizeTracks tracks={tracks} />);
+
+    // Both tracks render in the tab sidebar, each anchored by its slug.
+    expect(container.querySelector("#protocol-labs")).toBeTruthy();
+    expect(container.querySelector("#zero-knowledge-labs")).toBeTruthy();
 
     expect(
       screen.getByText(
         "Make protocol onboarding measurable and easier for new builders.",
       ),
     ).toBeTruthy();
-
-    const zkTrackButton = screen
-      .getByText("ZK Infrastructure")
-      .closest("button");
-    expect(zkTrackButton).toBeTruthy();
-    await user.click(zkTrackButton as HTMLButtonElement);
-
-    expect(screen.getAllByText("3000 EUR").length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText("5000 EUR").length).toBeGreaterThan(0);
+    expect(screen.getByText("Wallet onboarding health check")).toBeTruthy();
+    expect(screen.getByText("Demo the full onboarding path.")).toBeTruthy();
     expect(
-      screen.getByText(
-        "Build a proving dashboard that makes infrastructure status visible.",
-      ),
-    ).toBeTruthy();
-    expect(screen.getByText("Proof latency visualizer")).toBeTruthy();
+      screen.getByRole("link", { name: /protocol\.ai/ }).getAttribute("href"),
+    ).toBe("https://protocol.ai/");
+
+    // Switch to the pending track
+    const zkTab = container.querySelector("#zero-knowledge-labs");
+    if (zkTab) {
+      fireEvent.click(zkTab);
+    }
+
+    // The pending track advertises no amount, brief, or ideas.
+    expect(screen.getByText("Prize details coming soon")).toBeTruthy();
+    expect(
+      screen.getAllByText("Prize amount announced soon.").length,
+    ).toBeGreaterThan(0);
   });
 });

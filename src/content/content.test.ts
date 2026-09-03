@@ -6,7 +6,12 @@ import { faqGroups, faqResources } from "@/content/faq";
 import { people } from "@/content/people";
 import { prizeContent, prizeTracks } from "@/content/prizes";
 import { scheduleDays } from "@/content/schedule";
-import { allSponsors, currentYearSponsors } from "@/content/sponsors";
+import {
+  allSponsors,
+  currentYearSponsors,
+  platformPartners,
+  trackSponsors,
+} from "@/content/sponsors";
 import {
   FALLBACK_TEXT,
   footerLinks,
@@ -78,8 +83,49 @@ describe("site content contract", () => {
     expect(dateAnswer).toContain("31 October at 14:00");
   });
 
-  it("keeps fallback prize content explicit while no partner tracks are public", () => {
-    expect(prizeTracks).toHaveLength(0);
+  it("publishes the confirmed pool while per-track details stay explicitly pending", () => {
+    expect(prizeContent.mainPoolAmount).toBe("€10,000");
+    expect(prizeContent.description).toContain("€10,000");
+
+    expect(prizeTracks.map((track) => track.sponsor)).toEqual([
+      "BSV Blockchain",
+      "Cardano",
+    ]);
+
+    const slugs = new Set<string>();
+
+    for (const track of prizeTracks) {
+      expect(track.slug).toMatch(/^[a-z0-9-]+$/);
+      expect(slugs.has(track.slug)).toBe(false);
+      slugs.add(track.slug);
+
+      // Every track sponsor must also be listed as a premium track sponsor.
+      expect(trackSponsors.map((sponsor) => sponsor.name)).toContain(
+        track.sponsor,
+      );
+      expect(track.sponsorLogoSrc).toBeTruthy();
+      expect(existsSync(publicAssetPath(track.sponsorLogoSrc ?? ""))).toBe(
+        true,
+      );
+
+      if (track.sponsorMarkSrc) {
+        expect(existsSync(publicAssetPath(track.sponsorMarkSrc))).toBe(true);
+      }
+
+      expectAbsoluteUrl(track.sponsorHref ?? "");
+
+      // Track amounts are confirmed, while briefs and ideas remain pending.
+      expect(track.status).toBe("coming-soon");
+      expect(track.amount).toBeTruthy();
+      expect(track.description).toBeUndefined();
+      expect(track.ideas).toBeUndefined();
+    }
+
+    const bsv = prizeTracks.find((t) => t.slug === "bsv-blockchain");
+    const cardano = prizeTracks.find((t) => t.slug === "cardano");
+    expect(bsv?.amount).toBe("€4,000");
+    expect(cardano?.amount).toBe("€6,000");
+
     expect(prizeContent.fallback).toBe("Prize tracks announced soon.");
     expect(prizeContent.trackAmountFallback).toBe(
       "Prize amount announced soon.",
@@ -123,16 +169,25 @@ describe("site content contract", () => {
 
   it("references only sponsor and speaker assets that exist in public", () => {
     expect(allSponsors.length).toBeGreaterThanOrEqual(20);
-    expect(currentYearSponsors.map((sponsor) => sponsor.name)).toEqual([
-      "Devfolio",
+
+    // Premium track sponsors stay separated from the platform partner.
+    expect(trackSponsors.map((sponsor) => sponsor.name)).toEqual([
       "BSV Blockchain",
+      "Cardano",
     ]);
-    expect(allSponsors.map((sponsor) => sponsor.name)).not.toContain(
+    expect(platformPartners.map((sponsor) => sponsor.name)).toEqual([
       "Devfolio",
-    );
-    expect(allSponsors.map((sponsor) => sponsor.name)).not.toContain(
+    ]);
+    expect(currentYearSponsors.map((sponsor) => sponsor.name)).toEqual([
       "BSV Blockchain",
-    );
+      "Cardano",
+      "Devfolio",
+    ]);
+    for (const currentSponsor of currentYearSponsors) {
+      expect(allSponsors.map((sponsor) => sponsor.name)).not.toContain(
+        currentSponsor.name,
+      );
+    }
 
     for (const sponsor of [...currentYearSponsors, ...allSponsors]) {
       expectAbsoluteUrl(sponsor.href);
