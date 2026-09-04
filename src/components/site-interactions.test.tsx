@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FaqsSection } from "@/components/ui/faqs-1";
 import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { MiniNavbar } from "@/components/ui/mini-navbar";
+import { CountdownBanner } from "@/components/sections/countdown-banner";
 import { CurrentYearSponsors } from "@/components/sections/current-year-sponsors";
 import { PrizeTracks } from "@/components/sections/prize-tracks";
 import { RollingSponsors } from "@/components/sections/rolling-sponsors";
@@ -223,5 +224,21 @@ describe("site component interactions", () => {
     expect(
       screen.getAllByText("Prize amount announced soon.").length,
     ).toBeGreaterThan(0);
+  });
+
+  it("renders countdown banner with units and target title", () => {
+    render(
+      <CountdownBanner
+        targetDate="2026-10-30T09:00:00+01:00"
+        title="TUM Blockchain Hackathon"
+      />,
+    );
+
+    expect(screen.getByText("COUNTDOWN TO")).toBeTruthy();
+    expect(screen.getByText("TUM Blockchain Hackathon")).toBeTruthy();
+    expect(screen.getByText("DAYS")).toBeTruthy();
+    expect(screen.getByText("HOURS")).toBeTruthy();
+    expect(screen.getByText("MINUTES")).toBeTruthy();
+    expect(screen.getByText("SECONDS")).toBeTruthy();
   });
 });

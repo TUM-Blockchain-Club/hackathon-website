@@ -3,6 +3,7 @@ import { ArrowRight, Calendar } from "lucide-react";
 
 import { SectionShell } from "@/components/primitives/section-shell";
 import { CurrentYearSponsors } from "@/components/sections/current-year-sponsors";
+import { CountdownBanner } from "@/components/sections/countdown-banner";
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
 import { SpeakersJudges } from "@/components/sections/speakers-judges";
 import { RollingSponsors } from "@/components/sections/rolling-sponsors";
@@ -101,6 +102,7 @@ export default function HomePage() {
         primaryCta={homeContent.primaryCta}
         secondaryCta={homeContent.secondaryCta}
       />
+      <CountdownBanner />
       {/* 1. Prize Pool */}
       <SectionShell>
         <PrizeMainPool tracks={prizeTracks} showDetailsLink />
