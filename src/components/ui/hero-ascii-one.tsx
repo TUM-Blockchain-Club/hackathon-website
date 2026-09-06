@@ -38,15 +38,11 @@ export function HeroAsciiOne({
 }: HeroAsciiOneProps) {
   const displayDate =
     date ??
-    (eyebrow?.includes("//")
-      ? eyebrow.split("//")[1]?.trim()
-      : eyebrow);
+    (eyebrow?.includes("//") ? eyebrow.split("//")[1]?.trim() : eyebrow);
 
   const displayLocation =
     location ??
-    (eyebrow?.includes("//")
-      ? eyebrow.split("//")[0]?.trim()
-      : undefined);
+    (eyebrow?.includes("//") ? eyebrow.split("//")[0]?.trim() : undefined);
 
   return (
     <section className="relative isolate flex min-h-svh items-center justify-center overflow-hidden border-b border-border bg-black">
@@ -78,9 +74,9 @@ export function HeroAsciiOne({
       />
 
       {/* Centered hero content */}
-      <div className="site-container relative z-10 flex flex-col items-center pb-16 pt-28 text-center">
+      <div className="site-container relative z-10 flex min-h-[calc(100svh-1px)] flex-col items-center justify-center gap-[clamp(0.75rem,3svh,1.5rem)] pb-6 pt-28 text-center [@media(max-height:500px)]:pb-3">
         {/* Big graphic – centered and dominant */}
-        <div className="w-full max-w-[820px]">
+        <div className="w-full max-w-[min(820px,max(120px,calc((100svh-27rem)*875/495)))] sm:max-w-[min(820px,max(120px,calc((100svh-25rem)*875/495)))]">
           <HeroLogoShader
             priority
             className="w-full"
@@ -89,7 +85,7 @@ export function HeroAsciiOne({
         </div>
 
         {/* Semi-transparent frosted box for date, location & CTAs */}
-        <div className="relative mt-8 w-full max-w-xl overflow-hidden rounded-[24px] border border-white/15 bg-black/70 p-6 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:p-8 md:p-9">
+        <div className="relative w-full max-w-xl overflow-hidden rounded-none border border-white/15 bg-black/70 p-4 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:p-5 md:p-6 [@media(max-height:500px)]:p-3">
           {/* Subtle top sheen highlight */}
           <div
             className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"
@@ -99,7 +95,7 @@ export function HeroAsciiOne({
           {/* Date & Location block */}
           <div className="flex flex-col items-center gap-1.5 sm:gap-2">
             {displayDate && (
-              <p className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl">
+              <p className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl [@media(max-height:500px)]:text-2xl">
                 {displayDate}
               </p>
             )}
@@ -111,7 +107,7 @@ export function HeroAsciiOne({
           </div>
 
           {/* CTA buttons */}
-          <div className="mt-7 flex flex-col items-center gap-4">
+          <div className="mt-4 flex flex-col items-center gap-3 [@media(max-height:500px)]:mt-3 [@media(max-height:500px)]:gap-2">
             <div className="flex flex-col gap-3 sm:flex-row">
               {primaryCta.disabled ? (
                 <button
