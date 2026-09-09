@@ -129,7 +129,7 @@ describe("site component interactions", () => {
         logoSrc: "/sponsors/devfolio_logo_colored.svg",
       },
       {
-        name: "BSV Blockchain",
+        name: "BSV Association",
         tier: "Partner",
         href: "https://bsvblockchain.org/",
         logoSrc: "/sponsors/bsv_blockchain_logo.png",

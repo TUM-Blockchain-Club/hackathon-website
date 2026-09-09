@@ -26,15 +26,15 @@ export const prizeContent = {
 
 export const prizeTracks: PrizeTrack[] = [
   {
-    slug: "bsv-blockchain",
-    sponsor: "BSV Blockchain",
-    trackName: "BSV Blockchain Track",
+    slug: "bsv-association",
+    sponsor: "BSV Association",
+    trackName: "BSV Association Track",
     sponsorLogoSrc: "/sponsors/bsv_blockchain_logo.png",
     sponsorLogoPadding: "p-1",
     sponsorMarkSrc: "/sponsors/bsv_icon.png",
     sponsorHref: "https://bsvblockchain.org/",
     about:
-      "BSV Blockchain supports the growth of the BSV network, a scalable public blockchain built for high-throughput data and micropayment applications.",
+      "BSV Association supports the growth of the BSV network, a scalable public blockchain built for high-throughput data and micropayment applications.",
     rightMark: "BSV",
     amount: "€4,000",
     status: "coming-soon",

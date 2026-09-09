@@ -130,7 +130,7 @@ export const partners: Sponsor[] = [
  */
 export const trackSponsors: Sponsor[] = [
   {
-    name: "BSV Blockchain",
+    name: "BSV Association",
     tier: "Platinum",
     href: "https://bsvblockchain.org/",
     // Primary stacked lockup, exported from the BSVA brand kit at 1400px.

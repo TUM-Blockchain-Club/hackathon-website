@@ -88,7 +88,7 @@ describe("site content contract", () => {
     expect(prizeContent.description).toContain("€4,000");
 
     expect(prizeTracks.map((track) => track.sponsor)).toEqual([
-      "BSV Blockchain",
+      "BSV Association",
     ]);
 
     const slugs = new Set<string>();
@@ -120,7 +120,7 @@ describe("site content contract", () => {
       expect(track.ideas).toBeUndefined();
     }
 
-    const bsv = prizeTracks.find((t) => t.slug === "bsv-blockchain");
+    const bsv = prizeTracks.find((t) => t.slug === "bsv-association");
     expect(bsv?.amount).toBe("€4,000");
 
     expect(prizeContent.fallback).toBe("Prize tracks announced soon.");
@@ -169,13 +169,13 @@ describe("site content contract", () => {
 
     // Premium track sponsors stay separated from the platform partner.
     expect(trackSponsors.map((sponsor) => sponsor.name)).toEqual([
-      "BSV Blockchain",
+      "BSV Association",
     ]);
     expect(platformPartners.map((sponsor) => sponsor.name)).toEqual([
       "Devfolio",
     ]);
     expect(currentYearSponsors.map((sponsor) => sponsor.name)).toEqual([
-      "BSV Blockchain",
+      "BSV Association",
       "Devfolio",
     ]);
     for (const currentSponsor of currentYearSponsors) {
