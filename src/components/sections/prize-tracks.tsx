@@ -164,7 +164,7 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
         </div>
 
         {/* Right Column: Selected Tab Detail Pane */}
-        <div className="flex flex-col justify-between bg-gradient-to-br from-white/[0.02] via-transparent to-purple-950/[0.15] p-5 sm:p-6 md:p-8">
+        <div className="flex flex-col justify-between bg-white/[0.02] p-5 sm:p-6 md:p-8">
           <div>
             {/* Header: Logo, Title, Amount, Badges, & External Link */}
             <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">

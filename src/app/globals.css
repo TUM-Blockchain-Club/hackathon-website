@@ -279,23 +279,7 @@ select {
 .prize-track-field {
   isolation: isolate;
   position: relative;
-  background:
-    radial-gradient(
-      820px 440px at 6% 0%,
-      rgba(111, 61, 226, 0.18),
-      transparent 58%
-    ),
-    radial-gradient(
-      760px 440px at 96% 10%,
-      rgba(255, 193, 16, 0.14),
-      transparent 58%
-    ),
-    radial-gradient(
-      720px 440px at 48% 116%,
-      rgba(244, 67, 54, 0.15),
-      transparent 62%
-    ),
-    rgba(0, 0, 0, 0.52);
+  background: rgba(0, 0, 0, 0.52);
   box-shadow: 0 28px 90px rgba(0, 0, 0, 0.38);
 }
 
