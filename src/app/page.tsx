@@ -13,7 +13,12 @@ import { homeContent } from "@/content/home";
 import { people, peopleContent } from "@/content/people";
 import { prizeContent, prizeTracks } from "@/content/prizes";
 import { scheduleDays } from "@/content/schedule";
-import { allSponsors, platformPartners, trackSponsors } from "@/content/sponsors";
+import {
+  allSponsors,
+  generalTrackSponsors,
+  platformPartners,
+  premiumTrackSponsors,
+} from "@/content/sponsors";
 import { siteConfig } from "@/content/site";
 import { cn } from "@/lib/utils";
 import type { ScheduleSession } from "@/types/content";
@@ -133,8 +138,13 @@ export default function HomePage() {
       >
         <div className="space-y-4">
           <CurrentYearSponsors
-            sponsors={trackSponsors}
+            sponsors={premiumTrackSponsors}
             label="Premium track sponsors"
+            size="large"
+          />
+          <CurrentYearSponsors
+            sponsors={generalTrackSponsors}
+            label="Tracks"
             size="large"
           />
           <CurrentYearSponsors

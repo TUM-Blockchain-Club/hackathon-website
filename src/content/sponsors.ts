@@ -125,10 +125,9 @@ export const partners: Sponsor[] = [
 ];
 
 /**
- * Partners running their own premium prize track. Each entry here has a
- * matching track in `@/content/prizes`.
+ * Partners running their own premium prize track.
  */
-export const trackSponsors: Sponsor[] = [
+export const premiumTrackSponsors: Sponsor[] = [
   {
     name: "BSV Association",
     tier: "Platinum",
@@ -138,14 +137,26 @@ export const trackSponsors: Sponsor[] = [
     logoAlt: "BSV Association logo",
     logoPadding: "p-1",
   },
+];
+
+/**
+ * Partners running tracks.
+ */
+export const generalTrackSponsors: Sponsor[] = [
   {
     name: "Cardano",
     tier: "Platinum",
     href: "https://cardano.org/",
     logoSrc: "/sponsors/cardano_logo.svg",
     logoAlt: "Cardano logo",
+    logoScale: 0.6,
     logoPadding: "p-1",
   },
+];
+
+export const trackSponsors: Sponsor[] = [
+  ...premiumTrackSponsors,
+  ...generalTrackSponsors,
 ];
 
 /**

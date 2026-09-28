@@ -151,7 +151,7 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
                   )}
                   <div className="flex min-w-0 flex-col">
                     <span className="truncate text-sm font-bold tracking-tight text-white">
-                      {track.trackName || track.sponsor}
+                      {track.sponsor}
                     </span>
                     <span className="text-xs font-semibold text-white/60">
                       {track.amount ?? prizeContent.trackAmountFallback}
@@ -194,7 +194,7 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
 
                 <div className="min-w-0">
                   <h2 className="font-display text-xl font-bold tracking-tight text-white sm:text-2xl md:text-3xl">
-                    {activeTrack.trackName || activeTrack.sponsor}
+                    {activeTrack.sponsor}
                   </h2>
                   <p className="mt-0.5 font-display text-lg font-bold text-tbc-yellow drop-shadow-[0_2px_12px_rgba(255,193,16,0.25)] sm:text-xl md:text-2xl">
                     {activeTrack.amount ?? prizeContent.trackAmountFallback}

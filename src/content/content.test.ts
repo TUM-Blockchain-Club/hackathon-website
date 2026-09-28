@@ -125,7 +125,7 @@ describe("site content contract", () => {
     const cardano = prizeTracks.find((t) => t.slug === "cardano");
     expect(bsv?.amount).toBe("€4,000");
     expect(cardano?.amount).toBe("€6,000");
-    expect(cardano?.trackName).toBe("Tracks");
+    expect(cardano?.trackName).toBe("Cardano Track");
 
     expect(prizeContent.fallback).toBe("Prize tracks announced soon.");
     expect(prizeContent.trackAmountFallback).toBe(
