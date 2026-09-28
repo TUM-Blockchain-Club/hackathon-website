@@ -84,11 +84,12 @@ describe("site content contract", () => {
   });
 
   it("publishes the confirmed pool while per-track details stay explicitly pending", () => {
-    expect(prizeContent.mainPoolAmount).toBe("€4,000");
-    expect(prizeContent.description).toContain("€4,000");
+    expect(prizeContent.mainPoolAmount).toBe("€10,000");
+    expect(prizeContent.description).toContain("€10,000");
 
     expect(prizeTracks.map((track) => track.sponsor)).toEqual([
       "BSV Association",
+      "Cardano",
     ]);
 
     const slugs = new Set<string>();
@@ -121,7 +122,9 @@ describe("site content contract", () => {
     }
 
     const bsv = prizeTracks.find((t) => t.slug === "bsv-association");
+    const cardano = prizeTracks.find((t) => t.slug === "cardano");
     expect(bsv?.amount).toBe("€4,000");
+    expect(cardano?.amount).toBe("€6,000");
 
     expect(prizeContent.fallback).toBe("Prize tracks announced soon.");
     expect(prizeContent.trackAmountFallback).toBe(
@@ -170,12 +173,14 @@ describe("site content contract", () => {
     // Premium track sponsors stay separated from the platform partner.
     expect(trackSponsors.map((sponsor) => sponsor.name)).toEqual([
       "BSV Association",
+      "Cardano",
     ]);
     expect(platformPartners.map((sponsor) => sponsor.name)).toEqual([
       "Devfolio",
     ]);
     expect(currentYearSponsors.map((sponsor) => sponsor.name)).toEqual([
       "BSV Association",
+      "Cardano",
       "Devfolio",
     ]);
     for (const currentSponsor of currentYearSponsors) {
