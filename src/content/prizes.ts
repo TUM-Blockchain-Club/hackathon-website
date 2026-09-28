@@ -28,7 +28,7 @@ export const prizeTracks: PrizeTrack[] = [
   {
     slug: "bsv-association",
     sponsor: "BSV Association",
-    trackName: "BSV Association Track",
+    trackName: "BSV Association",
     sponsorLogoSrc: "/sponsors/bsv_blockchain_logo.png",
     sponsorLogoPadding: "p-1",
     sponsorMarkSrc: "/sponsors/bsv_icon.png",
@@ -42,7 +42,7 @@ export const prizeTracks: PrizeTrack[] = [
   {
     slug: "cardano",
     sponsor: "Cardano",
-    trackName: "Cardano Track",
+    trackName: "Tracks",
     sponsorLogoSrc: "/sponsors/cardano_logo.svg",
     sponsorLogoPadding: "p-2.5",
     sponsorMarkSrc: "/sponsors/cardano_icon.svg",

@@ -81,7 +81,7 @@ export function PrizeMainPool({
                   )}
                   <div className="flex flex-col text-left leading-tight">
                     <span className="text-sm font-bold tracking-tight text-white">
-                      {track.sponsor}
+                      {track.trackName || track.sponsor}
                     </span>
                     <span className="text-xs font-semibold text-white/70">
                       {track.amount ?? prizeContent.trackAmountFallback}
@@ -151,7 +151,7 @@ export function PrizeMainPool({
                     )}
                     <div className="flex flex-col text-left leading-tight">
                       <span className="text-sm font-bold tracking-tight text-white">
-                        {track.sponsor}
+                        {track.trackName || track.sponsor}
                       </span>
                       <span className="text-xs font-semibold text-white/70">
                         {track.amount ?? prizeContent.trackAmountFallback}
