@@ -128,7 +128,7 @@ const SESSION_TYPE_STYLES: Record<
 };
 
 export function ScheduleClient({ hideHeader = false }: { hideHeader?: boolean } = {}) {
-  const [activeDayIdx, setActiveDayIdx] = useState(1); // Default to Day 2 to match mockup active state
+  const [activeDayIdx, setActiveDayIdx] = useState(0); // Default to Day 1
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSession, setSelectedSession] = useState<ScheduleSession | null>(null);
 

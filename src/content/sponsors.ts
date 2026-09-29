@@ -124,18 +124,15 @@ export const partners: Sponsor[] = [
   },
 ];
 
-/**
- * Partners running their own premium prize track.
- */
 export const premiumTrackSponsors: Sponsor[] = [
   {
     name: "BSV Association",
     tier: "Platinum",
     href: "https://bsvblockchain.org/",
-    // Primary stacked lockup, exported from the BSVA brand kit at 1400px.
-    logoSrc: "/sponsors/bsv_blockchain_logo.png",
+    // Horizontal linear lockup matching the conference design
+    logoSrc: "/sponsors/bsv_association_linear.png",
     logoAlt: "BSV Association logo",
-    logoPadding: "p-1",
+    logoPadding: "p-2.5 sm:p-3.5 md:p-4",
   },
 ];
 
@@ -149,8 +146,7 @@ export const generalTrackSponsors: Sponsor[] = [
     href: "https://cardano.org/",
     logoSrc: "/sponsors/cardano_logo.svg",
     logoAlt: "Cardano logo",
-    logoScale: 0.6,
-    logoPadding: "p-1",
+    logoPadding: "p-2 sm:p-3 md:p-3.5",
   },
 ];
 
@@ -170,7 +166,8 @@ export const platformPartners: Sponsor[] = [
     href: "https://devfolio.co/",
     logoSrc: "/sponsors/devfolio_logo_colored.svg",
     logoAlt: "DEVFOLIO LOGO",
-    logoScale: 1.08,
+    logoScale: 1.05,
+    logoPadding: "p-1.5 sm:p-2 md:p-2.5",
   },
 ];
 

@@ -136,20 +136,23 @@ export default function HomePage() {
           </Link>
         }
       >
-        <div className="space-y-4">
+        <div className="space-y-4 sm:space-y-5 md:space-y-6">
           <CurrentYearSponsors
             sponsors={premiumTrackSponsors}
-            label="Premium track sponsors"
+            label="PREMIUM"
+            labelColor="white"
             size="large"
           />
           <CurrentYearSponsors
             sponsors={generalTrackSponsors}
-            label="Tracks"
-            size="large"
+            label="STANDARD"
+            labelColor="yellow"
+            size="default"
           />
           <CurrentYearSponsors
             sponsors={platformPartners}
-            label="Platform partner"
+            label="PLATFORM PARTNER"
+            labelColor="muted"
             size="compact"
           />
         </div>

@@ -69,10 +69,16 @@ describe("ScheduleClient", () => {
     const user = userEvent.setup();
     render(<ScheduleClient />);
 
+    // Day 1 is selected by default
+    expect(screen.getByText("Opening Ceremony")).toBeTruthy();
+    expect(screen.getByText("AI x Blockchain Workshop")).toBeTruthy();
+
+    // Switch to Day 2
+    await user.click(screen.getByRole("button", { name: "Day 2 Sat, Oct 31" }));
     expect(screen.getByText("Final Pitches")).toBeTruthy();
 
+    // Switch back to Day 1
     await user.click(screen.getByRole("button", { name: "Day 1 Fri, Oct 30" }));
-
     expect(screen.getByText("Opening Ceremony")).toBeTruthy();
     expect(screen.getByText("AI x Blockchain Workshop")).toBeTruthy();
 

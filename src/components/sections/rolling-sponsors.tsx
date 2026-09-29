@@ -6,34 +6,55 @@ import { cn } from "@/lib/utils";
 
 export type SponsorCardSize = "large" | "default" | "compact";
 
-const sponsorCardSizeClasses: Record<SponsorCardSize, string> = {
-  large: "w-64 h-32 md:w-[360px] md:h-[176px] p-4 md:p-6",
-  default: "w-48 h-20 md:w-[240px] md:h-[96px] p-3 md:p-4",
-  compact: "w-36 h-14 md:w-[168px] md:h-[64px] p-2.5 md:p-3",
+const marqueeSizeClasses: Record<SponsorCardSize, string> = {
+  large: "w-64 h-32 md:w-[360px] md:h-[176px] p-4 md:p-6 rounded-xl",
+  default: "w-48 h-20 md:w-[240px] md:h-[96px] p-3 md:p-4 rounded-xl",
+  compact: "w-36 h-14 md:w-[168px] md:h-[64px] p-2.5 md:p-3 rounded-lg",
+};
+
+const glowSizeClasses: Record<SponsorCardSize, string> = {
+  large:
+    "w-[260px] h-[95px] sm:w-[320px] sm:h-[110px] md:w-[380px] md:h-[125px] p-3 sm:p-4 md:p-5 rounded-[16px] md:rounded-[20px]",
+  default:
+    "w-[220px] h-[80px] sm:w-[270px] sm:h-[95px] md:w-[310px] md:h-[105px] p-2.5 sm:p-3 md:p-4 rounded-[14px] md:rounded-[18px]",
+  compact:
+    "w-[180px] h-[60px] sm:w-[220px] sm:h-[70px] md:w-[250px] md:h-[80px] p-2 sm:p-2.5 md:p-3 rounded-[12px] md:rounded-[16px]",
 };
 
 /** Keeps Next.js from downloading a thumbnail for a card it renders large. */
 const sponsorCardSizeHints: Record<SponsorCardSize, string> = {
-  large: "(min-width: 768px) 360px, 256px",
-  default: "(min-width: 768px) 240px, 192px",
-  compact: "(min-width: 768px) 168px, 144px",
+  large: "(min-width: 768px) 380px, 260px",
+  default: "(min-width: 768px) 310px, 220px",
+  compact: "(min-width: 768px) 250px, 180px",
 };
 
 export function SponsorCard({
   logo,
   size = "default",
+  variant = "default",
 }: {
   logo: Sponsor;
   size?: SponsorCardSize;
+  variant?: "default" | "glow";
 }) {
+  const isGlow = variant === "glow";
+
   const cardContent = (
     <div
       className={cn(
-        "group relative flex-shrink-0 bg-white rounded-xl shadow-sm border border-black/5 flex items-center justify-center transition-all duration-300 hover:scale-[1.03] hover:shadow-md",
-        sponsorCardSizeClasses[size],
+        "group relative flex-shrink-0 bg-white flex items-center justify-center transition-all duration-300",
+        isGlow
+          ? cn(
+              glowSizeClasses[size],
+              "shadow-[0_0_50px_rgba(255,255,255,0.16)] hover:shadow-[0_0_65px_rgba(255,255,255,0.28)] hover:scale-[1.02]",
+            )
+          : cn(
+              marqueeSizeClasses[size],
+              "shadow-sm border border-black/5 hover:scale-[1.03] hover:shadow-md",
+            ),
       )}
     >
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-full flex items-center justify-center">
         {logo.logoSrc ? (
           <Image
             src={logo.logoSrc}
@@ -41,7 +62,7 @@ export function SponsorCard({
             fill
             className={cn(
               "object-contain transition-all duration-300",
-              logo.logoPadding || "p-1",
+              logo.logoPadding || (isGlow ? "p-4 sm:p-6" : "p-1"),
             )}
             style={{
               transform: logo.logoScale
@@ -66,7 +87,10 @@ export function SponsorCard({
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`${logo.name} official website`}
-        className="focus:outline-none focus-visible:ring-2 focus-visible:ring-tbc-yellow rounded-xl block flex-shrink-0"
+        className={cn(
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-tbc-yellow block flex-shrink-0",
+          isGlow ? "rounded-[20px] md:rounded-[24px]" : "rounded-xl",
+        )}
       >
         {cardContent}
       </a>

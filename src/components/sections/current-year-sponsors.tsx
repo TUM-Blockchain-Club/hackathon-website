@@ -1,5 +1,5 @@
 import type { Sponsor } from "@/types/content";
-
+import { cn } from "@/lib/utils";
 import {
   SponsorCard,
   type SponsorCardSize,
@@ -7,30 +7,47 @@ import {
 
 type CurrentYearSponsorsProps = {
   sponsors: Sponsor[];
-  /** Small divider caption, used to separate sponsor groups from each other. */
+  /** Caption / title displayed above the sponsor group */
   label?: string;
+  /** Color theme of the label: "white" (default, e.g. PREMIUM) | "yellow" (e.g. STANDARD) | "muted" */
+  labelColor?: "white" | "yellow" | "gold" | "muted";
   size?: SponsorCardSize;
+  variant?: "default" | "glow";
 };
 
 export function CurrentYearSponsors({
   sponsors,
   label,
-  size = "default",
+  labelColor = "white",
+  size = "large",
+  variant = "glow",
 }: CurrentYearSponsorsProps) {
   return (
-    <div className="py-4">
+    <div className="py-1">
       {label ? (
-        <div className="mb-5 flex items-center gap-4">
-          <span aria-hidden="true" className="h-px flex-1 bg-white/10" />
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+        <div className="mb-2 sm:mb-2.5 flex justify-center">
+          <p
+            className={cn(
+              "font-mono text-[11px] sm:text-xs font-semibold uppercase tracking-[0.25em]",
+              labelColor === "yellow" || labelColor === "gold"
+                ? "text-tbc-yellow"
+                : labelColor === "muted"
+                  ? "text-white/50"
+                  : "text-white",
+            )}
+          >
             {label}
           </p>
-          <span aria-hidden="true" className="h-px flex-1 bg-white/10" />
         </div>
       ) : null}
-      <div className="flex flex-wrap justify-center gap-6">
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
         {sponsors.map((sponsor) => (
-          <SponsorCard key={sponsor.name} logo={sponsor} size={size} />
+          <SponsorCard
+            key={sponsor.name}
+            logo={sponsor}
+            size={size}
+            variant={variant}
+          />
         ))}
       </div>
     </div>
