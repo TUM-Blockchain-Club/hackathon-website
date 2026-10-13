@@ -154,7 +154,6 @@ export function ScheduleClient({ hideHeader = false }: { hideHeader?: boolean } 
     <>
       {!hideHeader && (
         <PageHeader
-          eyebrow="Run of show"
           title={scheduleContent.title}
           description={scheduleContent.description}
         />

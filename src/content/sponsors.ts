@@ -148,6 +148,14 @@ export const generalTrackSponsors: Sponsor[] = [
     logoAlt: "Cardano logo",
     logoPadding: "p-2 sm:p-3 md:p-3.5",
   },
+  {
+    name: "API3",
+    tier: "Gold",
+    href: "https://api3.org/",
+    logoSrc: "/sponsors/api3_logo.svg",
+    logoAlt: "API3 logo",
+    logoPadding: "p-2 sm:p-3 md:p-3.5",
+  },
 ];
 
 export const trackSponsors: Sponsor[] = [
@@ -300,11 +308,9 @@ export const allSponsors: Sponsor[] = [
     logoSrc: "/sponsors/arcium_logo.png",
   },
   {
-    name: "API3",
+    name: "Neodyme",
     tier: "Partner",
-    href: "https://api3.org/",
-    logoSrc: "/sponsors/api3_logo.png",
-    logoScale: 1.25,
-    logoPadding: "p-0.5",
+    href: "https://neodyme.io/",
+    logoSrc: "/sponsors/neodyme_logo.png",
   },
 ];

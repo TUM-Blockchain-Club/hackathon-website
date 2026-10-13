@@ -3,15 +3,15 @@ import type { PrizeTrack } from "@/types/content";
 export const prizeContent = {
   title: "Prize Tracks",
   description:
-    "A €10,000 prize pool, split across premium partner tracks. Track briefs, prize breakdowns, and judging criteria are announced soon.",
+    "A €12,000 prize pool, split across partner tracks. Track briefs, prize breakdowns, and judging criteria are announced soon.",
   fallback: "Prize tracks announced soon.",
   trackAmountFallback: "Prize amount announced soon.",
   trackDescriptionFallback: "Track brief announced soon.",
   trackIdeasFallback: "Example ideas announced soon.",
   trackRequirementsFallback: "Track-specific requirements announced soon.",
   mainPoolDescription:
-    "The total prize pool is split across our premium partner tracks.",
-  mainPoolAmount: "€10,000",
+    "The total prize pool is split across our partner tracks.",
+  mainPoolAmount: "€12,000",
   mainPoolSubhead: "Available in prizes",
   mainPoolNote: undefined,
   comingSoonLabel: "Track details coming soon",
@@ -51,6 +51,20 @@ export const prizeTracks: PrizeTrack[] = [
       "Cardano is a proof-of-stake blockchain platform built on peer-reviewed research, with a focus on security, sustainability, and formal methods.",
     rightMark: "ADA",
     amount: "€6,000",
+    status: "coming-soon",
+  },
+  {
+    slug: "api3",
+    sponsor: "API3",
+    trackName: "API3 Track",
+    sponsorLogoSrc: "/sponsors/api3_logo.svg",
+    sponsorLogoPadding: "p-2.5",
+    sponsorMarkSrc: "/sponsors/api3_icon.svg",
+    sponsorHref: "https://api3.org/",
+    about:
+      "API3 builds decentralized APIs for Web3, connecting smart contracts to real-world data feeds with first-party oracles.",
+    rightMark: "API3",
+    amount: "€2,000",
     status: "coming-soon",
   },
 ];

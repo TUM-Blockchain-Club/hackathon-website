@@ -1,8 +1,9 @@
 import type { ScheduleDay } from "@/types/content";
 
 export const scheduleContent = {
-  title: "Conference Agenda",
-  description: "Two days of talks, workshops, and networking.",
+  title: "Hackathon Agenda",
+  description:
+    "Find workshops, connecting hours, meal times and start and finish times here.",
   fallback: "Full schedule coming soon.",
 };
 
