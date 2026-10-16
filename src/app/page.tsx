@@ -11,7 +11,7 @@ import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { buttonVariants } from "@/components/ui/button";
 import { homeContent } from "@/content/home";
 import { people, peopleContent } from "@/content/people";
-import { prizeContent, prizeTracks } from "@/content/prizes";
+import { prizeTracks } from "@/content/prizes";
 import { scheduleDays } from "@/content/schedule";
 import {
   allSponsors,
@@ -27,69 +27,60 @@ const compactScheduleTypeStyles: Record<
   ScheduleSession["type"],
   {
     card: string;
-    accent: string;
     badge: string;
   }
 > = {
+  Milestone: {
+    card: "border-white/10 bg-gradient-to-r from-[rgba(244,67,54,0.07)] via-[rgba(244,67,54,0.02)] to-transparent hover:border-white/20",
+    badge: "text-rose-200/70",
+  },
   Ceremony: {
-    card: "border-l-[var(--tbc-red)] bg-[rgba(244,67,54,0.065)]",
-    accent: "bg-[var(--tbc-red)]",
-    badge: "text-[var(--tbc-red)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(244,67,54,0.07)] via-[rgba(244,67,54,0.02)] to-transparent hover:border-white/20",
+    badge: "text-rose-200/70",
   },
   Workshop: {
-    card: "border-l-[var(--tbc-purple)] bg-[rgba(111,61,226,0.075)]",
-    accent: "bg-[var(--tbc-purple)]",
-    badge: "text-[var(--tbc-purple)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(111,61,226,0.06)] via-[rgba(111,61,226,0.015)] to-transparent hover:border-white/20",
+    badge: "text-purple-200/60",
   },
   Meal: {
-    card: "border-l-[var(--tbc-yellow)] bg-[rgba(255,193,16,0.085)]",
-    accent: "bg-[var(--tbc-yellow)]",
-    badge: "text-[var(--tbc-yellow)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(255,193,16,0.05)] via-[rgba(255,193,16,0.015)] to-transparent hover:border-white/20",
+    badge: "text-amber-200/60",
   },
   Mentoring: {
-    card: "border-l-[var(--tbc-purple)] bg-[rgba(111,61,226,0.075)]",
-    accent: "bg-[var(--tbc-purple)]",
-    badge: "text-[var(--tbc-purple)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(111,61,226,0.05)] via-[rgba(111,61,226,0.015)] to-transparent hover:border-white/20",
+    badge: "text-purple-200/60",
   },
   Registration: {
-    card: "border-l-[var(--tbc-purple)] bg-[rgba(111,61,226,0.075)]",
-    accent: "bg-[var(--tbc-purple)]",
-    badge: "text-[var(--tbc-purple)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(111,61,226,0.05)] via-[rgba(111,61,226,0.015)] to-transparent hover:border-white/20",
+    badge: "text-purple-200/60",
   },
   Talk: {
-    card: "border-l-[var(--tbc-yellow)] bg-[rgba(255,193,16,0.085)]",
-    accent: "bg-[var(--tbc-yellow)]",
-    badge: "text-[var(--tbc-yellow)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(255,193,16,0.05)] via-[rgba(255,193,16,0.015)] to-transparent hover:border-white/20",
+    badge: "text-amber-200/60",
   },
   Keynote: {
-    card: "border-l-[var(--tbc-red)] bg-[rgba(244,67,54,0.065)]",
-    accent: "bg-[var(--tbc-red)]",
-    badge: "text-[var(--tbc-red)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(244,67,54,0.055)] via-[rgba(244,67,54,0.015)] to-transparent hover:border-white/20",
+    badge: "text-rose-200/60",
   },
   Networking: {
-    card: "border-l-[var(--tbc-purple)] bg-[rgba(111,61,226,0.075)]",
-    accent: "bg-[var(--tbc-purple)]",
-    badge: "text-[var(--tbc-purple)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(111,61,226,0.05)] via-[rgba(111,61,226,0.015)] to-transparent hover:border-white/20",
+    badge: "text-purple-200/60",
   },
   Deadline: {
-    card: "border-l-[var(--tbc-red)] bg-[rgba(244,67,54,0.065)]",
-    accent: "bg-[var(--tbc-red)]",
-    badge: "text-[var(--tbc-red)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(244,67,54,0.055)] via-[rgba(244,67,54,0.015)] to-transparent hover:border-white/20",
+    badge: "text-rose-200/60",
   },
   Judging: {
-    card: "border-l-[var(--tbc-purple)] bg-[rgba(111,61,226,0.075)]",
-    accent: "bg-[var(--tbc-purple)]",
-    badge: "text-[var(--tbc-purple)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(111,61,226,0.06)] via-[rgba(111,61,226,0.015)] to-transparent hover:border-white/20",
+    badge: "text-purple-200/60",
   },
   Pitch: {
-    card: "border-l-[var(--tbc-yellow)] bg-[rgba(255,193,16,0.085)]",
-    accent: "bg-[var(--tbc-yellow)]",
-    badge: "text-[var(--tbc-yellow)]",
+    card: "border-white/10 bg-gradient-to-r from-[rgba(255,193,16,0.05)] via-[rgba(255,193,16,0.015)] to-transparent hover:border-white/20",
+    badge: "text-amber-200/60",
   },
   Other: {
-    card: "border-l-white/30 bg-white/[0.04]",
-    accent: "bg-white/30",
-    badge: "text-white/70",
+    card: "border-white/10 bg-white/[0.02] hover:border-white/20",
+    badge: "text-white/40",
   },
 };
 
@@ -188,35 +179,28 @@ export default function HomePage() {
                     8 AM - 6 PM
                   </p>
                 </div>
-                <div className="grid grid-cols-[86px_1fr]">
+                <div className="grid grid-cols-[96px_1fr]">
                   {day.sessions.slice(0, 6).map((session) => {
                     const typeStyle = compactScheduleTypeStyles[session.type];
 
                     return (
                       <div
-                        key={`${day.date}-${session.time}-${session.title}`}
+                        key={`${day.date}-${session.startTime}-${session.title}`}
                         className="contents"
                       >
-                        <div className="border-t border-white/10 bg-black px-3 py-3 text-right">
-                          <p className="font-mono text-[11px] font-semibold leading-tight text-white/45">
-                            {session.startTime ?? session.time}
-                          </p>
+                        <div className="flex items-center justify-center border-t border-white/10 bg-black/60 px-3 py-3">
+                          <span className="font-mono text-lg font-bold tracking-tight text-white tabular-nums drop-shadow-[0_1px_4px_rgba(255,255,255,0.2)] sm:text-xl">
+                            {session.timeTba ? "TBA" : session.startTime}
+                          </span>
                         </div>
                         <div className="border-t border-white/[0.08] p-2">
                           <div
                             className={cn(
-                              "flex min-h-14 gap-3 border border-white/10 border-l-4 px-3 py-2",
+                              "flex min-h-14 items-center gap-3 border px-3.5 py-2.5 transition-colors",
                               typeStyle.card,
                             )}
                           >
-                            <span
-                              aria-hidden="true"
-                              className={cn(
-                                "mt-1 h-7 w-1 shrink-0",
-                                typeStyle.accent,
-                              )}
-                            />
-                            <div className="min-w-0">
+                            <div className="min-w-0 flex-1">
                               <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                                 <p
                                   className={cn(
@@ -226,9 +210,11 @@ export default function HomePage() {
                                 >
                                   {session.type}
                                 </p>
-                                <p className="font-mono text-[10px] text-white/40">
-                                  {session.location}
-                                </p>
+                                {session.location ? (
+                                  <p className="font-mono text-[10px] text-white/40">
+                                    {session.location}
+                                  </p>
+                                ) : null}
                               </div>
                               <p className="mt-1 truncate font-display text-sm font-semibold leading-tight text-white">
                                 {session.title}
@@ -258,18 +244,20 @@ export default function HomePage() {
       </SectionShell>
 
       {/* 4. Speakers & Judges */}
-      <SectionShell
-        eyebrow="People"
-        title="Speakers & Judges"
-        description="here are our past speakers in our conference"
-      >
-        <SpeakersJudges
-          people={publicPeople}
-          fallback={peopleContent.fallback}
-          limit={8}
-          showCta
-        />
-      </SectionShell>
+      {siteConfig.showSpeakersAndJudges ? (
+        <SectionShell
+          eyebrow="People"
+          title="Speakers & Judges"
+          description="here are our past speakers in our conference"
+        >
+          <SpeakersJudges
+            people={publicPeople}
+            fallback={peopleContent.fallback}
+            limit={8}
+            showCta
+          />
+        </SectionShell>
+      ) : null}
 
       {/* 5. Past Sponsors */}
       <SectionShell

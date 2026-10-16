@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-// Hackathon starts October 30, 2026 at 09:00 AM Munich time (CET / UTC+1)
-const DEFAULT_TARGET_DATE = "2026-10-30T09:00:00+01:00";
+// Hackathon starts October 30, 2026 at 09:30 AM Munich time (CET / UTC+1)
+const DEFAULT_TARGET_DATE = "2026-10-30T09:30:00+01:00";
 
 type TimeRemaining = {
   days: number;

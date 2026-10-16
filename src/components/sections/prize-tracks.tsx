@@ -13,7 +13,7 @@ import {
 
 import { prizeContent } from "@/content/prizes";
 import { cn } from "@/lib/utils";
-import type { PrizeTrack } from "@/types/content";
+import type { PrizeTrack, TrackCompany } from "@/types/content";
 
 type PrizeTracksProps = {
   tracks: PrizeTrack[];
@@ -28,16 +28,119 @@ function hostLabel(href: string) {
   }
 }
 
-export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
-  const [activeSlug, setActiveSlug] = useState<string>(
-    tracks[0]?.slug ?? "",
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .map((word) => word[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+function PartnerCard({ company }: { company: TrackCompany }) {
+  const prizes = company.prizes ?? [];
+
+  return (
+    <article className="flex flex-col rounded-[16px] border border-white/10 bg-black p-5 transition-colors hover:border-white/20 sm:p-6">
+      <div className="flex items-center gap-3.5">
+        <span
+          className={cn(
+            "relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-[10px]",
+            company.markFullBleed ? "ring-1 ring-white/10" : "bg-white",
+          )}
+        >
+          {company.markSrc || company.logoSrc ? (
+            <Image
+              src={company.markSrc ?? company.logoSrc ?? ""}
+              alt={company.logoAlt ?? `${company.name} logo`}
+              fill
+              sizes="48px"
+              className={
+                company.markFullBleed ? "object-cover" : "object-contain p-1.5"
+              }
+            />
+          ) : (
+            <span
+              role="img"
+              aria-label={company.logoAlt ?? `${company.name} logo`}
+              className="font-display text-sm font-bold text-black"
+            >
+              {initials(company.name)}
+            </span>
+          )}
+        </span>
+        <div className="min-w-0">
+          <h4 className="font-display text-base font-semibold text-white sm:text-lg">
+            {company.name}
+          </h4>
+          <a
+            href={company.href}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-0.5 text-xs text-white/50 transition-colors hover:text-white"
+          >
+            {hostLabel(company.href)}
+            <ArrowUpRight aria-hidden="true" size={12} />
+          </a>
+        </div>
+      </div>
+
+      <p className="mt-6 font-display text-3xl font-semibold tracking-tight text-white">
+        {company.amount}
+        {company.amountNote ? (
+          <span className="ml-2 text-sm font-normal tracking-normal text-white/50">
+            {company.amountNote}
+          </span>
+        ) : null}
+      </p>
+
+      {company.description ? (
+        <p className="mt-2 text-sm leading-relaxed text-white/60">
+          {company.description}
+        </p>
+      ) : null}
+
+      <div className="mt-auto pt-6">
+        {prizes.length > 0 ? (
+          <dl className="divide-y divide-white/10 border-t border-white/10 text-sm">
+            {prizes.map((prize, idx) => (
+              <div
+                key={`${prize.place ?? idx}-${prize.title}`}
+                className="flex items-baseline gap-4 py-2.5"
+              >
+                <dt className="w-8 shrink-0 text-white/40">{prize.place}</dt>
+                <dd className="min-w-0 flex-1 text-white/85">{prize.title}</dd>
+                <dd className="shrink-0 tabular-nums text-white/60">
+                  {prize.amount}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        ) : (
+          <p className="border-t border-white/10 pt-3 text-sm text-white/40">
+            {prizeContent.partnerPrizesFallback}
+          </p>
+        )}
+      </div>
+    </article>
   );
+}
+
+export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
+  const [activeSlug, setActiveSlug] = useState<string>(tracks[0]?.slug ?? "");
 
   // Sync active tab with URL hash (e.g. /prizes#cardano) without awkward jump scrolling
   useEffect(() => {
     if (typeof window !== "undefined") {
       const syncFromHash = () => {
-        const hash = window.location.hash.replace("#", "");
+        let hash = window.location.hash.replace("#", "");
+        if (
+          hash === "adevar-labs" ||
+          hash === "tum-blockchain-track" ||
+          hash === "tum-blockchain"
+        ) {
+          hash = "tum-blockchain-club";
+        }
         if (hash && tracks.some((t) => t.slug === hash)) {
           setActiveSlug(hash);
         }
@@ -45,7 +148,11 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
 
       syncFromHash();
       // Keep page positioned at the top on entry so the header banner and layout remain in view
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant" as ScrollBehavior,
+      });
 
       window.addEventListener("hashchange", syncFromHash);
       return () => {
@@ -73,19 +180,25 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
     );
   }
 
-  const activeTrack =
-    tracks.find((t) => t.slug === activeSlug) ?? tracks[0];
+  const activeTrack = tracks.find((t) => t.slug === activeSlug) ?? tracks[0];
 
   const ideas = activeTrack.ideas ?? [];
+  const howToWin = activeTrack.howToWin ?? [];
+  const companies = activeTrack.companies ?? [];
+  const selectionCriteria = activeTrack.selectionCriteria ?? [];
   const requirements =
     activeTrack.requirements && activeTrack.requirements.length > 0
       ? activeTrack.requirements
-      : prizeContent.defaultRequirements;
-  const isPending = activeTrack.status === "coming-soon";
+      : companies.length > 0
+        ? []
+        : prizeContent.defaultRequirements;
   const hasDetailedContent =
     Boolean(activeTrack.description) ||
     ideas.length > 0 ||
-    Boolean(activeTrack.requirements && activeTrack.requirements.length > 0);
+    howToWin.length > 0 ||
+    companies.length > 0 ||
+    selectionCriteria.length > 0 ||
+    requirements.length > 0;
 
   const activeLogoSrc =
     activeTrack.sponsorLogoSrc ?? activeTrack.sponsorMarkSrc;
@@ -93,7 +206,7 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
   return (
     <div
       className={cn(
-        "surface-panel prize-track-field overflow-hidden rounded-[24px] border border-white/15 bg-black/60 shadow-[0_24px_80px_rgba(0,0,0,0.6)] backdrop-blur-xl ring-1 ring-white/10",
+        "prize-track-field relative z-10 overflow-hidden rounded-[24px] border border-white/15 bg-[#0a0a0c] shadow-[0_24px_80px_rgba(0,0,0,0.8)] ring-1 ring-white/10",
         className,
       )}
     >
@@ -173,7 +286,7 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
                 <div className="relative shrink-0">
                   <div
                     aria-hidden="true"
-                    className="absolute -inset-1 rounded-[18px] bg-gradient-to-br from-tbc-yellow/30 via-tbc-red/20 to-purple-500/20 blur-md opacity-80"
+                    className="absolute -inset-1 rounded-[18px] bg-white/[0.04] blur-sm opacity-50"
                   />
                   {activeLogoSrc ? (
                     <div className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-[16px] bg-white p-2 shadow-lg sm:size-20">
@@ -182,7 +295,7 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
                         alt={`${activeTrack.sponsor} logo`}
                         fill
                         sizes="80px"
-                        className="object-contain p-1.5"
+                        className="object-contain p-2"
                       />
                     </div>
                   ) : (
@@ -194,15 +307,15 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
 
                 <div className="min-w-0">
                   <h2 className="font-display text-xl font-bold tracking-tight text-white sm:text-2xl md:text-3xl">
-                    {activeTrack.sponsor}
+                    {activeTrack.trackName ?? activeTrack.sponsor}
                   </h2>
                   <p className="mt-0.5 font-display text-lg font-bold text-tbc-yellow drop-shadow-[0_2px_12px_rgba(255,193,16,0.25)] sm:text-xl md:text-2xl">
                     {activeTrack.amount ?? prizeContent.trackAmountFallback}
                   </p>
 
                   {/* Badges / Links Row */}
-                  {activeTrack.sponsorHref ? (
-                    <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                  <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                    {activeTrack.sponsorHref ? (
                       <a
                         href={activeTrack.sponsorHref}
                         target="_blank"
@@ -212,8 +325,8 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
                         <Globe size={12} className="text-white/70" />
                         <span>{hostLabel(activeTrack.sponsorHref)}</span>
                       </a>
-                    </div>
-                  ) : null}
+                    ) : null}
+                  </div>
                 </div>
               </div>
 
@@ -223,10 +336,15 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
                   href={activeTrack.sponsorHref}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-[9999px] border border-white/25 bg-white/15 px-4 py-1.5 text-xs font-bold text-white shadow-md transition-all hover:scale-105 hover:bg-white hover:text-black active:scale-95 sm:self-start"
+                  className="prize-open-page-btn group/btn inline-flex shrink-0 items-center justify-center gap-1.5 rounded-[9999px] border border-white/25 bg-white/15 px-4 py-1.5 text-xs font-bold text-white shadow-md transition-all hover:scale-105 hover:border-white hover:bg-white hover:!text-black active:scale-95 sm:self-start"
                 >
-                  <span>Open page</span>
-                  <ArrowRight size={13} />
+                  <span className="transition-colors group-hover/btn:!text-black">
+                    Open page
+                  </span>
+                  <ArrowRight
+                    size={13}
+                    className="stroke-current transition-colors group-hover/btn:!text-black"
+                  />
                 </a>
               ) : null}
             </div>
@@ -243,7 +361,7 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
 
             {/* Prize Details Section */}
             {hasDetailedContent ? (
-              <div className="mt-6 space-y-5">
+              <div className="mt-8 space-y-8">
                 {activeTrack.description ? (
                   <div>
                     <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-white/50">
@@ -255,7 +373,33 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
                   </div>
                 ) : null}
 
-                {ideas.length > 0 ? (
+                {/* How to Win Section */}
+                {howToWin.length > 0 ? (
+                  <div>
+                    <h4 className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-white/50">
+                      <Trophy
+                        aria-hidden="true"
+                        size={13}
+                        className="text-tbc-yellow"
+                      />
+                      How to win
+                    </h4>
+                    <ul className="mt-2.5 space-y-2">
+                      {howToWin.map((item, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2.5 rounded-[12px] border border-white/10 bg-white/[0.03] p-3 text-xs text-white/85 sm:text-sm"
+                        >
+                          <span
+                            aria-hidden="true"
+                            className="mt-1.5 size-1.5 shrink-0 rounded-full bg-tbc-yellow shadow-[0_0_8px_rgba(255,193,16,0.5)]"
+                          />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : ideas.length > 0 ? (
                   <div>
                     <h4 className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-white/50">
                       <Lightbulb aria-hidden="true" size={13} />
@@ -275,6 +419,48 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
                   </div>
                 ) : null}
 
+                {/* Contributing partners: one card per company in the pool */}
+                {companies.length > 0 ? (
+                  <section aria-labelledby="track-partners-heading">
+                    <h3
+                      id="track-partners-heading"
+                      className="font-display text-base font-bold text-white sm:text-lg"
+                    >
+                      Contributing partners
+                    </h3>
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                      {companies.map((company) => (
+                        <PartnerCard key={company.name} company={company} />
+                      ))}
+                    </div>
+                  </section>
+                ) : null}
+
+                {selectionCriteria.length > 0 ? (
+                  <section aria-labelledby="track-criteria-heading">
+                    <h3
+                      id="track-criteria-heading"
+                      className="font-display text-base font-bold text-white sm:text-lg"
+                    >
+                      Selection criteria
+                    </h3>
+                    <ol className="mt-3 divide-y divide-white/10 rounded-[16px] border border-white/10 bg-black">
+                      {selectionCriteria.map((criterion, idx) => (
+                        <li
+                          key={criterion}
+                          className="flex gap-4 px-5 py-3.5 text-sm text-white/80"
+                        >
+                          <span className="w-4 shrink-0 tabular-nums text-white/35">
+                            {idx + 1}
+                          </span>
+                          <span>{criterion}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </section>
+                ) : null}
+
+                {/* Submission requirements */}
                 {requirements.length > 0 ? (
                   <details className="rounded-[14px] border border-white/10 bg-black/25 p-3.5">
                     <summary className="cursor-pointer font-mono text-xs font-semibold uppercase tracking-[0.16em] text-tbc-yellow">

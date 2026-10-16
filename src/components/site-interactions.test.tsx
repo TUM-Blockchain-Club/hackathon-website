@@ -229,7 +229,7 @@ describe("site component interactions", () => {
   it("renders countdown banner with units and target title", () => {
     render(
       <CountdownBanner
-        targetDate="2026-10-30T09:00:00+01:00"
+        targetDate="2026-10-30T09:30:00+01:00"
         title="TUM Blockchain Hackathon"
       />,
     );

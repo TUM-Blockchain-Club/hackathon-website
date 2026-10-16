@@ -25,13 +25,17 @@ export const siteConfig = {
   contactEmail: "hackathon@tum-blockchain.com",
   sponsorEmail: "sponsors@tum-blockchain.com",
   sponsorFormUrl: "https://tally.so/r/vGzv6g",
+  /** Hidden until this year's speakers and judges are confirmed. */
+  showSpeakersAndJudges: false,
 } as const;
 
 export const navItems: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Prizes", href: "/prizes" },
   { label: "Schedule", href: "/schedule" },
-  { label: "Speakers & Judges", href: "/speakers-and-judges" },
+  ...(siteConfig.showSpeakersAndJudges
+    ? [{ label: "Speakers & Judges", href: "/speakers-and-judges" }]
+    : []),
   { label: "FAQ", href: "/faq" },
   { label: "Conference", href: siteConfig.conferenceUrl, external: true },
 ];

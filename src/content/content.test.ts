@@ -35,7 +35,7 @@ describe("site content contract", () => {
       "/",
       "/prizes",
       "/schedule",
-      "/speakers-and-judges",
+      ...(siteConfig.showSpeakersAndJudges ? ["/speakers-and-judges"] : []),
       "/faq",
     ]);
 
@@ -84,13 +84,14 @@ describe("site content contract", () => {
   });
 
   it("publishes the confirmed pool while per-track details stay explicitly pending", () => {
-    expect(prizeContent.mainPoolAmount).toBe("€12,000");
-    expect(prizeContent.description).toContain("€12,000");
+    expect(prizeContent.mainPoolAmount).toBe("€12,000+");
+    expect(prizeContent.description).toContain("€12,000+");
 
     expect(prizeTracks.map((track) => track.sponsor)).toEqual([
       "BSV Association",
       "Cardano",
       "API3",
+      "TUM Blockchain Club",
     ]);
 
     const slugs = new Set<string>();
@@ -100,10 +101,12 @@ describe("site content contract", () => {
       expect(slugs.has(track.slug)).toBe(false);
       slugs.add(track.slug);
 
-      // Every track sponsor must also be listed as a premium track sponsor.
-      expect(trackSponsors.map((sponsor) => sponsor.name)).toContain(
-        track.sponsor,
-      );
+      // Partner track sponsors must also be listed in track sponsors
+      if (track.sponsor !== "TUM Blockchain Club") {
+        expect(trackSponsors.map((sponsor) => sponsor.name)).toContain(
+          track.sponsor,
+        );
+      }
       expect(track.sponsorLogoSrc).toBeTruthy();
       expect(existsSync(publicAssetPath(track.sponsorLogoSrc ?? ""))).toBe(
         true,
@@ -115,21 +118,46 @@ describe("site content contract", () => {
 
       expectAbsoluteUrl(track.sponsorHref ?? "");
 
-      // Track amounts are confirmed, while briefs and ideas remain pending.
-      expect(track.status).toBe("coming-soon");
       expect(track.amount).toBeTruthy();
-      expect(track.description).toBeUndefined();
-      expect(track.ideas).toBeUndefined();
+      if (track.slug !== "tum-blockchain-club") {
+        expect(track.status).toBe("coming-soon");
+        expect(track.description).toBeUndefined();
+        expect(track.howToWin).toBeUndefined();
+      } else {
+        expect(track.status).toBe("confirmed");
+        expect(track.companies?.map((company) => company.name)).toEqual([
+          "Adevar Labs",
+        ]);
+        const adevar = track.companies?.[0];
+        expect(adevar?.prizes?.map((prize) => prize.title)).toEqual([
+          "10K in audit credits",
+          "Pre-Audit Core",
+          "Pre-Audit Express",
+        ]);
+        expect(track.selectionCriteria?.length).toBeGreaterThan(0);
+        for (const company of track.companies ?? []) {
+          for (const src of [company.logoSrc, company.markSrc]) {
+            if (src) {
+              expect(existsSync(publicAssetPath(src))).toBe(true);
+            }
+          }
+          expectAbsoluteUrl(company.href);
+          expect(company.amount).toBeTruthy();
+        }
+      }
     }
 
     const bsv = prizeTracks.find((t) => t.slug === "bsv-association");
     const cardano = prizeTracks.find((t) => t.slug === "cardano");
     const api3 = prizeTracks.find((t) => t.slug === "api3");
+    const tum = prizeTracks.find((t) => t.slug === "tum-blockchain-club");
     expect(bsv?.amount).toBe("€4,000");
     expect(cardano?.amount).toBe("€6,000");
     expect(api3?.amount).toBe("€2,000");
+    expect(tum?.amount).toBe("€16,000 in audit credits");
     expect(cardano?.trackName).toBe("Cardano Track");
     expect(api3?.trackName).toBe("API3 Track");
+    expect(tum?.trackName).toBe("TUM Blockchain Track");
 
     expect(prizeContent.fallback).toBe("Prize tracks announced soon.");
     expect(prizeContent.trackAmountFallback).toBe(
@@ -183,12 +211,14 @@ describe("site content contract", () => {
     ]);
     expect(platformPartners.map((sponsor) => sponsor.name)).toEqual([
       "Devfolio",
+      "Adevar Labs",
     ]);
     expect(currentYearSponsors.map((sponsor) => sponsor.name)).toEqual([
       "BSV Association",
       "Cardano",
       "API3",
       "Devfolio",
+      "Adevar Labs",
     ]);
     for (const currentSponsor of currentYearSponsors) {
       expect(allSponsors.map((sponsor) => sponsor.name)).not.toContain(
@@ -207,6 +237,12 @@ describe("site content contract", () => {
     ).toMatchObject({
       logoAlt: "DEVFOLIO LOGO",
       logoSrc: "/sponsors/devfolio_logo_colored.svg",
+    });
+    expect(
+      currentYearSponsors.find((sponsor) => sponsor.name === "Adevar Labs"),
+    ).toMatchObject({
+      logoAlt: "Adevar Labs logo",
+      logoSrc: "/sponsors/adevar_labs_logo.png",
     });
 
     const publicPeople = people.filter((person) => person.publicCleared);

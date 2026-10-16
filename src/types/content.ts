@@ -37,6 +37,32 @@ export type Sponsor = {
   logoPadding?: string;
 };
 
+export type TrackCompanyPrize = {
+  place?: string;
+  title: string;
+  amount: string;
+  description?: string;
+};
+
+/** A partner that funds part of a pooled track without running its own. */
+export type TrackCompany = {
+  name: string;
+  role?: string;
+  /** Falls back to a monogram tile when the partner has no logo yet. */
+  logoSrc?: string;
+  /** Square mark for small spots; falls back to logoSrc. */
+  markSrc?: string;
+  /** The mark is a full tile with its own background; skip the white frame. */
+  markFullBleed?: boolean;
+  logoAlt?: string;
+  href: string;
+  /** Headline value, e.g. "€16,000"; amountNote says what it is. */
+  amount: string;
+  amountNote?: string;
+  description?: string;
+  prizes?: TrackCompanyPrize[];
+};
+
 export type PrizeTrack = {
   /** Anchor id used to jump from the summary cards to the detail section. */
   slug: string;
@@ -54,12 +80,17 @@ export type PrizeTrack = {
   rightMark?: string;
   description?: string;
   ideas?: string[];
+  howToWin?: string[];
+  companies?: TrackCompany[];
+  /** Shared by every partner in a pooled track; shown below the partners. */
+  selectionCriteria?: string[];
   requirements?: string[];
   /** "coming-soon" renders the track brief, ideas, and breakdown as pending. */
   status?: "confirmed" | "coming-soon";
 };
 
 export type ScheduleSessionType =
+  | "Milestone"
   | "Ceremony"
   | "Workshop"
   | "Mentoring"
@@ -73,18 +104,33 @@ export type ScheduleSessionType =
   | "Registration"
   | "Other";
 
+export type ScheduleSpeaker = {
+  name: string;
+  role?: string;
+  imageSrc?: string;
+  /** Render imageSrc as a contained logo instead of a cropped portrait. */
+  logo?: boolean;
+  /** Not confirmed yet: shows a neutral person icon instead of initials. */
+  placeholder?: boolean;
+};
+
 export type ScheduleSession = {
-  time: string;
+  /** 24h "HH:MM" in the event timezone (see scheduleContent.utcOffset). */
+  startTime: string;
+  endTime?: string;
   title: string;
   type: ScheduleSessionType;
   note: string;
   location?: string;
-  speaker?: string;
-  startTime?: string;
-  endTime?: string;
-  gridStart?: number;
-  gridEnd?: number;
+  speakers?: ScheduleSpeaker[];
   sponsor?: string;
+  /** Partner mark drawn faintly behind the card, cut off at the right edge. */
+  sponsorLogoSrc?: string;
+  /**
+   * Time not confirmed yet: shown as "TBA". startTime/endTime still decide
+   * where the session sits in the day.
+   */
+  timeTba?: boolean;
 };
 
 export type ScheduleDay = {

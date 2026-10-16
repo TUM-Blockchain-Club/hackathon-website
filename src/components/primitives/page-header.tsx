@@ -5,6 +5,8 @@ type PageHeaderProps = {
   title: string;
   description?: string;
   align?: "left" | "center";
+  /** Less space below the title, for pages whose content should start high. */
+  compact?: boolean;
 };
 
 export function PageHeader({
@@ -12,11 +14,15 @@ export function PageHeader({
   title,
   description,
   align = "center",
+  compact = false,
 }: PageHeaderProps) {
   return (
     <header
       className={cn(
-        "site-container pb-12 pt-28 md:pb-20 md:pt-36",
+        "site-container",
+        compact
+          ? "pb-8 pt-28 md:pb-10 md:pt-32"
+          : "pb-12 pt-28 md:pb-20 md:pt-36",
         align === "center" ? "text-center" : "text-left",
       )}
     >

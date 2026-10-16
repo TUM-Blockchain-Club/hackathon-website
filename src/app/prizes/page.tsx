@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import { SectionShell } from "@/components/primitives/section-shell";
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
 import { PrizeTracks } from "@/components/sections/prize-tracks";
 import { prizeContent, prizeTracks } from "@/content/prizes";

@@ -177,6 +177,15 @@ export const platformPartners: Sponsor[] = [
     logoScale: 1.05,
     logoPadding: "p-1.5 sm:p-2 md:p-2.5",
   },
+  {
+    name: "Adevar Labs",
+    tier: "Partner",
+    href: "https://adevarlabs.com/",
+    logoSrc: "/sponsors/adevar_labs_logo.png",
+    logoAlt: "Adevar Labs logo",
+    logoScale: 1.35,
+    logoPadding: "p-1 sm:p-1.5 md:p-2",
+  },
 ];
 
 export const currentYearSponsors: Sponsor[] = [

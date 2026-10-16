@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
 import { PageHeader } from "@/components/primitives/page-header";
@@ -15,6 +16,10 @@ export const metadata: Metadata = {
 };
 
 export default function SpeakersAndJudgesPage() {
+  if (!siteConfig.showSpeakersAndJudges) {
+    notFound();
+  }
+
   const publicPeople = people.filter((person) => person.publicCleared);
 
   return (

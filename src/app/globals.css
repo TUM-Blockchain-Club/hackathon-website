@@ -279,8 +279,14 @@ select {
 .prize-track-field {
   isolation: isolate;
   position: relative;
-  background: rgba(0, 0, 0, 0.52);
-  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.38);
+  background: #0a0a0c;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.8);
+}
+
+.prize-open-page-btn:hover,
+.prize-open-page-btn:hover * {
+  color: #000000 !important;
+  stroke: #000000 !important;
 }
 
 .prize-track-field::before {
@@ -518,6 +524,286 @@ select {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Schedule timeline — agenda cards on a vertical track. Each row sets
+   --session-accent (yellow / red / purple by session type) and every glow,
+   corner bracket and chip derives from it. */
+.schedule-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.schedule-row {
+  --session-accent: var(--tbc-yellow);
+  /* Lifted tint so dark accents (purple) stay readable as text on black. */
+  --session-accent-text: color-mix(in srgb, var(--session-accent) 72%, #fff);
+  --rail-width: 6.5rem;
+  --rail-gap: 2.75rem;
+  --node-top: 1.6rem;
+  animation: speaker-card-in 420ms ease-out both;
+  animation-delay: var(--row-delay, 0ms);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding-bottom: 0.75rem;
+  position: relative;
+}
+
+.schedule-row:last-child {
+  padding-bottom: 0;
+}
+
+.schedule-rail,
+.schedule-node {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .schedule-row {
+    column-gap: var(--rail-gap);
+    grid-template-columns: var(--rail-width) minmax(0, 1fr);
+  }
+
+  /* Track line connecting the nodes between rail and card. */
+  .schedule-row::before {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.18),
+      rgba(255, 255, 255, 0.08)
+    );
+    bottom: 0;
+    content: "";
+    left: calc(var(--rail-width) + var(--rail-gap) / 2);
+    position: absolute;
+    top: 0;
+    width: 1px;
+  }
+
+  .schedule-row:first-child::before {
+    top: var(--node-top);
+  }
+
+  .schedule-row:last-child::before {
+    bottom: auto;
+    height: var(--node-top);
+  }
+
+  .schedule-row:only-child::before {
+    display: none;
+  }
+
+  .schedule-rail {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    padding-top: 1.1rem;
+  }
+
+  .schedule-node {
+    background: #000;
+    border: 1px solid var(--session-accent);
+    box-shadow:
+      0 0 0 5px #000,
+      0 0 18px color-mix(in srgb, var(--session-accent) 55%, transparent);
+    display: block;
+    height: 0.75rem;
+    left: calc(var(--rail-width) + var(--rail-gap) / 2);
+    position: absolute;
+    top: var(--node-top);
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 0.75rem;
+  }
+
+  .schedule-node::after {
+    background: var(--session-accent);
+    content: "";
+    inset: 2px;
+    position: absolute;
+  }
+}
+
+.schedule-rail__time {
+  color: #fff;
+  transition: color 220ms ease;
+}
+
+.schedule-card {
+  background:
+    radial-gradient(
+      110% 150% at 0% 100%,
+      color-mix(in srgb, var(--session-accent) 20%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 45%),
+    rgba(0, 0, 0, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.4);
+  isolation: isolate;
+  min-width: 0;
+  overflow: hidden;
+  padding: clamp(1rem, 2.4vw, 1.4rem);
+  position: relative;
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    opacity 220ms ease;
+}
+
+/* Blueprint grid, fading out toward the top-right. */
+.schedule-card::before {
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 34px 34px;
+  content: "";
+  inset: 0;
+  -webkit-mask-image: linear-gradient(20deg, #000 10%, transparent 75%);
+  mask-image: linear-gradient(20deg, #000 10%, transparent 75%);
+  opacity: 0.7;
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+}
+
+.schedule-card__corners {
+  --corner-length: 14px;
+  --corner-weight: 2px;
+  background:
+    linear-gradient(var(--session-accent), var(--session-accent)) top left /
+      var(--corner-length) var(--corner-weight),
+    linear-gradient(var(--session-accent), var(--session-accent)) top left /
+      var(--corner-weight) var(--corner-length),
+    linear-gradient(var(--session-accent), var(--session-accent)) top right /
+      var(--corner-length) var(--corner-weight),
+    linear-gradient(var(--session-accent), var(--session-accent)) top right /
+      var(--corner-weight) var(--corner-length),
+    linear-gradient(var(--session-accent), var(--session-accent)) bottom left /
+      var(--corner-length) var(--corner-weight),
+    linear-gradient(var(--session-accent), var(--session-accent)) bottom left /
+      var(--corner-weight) var(--corner-length),
+    linear-gradient(var(--session-accent), var(--session-accent)) bottom right /
+      var(--corner-length) var(--corner-weight),
+    linear-gradient(var(--session-accent), var(--session-accent)) bottom right /
+      var(--corner-weight) var(--corner-length);
+  background-repeat: no-repeat;
+  inset: 6px;
+  opacity: 0.45;
+  pointer-events: none;
+  position: absolute;
+  transition:
+    inset 220ms ease,
+    opacity 220ms ease;
+}
+
+.schedule-row[data-status="live"] .schedule-card {
+  border-color: color-mix(in srgb, var(--session-accent) 45%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--session-accent) 14%, transparent),
+    0 24px 80px color-mix(in srgb, var(--session-accent) 16%, transparent),
+    0 24px 70px rgba(0, 0, 0, 0.4);
+}
+
+.schedule-row[data-status="live"] .schedule-card__corners {
+  inset: 0;
+  opacity: 1;
+}
+
+.schedule-row[data-status="live"] .schedule-rail__time {
+  color: var(--session-accent-text);
+}
+
+.schedule-row[data-status="done"] .schedule-card {
+  opacity: 0.55;
+}
+
+.schedule-row[data-status="done"] .schedule-rail__time {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.schedule-eyebrow {
+  color: var(--session-accent-text);
+  display: flex;
+  gap: 0.6rem;
+}
+
+.schedule-icon {
+  color: var(--session-accent-text);
+  flex-shrink: 0;
+}
+
+.schedule-chip {
+  align-items: center;
+  background: color-mix(in srgb, var(--session-accent) 8%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--session-accent-text) 60%, transparent);
+  color: var(--session-accent-text);
+  display: inline-flex;
+  font-family: var(--font-mono, ui-monospace), monospace;
+  font-size: 12px;
+  font-weight: 600;
+  gap: 0.5rem;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  min-width: 8.5rem;
+  justify-content: center;
+  padding: 0.75rem 1.1rem;
+  text-transform: uppercase;
+}
+
+.schedule-chip--live {
+  --session-accent-text: var(--tbc-red);
+  min-width: 0;
+}
+
+.schedule-chip--muted {
+  --session-accent-text: rgba(255, 255, 255, 0.55);
+  min-width: 0;
+}
+
+.schedule-live-dot {
+  animation: schedule-live-pulse 1.4s ease-in-out infinite;
+  background: currentColor;
+  height: 6px;
+  width: 6px;
+}
+
+@keyframes schedule-live-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--tbc-red) 70%, transparent);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 0 5px transparent;
+    opacity: 0.45;
+  }
+}
+
+.schedule-avatar {
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(255, 255, 255, 0.14),
+      transparent 55%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--session-accent) 55%, #000),
+      #0a0a0a
+    );
+  border: 1px solid color-mix(in srgb, var(--session-accent) 45%, transparent);
+}
+
+.schedule-strip-rule {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 193, 16, 0.5),
+    rgba(244, 67, 54, 0.3) 40%,
+    rgba(111, 61, 226, 0.25) 70%,
+    transparent
+  );
 }
 
 /* Marquee continuous scroll animations */

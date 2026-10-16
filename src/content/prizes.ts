@@ -3,15 +3,16 @@ import type { PrizeTrack } from "@/types/content";
 export const prizeContent = {
   title: "Prize Tracks",
   description:
-    "A €12,000 prize pool, split across partner tracks. Track briefs, prize breakdowns, and judging criteria are announced soon.",
+    "A €12,000+ prize pool split across partner tracks, plus the TUM Blockchain Track with €16,000 in audit credits from Adevar Labs. Track briefs, prize breakdowns, and judging criteria are announced soon.",
   fallback: "Prize tracks announced soon.",
   trackAmountFallback: "Prize amount announced soon.",
   trackDescriptionFallback: "Track brief announced soon.",
   trackIdeasFallback: "Example ideas announced soon.",
   trackRequirementsFallback: "Track-specific requirements announced soon.",
+  partnerPrizesFallback: "Prize split announced soon.",
   mainPoolDescription:
-    "The total prize pool is split across our partner tracks.",
-  mainPoolAmount: "€12,000",
+    "The total prize pool is split across our partner tracks, plus platform security audit credits.",
+  mainPoolAmount: "€12,000+",
   mainPoolSubhead: "Available in prizes",
   mainPoolNote: undefined,
   comingSoonLabel: "Track details coming soon",
@@ -66,5 +67,43 @@ export const prizeTracks: PrizeTrack[] = [
     rightMark: "API3",
     amount: "€2,000",
     status: "coming-soon",
+  },
+  {
+    slug: "tum-blockchain-club",
+    sponsor: "TUM Blockchain Club",
+    trackName: "TUM Blockchain Track",
+    sponsorLogoSrc: "/sponsors/tbc_icon.png",
+    sponsorLogoPadding: "p-2",
+    sponsorMarkSrc: "/sponsors/tbc_icon.png",
+    sponsorHref: "https://tum-blockchain.com/",
+    about:
+      "The TUM Blockchain Track pools rewards from partners who support the hackathon without running a named track of their own. TUM Blockchain Club picks three winning projects, and the partners below distribute their prizes among them.",
+    rightMark: "TBC",
+    amount: "€16,000 in audit credits",
+    status: "confirmed",
+    companies: [
+      {
+        name: "Adevar Labs",
+        role: "Platform Partner",
+        logoSrc: "/sponsors/adevar_labs_logo.png",
+        markSrc: "/sponsors/adevar_labs_icon.png",
+        logoAlt: "Adevar Labs logo",
+        href: "https://adevarlabs.com/",
+        amount: "€16,000",
+        amountNote: "in audit credits",
+        description:
+          "Smart contract audit and pre-audit packages for the top 3 projects.",
+        prizes: [
+          { place: "1st", title: "10K in audit credits", amount: "€10,000" },
+          { place: "2nd", title: "Pre-Audit Core", amount: "€4,000" },
+          { place: "3rd", title: "Pre-Audit Express", amount: "€2,000" },
+        ],
+      },
+    ],
+    selectionCriteria: [
+      "TUM Blockchain Club selects three winning projects in total from all hackathon submissions.",
+      "Winners are the overall most liked projects of the hackathon.",
+      "Contributing partners distribute their prizes among these three projects.",
+    ],
   },
 ];

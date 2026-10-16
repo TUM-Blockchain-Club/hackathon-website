@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Trophy } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { prizeContent } from "@/content/prizes";
@@ -50,6 +50,11 @@ export function PrizeMainPool({
         <p className="mt-1.5 text-base font-medium text-white/80 drop-shadow-sm sm:text-lg md:text-xl">
           {prizeContent.mainPoolSubhead ?? "Available in prizes"}
         </p>
+        {prizeContent.mainPoolNote ? (
+          <div className="mt-3 inline-flex items-center gap-1.5 rounded-[9999px] border border-tbc-yellow/30 bg-tbc-yellow/10 px-4 py-1 font-mono text-xs font-semibold tracking-wide text-tbc-yellow backdrop-blur-sm sm:text-sm">
+            <span>{prizeContent.mainPoolNote}</span>
+          </div>
+        ) : null}
 
         {/* Optional Pills */}
         {showPills && tracks.length > 0 ? (
@@ -120,6 +125,11 @@ export function PrizeMainPool({
           <p className="mt-2 text-lg font-medium text-white/70 sm:text-xl md:text-2xl">
             {prizeContent.mainPoolSubhead ?? "Available in prizes"}
           </p>
+          {prizeContent.mainPoolNote ? (
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-[9999px] border border-tbc-yellow/30 bg-tbc-yellow/10 px-4 py-1 font-mono text-xs font-semibold tracking-wide text-tbc-yellow backdrop-blur-sm sm:text-sm">
+              <span>{prizeContent.mainPoolNote}</span>
+            </div>
+          ) : null}
 
           {/* Pill Row: Track chips + CTA button */}
           {showPills && tracks.length > 0 ? (

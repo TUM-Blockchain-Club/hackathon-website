@@ -1,113 +1,95 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import type { ScheduleDay } from "@/types/content";
-import { ScheduleClient } from "./schedule-client";
-
-const testScheduleDays = vi.hoisted<() => ScheduleDay[]>(() => () => [
-  {
-    label: "Day 1 Fri, Oct 30",
-    date: "2026-10-30",
-    sessions: [
-      {
-        time: "10:00",
-        startTime: "10:00",
-        endTime: "10:30",
-        title: "Opening Ceremony",
-        type: "Ceremony",
-        note: "Welcome builders and explain the hackathon rules.",
-        location: "Main Stage",
-        speaker: "TUM Blockchain Club",
-        gridStart: 4,
-        gridEnd: 5,
-      },
-      {
-        time: "11:00",
-        startTime: "11:00",
-        endTime: "12:00",
-        title: "AI x Blockchain Workshop",
-        type: "Workshop",
-        note: "Hands-on session for turning a sponsor prompt into a build plan.",
-        location: "Workshop Room",
-        speaker: "Ada Mentor",
-        gridStart: 6,
-        gridEnd: 8,
-      },
-    ],
-  },
-  {
-    label: "Day 2 Sat, Oct 31",
-    date: "2026-10-31",
-    sessions: [
-      {
-        time: "14:00",
-        startTime: "14:00",
-        endTime: "15:00",
-        title: "Final Pitches",
-        type: "Pitch",
-        note: "Teams present submitted projects to judges.",
-        location: "Main Stage",
-        gridStart: 12,
-        gridEnd: 14,
-      },
-    ],
-  },
-]);
-
-vi.mock("@/content/schedule", () => ({
-  scheduleContent: {
+const { mockScheduleContent, mockScheduleDays } = vi.hoisted(() => ({
+  mockScheduleContent: {
     title: "Hackathon Agenda",
     description:
       "Find workshops, connecting hours, meal times and start and finish times here.",
     fallback: "Full schedule coming soon.",
+    timezone: "CET",
+    utcOffset: "+01:00",
+    kickoff: { date: "2026-10-30", time: "09:00" },
   },
-  scheduleDays: testScheduleDays(),
+  mockScheduleDays: [
+    {
+      label: "Day 1 Fri, Oct 30",
+      date: "2026-10-30",
+      sessions: [
+        {
+          startTime: "11:00",
+          endTime: "12:00",
+          title: "AI x Blockchain Workshop",
+          type: "Workshop" as const,
+          note: "Hands-on session for turning a sponsor prompt into a build plan.",
+          location: "Workshop Room",
+          speakers: [{ name: "Ada Mentor", role: "Mentor" as const }],
+        },
+        {
+          startTime: "09:30",
+          title: "Opening Ceremony",
+          type: "Ceremony" as const,
+          note: "Welcome builders and explain the hackathon rules.",
+          location: "Main Stage",
+          speakers: [{ name: "TUM Blockchain Club" }],
+        },
+      ],
+    },
+    {
+      label: "Day 2 Sat, Oct 31",
+      date: "2026-10-31",
+      sessions: [
+        {
+          startTime: "15:00",
+          title: "Hackathon Ends",
+          type: "Milestone" as const,
+          note: "The hackathon comes to a close.",
+        },
+      ],
+    },
+  ],
 }));
 
+vi.mock("@/content/schedule", () => ({
+  scheduleContent: mockScheduleContent,
+  scheduleDays: mockScheduleDays,
+}));
+
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { ScheduleClient } from "./schedule-client";
+
 describe("ScheduleClient", () => {
-  it("filters sessions by contextual search terms and opens the session detail dialog", async () => {
+  it("renders sessions as time-ordered agenda cards with a mission clock", () => {
+    render(<ScheduleClient />);
+
+    const titles = screen
+      .getAllByRole("heading", { level: 3 })
+      .map((heading) => heading.textContent);
+    expect(titles).toEqual(["Opening Ceremony", "AI x Blockchain Workshop"]);
+
+    expect(screen.getByText("T+00:30")).toBeTruthy();
+    expect(screen.getByText("Fri, 11:00 – 12:00 CET")).toBeTruthy();
+    expect(screen.getByText("Ada Mentor")).toBeTruthy();
+  });
+
+  it("switches days and filters sessions by speaker and title", async () => {
     const user = userEvent.setup();
     render(<ScheduleClient />);
 
-    // Day 1 is selected by default
-    expect(screen.getByText("Opening Ceremony")).toBeTruthy();
-    expect(screen.getByText("AI x Blockchain Workshop")).toBeTruthy();
-
-    // Switch to Day 2
     await user.click(screen.getByRole("button", { name: "Day 2 Sat, Oct 31" }));
-    expect(screen.getByText("Final Pitches")).toBeTruthy();
+    expect(screen.getByText("Hackathon Ends")).toBeTruthy();
+    expect(screen.getByText("T+30:00")).toBeTruthy();
 
-    // Switch back to Day 1
     await user.click(screen.getByRole("button", { name: "Day 1 Fri, Oct 30" }));
-    expect(screen.getByText("Opening Ceremony")).toBeTruthy();
-    expect(screen.getByText("AI x Blockchain Workshop")).toBeTruthy();
-
     await user.type(
       screen.getByPlaceholderText("Search by session title, speaker..."),
-      "workshop",
+      "ada",
     );
 
     expect(screen.queryByText("Opening Ceremony")).toBeNull();
     expect(screen.getByText("AI x Blockchain Workshop")).toBeTruthy();
 
-    await user.click(
-      screen.getByRole("button", {
-        name: /AI x Blockchain Workshop/i,
-      }),
-    );
-
-    expect(screen.getByRole("dialog")).toBeTruthy();
-    expect(screen.getByText("Session Details")).toBeTruthy();
-    expect(screen.getByText("Ada Mentor")).toBeTruthy();
-    expect(
-      screen.getAllByText(
-        "Hands-on session for turning a sponsor prompt into a build plan.",
-      ).length,
-    ).toBeGreaterThanOrEqual(2);
-
-    await user.click(screen.getByRole("button", { name: "Close details" }));
-
-    expect(screen.queryByRole("dialog")).toBeNull();
+    await user.click(screen.getByRole("button", { name: "Clear search" }));
+    expect(screen.getByText("Opening Ceremony")).toBeTruthy();
   });
 });
