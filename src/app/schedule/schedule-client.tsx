@@ -240,6 +240,11 @@ function SessionCard({
             </p>
             <h3 className="mt-1.5 font-display text-xl font-semibold leading-[1.15] text-white sm:text-2xl">
               {session.title}
+              {session.titleSuffix && (
+                <span className="ml-2 text-base font-medium text-white/45 sm:text-lg">
+                  {session.titleSuffix}
+                </span>
+              )}
             </h3>
           </div>
 
@@ -319,6 +324,7 @@ export function ScheduleClient({
     return sortedSessions.filter((session) =>
       [
         session.title,
+        session.titleSuffix,
         session.note,
         session.type,
         session.location,

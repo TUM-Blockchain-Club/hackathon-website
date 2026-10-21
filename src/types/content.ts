@@ -119,6 +119,8 @@ export type ScheduleSession = {
   startTime: string;
   endTime?: string;
   title: string;
+  /** Secondary text after the title, rendered smaller and dimmer. */
+  titleSuffix?: string;
   type: ScheduleSessionType;
   note: string;
   location?: string;

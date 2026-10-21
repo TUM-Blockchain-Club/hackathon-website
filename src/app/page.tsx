@@ -218,6 +218,11 @@ export default function HomePage() {
                               </div>
                               <p className="mt-1 truncate font-display text-sm font-semibold leading-tight text-white">
                                 {session.title}
+                                {session.titleSuffix ? (
+                                  <span className="ml-1.5 text-xs font-medium text-white/45">
+                                    {session.titleSuffix}
+                                  </span>
+                                ) : null}
                               </p>
                             </div>
                           </div>
