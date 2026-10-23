@@ -42,8 +42,8 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "When and where is it?",
         answer:
-          "30-31 October 2026, at the House of Communication in Munich. Building begins on 30 October at 10:00, and submissions close on 31 October at 14:00. The full schedule is announced soon.",
-        status: "partial-tbd",
+          "30-31 October 2026, at the House of Communication in Munich. Doors open on Friday 30 October at 09:00, and the opening ceremony starts at 09:30. Submissions close on 31 October at 15:00. The TUM Blockchain Conference takes place the day before, on Thursday 29 October. The full agenda is on the Schedule page.",
+        status: "confirmed",
       },
       {
         question: "Is it in person or online?",
@@ -52,8 +52,9 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         question: "What is the theme?",
-        answer: "Blockchain and AI. Specific tracks are announced soon.",
-        status: "partial-tbd",
+        answer:
+          "Blockchain and AI. The partner tracks are Cardano, BSV Association and API3. Track details are on the Prizes page.",
+        status: "confirmed",
       },
     ],
   },
@@ -65,7 +66,7 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "Who can participate?",
         answer:
-          "Anyone who is interested in building projects in the Blockchain and AI space are welcome to attend. Whether you are a developer, designer, product manager, or simply curious about the space - we encourage you to apply!",
+          "Anyone interested in building in the blockchain and AI space is welcome. Whether you are a developer, designer, product manager or simply curious, we encourage you to apply.",
         status: "partial-tbd",
       },
       {
@@ -75,10 +76,51 @@ export const faqGroups: FaqGroup[] = [
         status: "tbd",
       },
       {
+        question: "What happens after I apply?",
+        answer:
+          "If we select you, you get an email from hackathon@tum-blockchain.com with a personal Luma link and a personal single-use code. You use them to pay your deposit on Luma. Once your deposit is paid, we accept you on Devfolio.",
+        status: "confirmed",
+      },
+      {
         question: "How much does it cost?",
         answer:
-          "Participation is free. Registration deposit details, if any, will be announced soon.",
-        status: "partial-tbd",
+          "You pay a €50 refundable deposit on Luma to confirm your place. You get the full €50 back after the event if you meet the refund conditions.",
+        status: "confirmed",
+      },
+      {
+        question: "When do I have to pay the deposit?",
+        answer:
+          "Within five days of your selection email. The deadline is in the email and cannot be extended. If you don't pay in time, your place goes to someone on the waitlist.",
+        status: "confirmed",
+      },
+      {
+        question: "Does every team member pay the deposit?",
+        answer:
+          "Yes. Every team member pays the deposit individually. Check that your teammates are listed on the hacker dashboard.",
+        status: "confirmed",
+      },
+      {
+        question: "How do I get my deposit back?",
+        answer:
+          "Do all three, in person, at House of Communication. Thursday 29 October: check in and attend the TUM Blockchain Conference. Friday 30 October: check in separately at the hackathon before the 09:30 opening ceremony. Saturday 31 October: submit your project on Devfolio before 15:00. The project must enter at least one partner track: Cardano, BSV Association or API3. You then get the full €50 back after the event.",
+        status: "confirmed",
+      },
+      {
+        question: "When is the deposit not refunded?",
+        answer:
+          "If you miss a check-in, take part remotely, do not submit a project, or submit a project that is not in a partner track.",
+        status: "confirmed",
+      },
+      {
+        question: "Can I give my place to someone else?",
+        answer: "No. Your acceptance is personal and cannot be transferred.",
+        status: "confirmed",
+      },
+      {
+        question: "I already bought a student ticket. Can I use it?",
+        answer:
+          "No. Hackers can only take part with the dedicated hacker ticket. If you already bought a student ticket, request a refund for it.",
+        status: "confirmed",
       },
     ],
   },
@@ -127,12 +169,13 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "How do I register?",
         answer:
-          "Apply on Devfolio at https://tum.devfolio.co. Each team member registers individually.",
+          "Apply on Devfolio at https://tum.devfolio.co. Every team member applies individually. If we select you, you get an email with the next steps. You are accepted on Devfolio once your deposit is paid.",
         status: "confirmed",
       },
       {
         question: "How and where do I submit my project?",
-        answer: "Through Devfolio, before the deadline on 31 October at 14:00.",
+        answer:
+          "On Devfolio, before the deadline on 31 October at 15:00. To get your deposit back, your project must enter at least one partner track: Cardano, BSV Association or API3.",
         status: "confirmed",
       },
       {
@@ -149,6 +192,11 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "Who owns the intellectual property of my project?",
         answer: "Your team keeps full ownership of your project and its IP.",
+        status: "confirmed",
+      },
+      {
+        question: "Who do I contact with questions?",
+        answer: "Email hackathon@tum-blockchain.com.",
         status: "confirmed",
       },
     ],
@@ -171,8 +219,9 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         question: "What are the prizes?",
-        answer: "Announced soon, and the pool is growing.",
-        status: "tbd",
+        answer:
+          "€12,000 in cash prizes across the Cardano, BSV Association and API3 tracks, plus €16,000 in audit credits. Details are on the Prizes page.",
+        status: "confirmed",
       },
       {
         question: "When are winners announced?",

@@ -80,7 +80,7 @@ describe("site content contract", () => {
 
     expect(dateAnswer).toContain("30-31 October 2026");
     expect(dateAnswer).toContain("House of Communication");
-    expect(dateAnswer).toContain("31 October at 14:00");
+    expect(dateAnswer).toContain("31 October at 15:00");
   });
 
   it("publishes the confirmed pool while per-track details stay explicitly pending", () => {

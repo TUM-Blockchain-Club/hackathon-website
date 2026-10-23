@@ -74,7 +74,7 @@ describe("site component interactions", () => {
 
     expect(
       screen.getByText(
-        /Anyone who is interested in building projects in the Blockchain and AI space/i,
+        /Anyone interested in building in the blockchain and AI space/i,
       ),
     ).toBeTruthy();
   });
