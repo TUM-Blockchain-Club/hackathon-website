@@ -192,13 +192,15 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
       : companies.length > 0
         ? []
         : prizeContent.defaultRequirements;
+  // Only the track's own requirements count: the defaults alone would hide
+  // the "coming soon" placeholder on tracks that have no brief yet.
   const hasDetailedContent =
     Boolean(activeTrack.description) ||
     ideas.length > 0 ||
     howToWin.length > 0 ||
     companies.length > 0 ||
     selectionCriteria.length > 0 ||
-    requirements.length > 0;
+    (activeTrack.requirements?.length ?? 0) > 0;
 
   const activeLogoSrc =
     activeTrack.sponsorLogoSrc ?? activeTrack.sponsorMarkSrc;
