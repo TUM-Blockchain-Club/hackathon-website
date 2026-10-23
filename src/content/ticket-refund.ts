@@ -29,7 +29,7 @@ export const ticketRefundContent = {
   eyebrow: "Accepted hackers",
   title: "Refund your student ticket",
   description:
-    "Hackers get into House of Communication only with a hacker ticket. If you already bought a Student Ticket on Luma, request a refund and cancel it. It takes about two minutes.",
+    "Hackers get into House of Communication only with a hacker ticket. If you already bought a Student Ticket on Luma, request a refund, cancel it, and register again with your hacker voucher. It takes about three minutes.",
   lumaUrl: "https://luma.com",
   eventUrl: "https://luma.com/tbc26",
   message: "I am a hacker, and I want a refund for my student ticket.",
@@ -153,6 +153,28 @@ export const ticketRefundSteps: RefundStep[] = [
     },
     narrow: true,
   },
+  {
+    title: 'Open your voucher link and click "register again"',
+    body: [
+      "The ticket box now says ",
+      { ui: "You're Not Going" },
+      ". Open the ",
+      { strong: "personal Luma link from your acceptance email" },
+      ", click ",
+      { ui: "register again" },
+      " in the ticket box, then pick the hacker ticket and enter your personal code to pay the €50 deposit.",
+    ],
+    image: {
+      src: "/ticket-refund/07-register-again.jpg",
+      width: 1194,
+      height: 444,
+      alt: "Luma ticket box after cancelling, showing You're Not Going and the register again link.",
+    },
+    callout: [
+      { strong: "The voucher link won't open the ticket selection by itself." },
+      " Because you cancelled a registration, you have to click register again first. Only then can you choose the hacker ticket.",
+    ],
+  },
 ];
 
 export const ticketRefundNextSteps: RefundTextPart[][] = [
@@ -160,9 +182,9 @@ export const ticketRefundNextSteps: RefundTextPart[][] = [
     "We issue the refund from our side. Luma emails you when it's done, and the money goes back to the card or account you paid with. How long it takes to show up depends on your bank.",
   ],
   [
-    "If you haven't yet, pay your ",
+    "Pay your ",
     { strong: "€50 hacker deposit" },
-    " with the Luma link and personal code from your acceptance email, before your deadline.",
+    " in step 7 before the deadline in your acceptance email. If you don't, your place goes to someone on the waitlist.",
   ],
   [
     "Questions? Reply to your acceptance email or write to ",
