@@ -1,5 +1,6 @@
 import type { FaqGroup, ResourceLink } from "@/types/content";
 import { siteConfig, FALLBACK_TEXT } from "@/content/site";
+import { ticketRefundContent } from "@/content/ticket-refund";
 
 export const faqContent = {
   title: "FAQ",
@@ -17,6 +18,11 @@ export const faqResources: ResourceLink[] = [
   {
     label: "Join the Telegram",
     href: siteConfig.telegramUrl,
+    primary: false,
+  },
+  {
+    label: "Refund a student ticket",
+    href: ticketRefundContent.path,
     primary: false,
   },
   {
@@ -119,7 +125,7 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "I already bought a student ticket. Can I use it?",
         answer:
-          "No. Hackers can only take part with the dedicated hacker ticket. If you already bought a student ticket, request a refund for it.",
+          'No. Hackers can only take part with the dedicated hacker ticket. If you already bought a student ticket, request a refund for it. The "Refund a student ticket" guide at the top of this page shows how.',
         status: "confirmed",
       },
     ],

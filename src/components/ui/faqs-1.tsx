@@ -56,7 +56,7 @@ export function FaqsSection({ groups, resources }: FaqsSectionProps) {
             logistics, and more.
           </p>
 
-          <div className="mx-auto mt-8 grid max-w-3xl gap-2 sm:grid-cols-3">
+          <div className="mx-auto mt-8 grid max-w-3xl gap-2 sm:grid-cols-2 md:grid-cols-4">
             {resources.map((resource) => {
               const isExternal =
                 resource.external ?? resource.href.startsWith("http");
