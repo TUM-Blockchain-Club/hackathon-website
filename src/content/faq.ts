@@ -108,7 +108,7 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "How do I get my deposit back?",
         answer:
-          "Do all three, in person, at House of Communication. Thursday 29 October: check in and attend the TUM Blockchain Conference. Friday 30 October: check in separately at the hackathon before the 09:30 opening ceremony. Saturday 31 October: submit your project on Devfolio before 15:00. The project must enter at least one partner track: Cardano, BSV Association or API3. You then get the full €50 back after the event.",
+          "Do all three, in person, at House of Communication. Thursday 29 October: check in and attend the TUM Blockchain Conference. Friday 30 October: check in separately at the hackathon. Saturday 31 October: submit your project on Devfolio before 15:00. The project must enter at least one partner track: Cardano, BSV Association or API3. You then get the full €50 back after the event.",
         status: "confirmed",
       },
       {

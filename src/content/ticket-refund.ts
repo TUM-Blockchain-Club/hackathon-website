@@ -158,9 +158,9 @@ export const ticketRefundSteps: RefundStep[] = [
     body: [
       "The ticket box now says ",
       { ui: "You're Not Going" },
-      ". Open the ",
-      { strong: "personal Luma link from your acceptance email" },
-      ", click ",
+      ". Open your ",
+      { strong: "personal Luma link" },
+      " from the email we sent with your link and code, click ",
       { ui: "register again" },
       " in the ticket box, then pick the hacker ticket and enter your personal code to pay the €50 deposit.",
     ],
@@ -184,7 +184,7 @@ export const ticketRefundNextSteps: RefundTextPart[][] = [
   [
     "Pay your ",
     { strong: "€50 hacker deposit" },
-    " in step 7 before the deadline in your acceptance email. If you don't, your place goes to someone on the waitlist.",
+    " in step 7 before the deadline in the email with your personal link. If you don't, your place goes to someone on the waitlist.",
   ],
   [
     "Questions? Reply to your acceptance email or write to ",
