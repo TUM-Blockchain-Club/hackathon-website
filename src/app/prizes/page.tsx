@@ -29,6 +29,19 @@ export default function PrizesPage() {
           tracks={prizeTracks}
         />
 
+        {/* Deadline strip: jumps to the submission guide tab */}
+        <div className="flex justify-center">
+          <a
+            href={`#${prizeContent.submission.slug}`}
+            className="group inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 rounded-[9999px] border border-tbc-yellow/30 bg-tbc-yellow/10 px-4 py-1.5 text-center text-xs font-semibold text-tbc-yellow backdrop-blur-sm transition-colors hover:border-tbc-yellow/60 sm:text-sm"
+          >
+            <span>Submissions close {prizeContent.submission.deadline}</span>
+            <span className="text-white/80 transition-colors group-hover:text-white">
+              How to submit →
+            </span>
+          </a>
+        </div>
+
         {/* Tabbed Prize Tracks fitting comfortably in the screen */}
         <div className="mt-4 sm:mt-6">
           <PrizeTracks tracks={prizeTracks} />

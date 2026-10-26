@@ -226,6 +226,52 @@ describe("site component interactions", () => {
     ).toBeGreaterThan(0);
   });
 
+  it("opens the submission guide tab with each track's extra items", () => {
+    const tracks: PrizeTrack[] = [
+      {
+        slug: "protocol-labs",
+        sponsor: "Protocol Labs",
+        trackName: "Protocol UX",
+        amount: "5000 EUR",
+        description: "Make protocol onboarding easier.",
+        submission: ["Link the onboarding transaction."],
+        judges: [{ name: "Ada Lovelace", role: "Judge, Protocol Labs" }],
+      },
+      {
+        slug: "zero-knowledge-labs",
+        sponsor: "Zero Knowledge Labs",
+        trackName: "ZK Infrastructure",
+        status: "coming-soon",
+      },
+    ];
+
+    // The previous test leaves a track hash behind; start from the first tab.
+    window.history.replaceState(null, "", "/prizes");
+    const { container } = render(<PrizeTracks tracks={tracks} />);
+
+    // Judges show by name and role on the track tab.
+    expect(screen.getByText("Ada Lovelace")).toBeTruthy();
+    expect(screen.getByText("Judge, Protocol Labs")).toBeTruthy();
+
+    const submitTab = container.querySelector("#how-to-submit");
+    expect(submitTab).toBeTruthy();
+    if (submitTab) {
+      fireEvent.click(submitTab);
+    }
+
+    expect(
+      screen.getAllByText("Saturday 31 October, 15:00 CET").length,
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getByText("A demo video of at most 2.5 minutes."),
+    ).toBeTruthy();
+    expect(screen.getByText("Link the onboarding transaction.")).toBeTruthy();
+    // A track without its own items says so instead of inventing them.
+    expect(
+      screen.getByText("Track-specific requirements announced soon."),
+    ).toBeTruthy();
+  });
+
   it("renders countdown banner with units and target title", () => {
     render(
       <CountdownBanner

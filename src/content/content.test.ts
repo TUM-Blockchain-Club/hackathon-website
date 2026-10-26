@@ -83,7 +83,7 @@ describe("site content contract", () => {
     expect(dateAnswer).toContain("31 October at 15:00");
   });
 
-  it("publishes the confirmed pool while per-track details stay explicitly pending", () => {
+  it("publishes the confirmed tracks while Cardano stays explicitly pending", () => {
     expect(prizeContent.mainPoolAmount).toBe("€12,000+");
     expect(prizeContent.description).toContain("€12,000+");
 
@@ -94,7 +94,7 @@ describe("site content contract", () => {
       "TUM Blockchain Club",
     ]);
 
-    const slugs = new Set<string>();
+    const slugs = new Set<string>([prizeContent.submission.slug]);
 
     for (const track of prizeTracks) {
       expect(track.slug).toMatch(/^[a-z0-9-]+$/);
@@ -117,33 +117,34 @@ describe("site content contract", () => {
       }
 
       expectAbsoluteUrl(track.sponsorHref ?? "");
-
+      if (track.sponsorXHref) {
+        expectAbsoluteUrl(track.sponsorXHref);
+      }
       expect(track.amount).toBeTruthy();
-      if (track.slug !== "tum-blockchain-club") {
-        expect(track.status).toBe("coming-soon");
-        expect(track.description).toBeUndefined();
-        expect(track.howToWin).toBeUndefined();
-      } else {
-        expect(track.status).toBe("confirmed");
-        expect(track.companies?.map((company) => company.name)).toEqual([
-          "Adevar Labs",
-        ]);
-        const adevar = track.companies?.[0];
-        expect(adevar?.prizes?.map((prize) => prize.title)).toEqual([
-          "10K in audit credits",
-          "Pre-Audit Core",
-          "Pre-Audit Express",
-        ]);
-        expect(track.selectionCriteria?.length).toBeGreaterThan(0);
-        for (const company of track.companies ?? []) {
-          for (const src of [company.logoSrc, company.markSrc]) {
-            if (src) {
-              expect(existsSync(publicAssetPath(src))).toBe(true);
-            }
+
+      for (const group of track.resources ?? []) {
+        for (const link of group.links) {
+          if (link.href) {
+            expectAbsoluteUrl(link.href);
+          } else {
+            expect(link.pending).toBe(true);
           }
-          expectAbsoluteUrl(company.href);
-          expect(company.amount).toBeTruthy();
         }
+      }
+
+      // Judges are published by name and role only.
+      for (const judge of track.judges ?? []) {
+        expect(Object.keys(judge).sort()).toEqual(["name", "role"]);
+      }
+
+      for (const company of track.companies ?? []) {
+        for (const src of [company.logoSrc, company.markSrc]) {
+          if (src) {
+            expect(existsSync(publicAssetPath(src))).toBe(true);
+          }
+        }
+        expectAbsoluteUrl(company.href);
+        expect(company.amount).toBeTruthy();
       }
     }
 
@@ -151,24 +152,75 @@ describe("site content contract", () => {
     const cardano = prizeTracks.find((t) => t.slug === "cardano");
     const api3 = prizeTracks.find((t) => t.slug === "api3");
     const tum = prizeTracks.find((t) => t.slug === "tum-blockchain-club");
+
     expect(bsv?.amount).toBe("€4,000");
-    expect(cardano?.amount).toBe("€6,000");
+    expect(bsv?.trackName).toBe("DeFi Rails for Agentic Payments");
+    expect(bsv?.status).toBe("confirmed");
+    expect(bsv?.prizes?.map((prize) => prize.amount)).toEqual([
+      "€2,500",
+      "€1,000",
+      "€500",
+    ]);
+    // ts-sdk and wallet-toolbox are archived; only the ts-stack monorepo is linked.
+    const bsvLinks = (bsv?.resources ?? []).flatMap((group) =>
+      group.links.map((link) => link.href ?? ""),
+    );
+    expect(bsvLinks).toContain("https://github.com/bsv-blockchain/ts-stack");
+    expect(bsvLinks.some((href) => /ts-sdk|wallet-toolbox/.test(href))).toBe(
+      false,
+    );
+
     expect(api3?.amount).toBe("€2,000");
-    expect(tum?.amount).toBe("€16,000 in audit credits");
+    expect(api3?.trackName).toBe("Any API in your contract");
+    expect(api3?.status).toBe("confirmed");
+    // The split stays unpublished until API3 confirms it.
+    expect(api3?.prizes).toBeUndefined();
+    expect(api3?.prizeNote).toContain("announced soon");
+    expect(api3?.workshop?.when).toBe("Fri 30 Oct, 11:00–11:30");
+
+    expect(cardano?.amount).toBe("€6,000");
     expect(cardano?.trackName).toBe("Cardano Track");
-    expect(api3?.trackName).toBe("API3 Track");
+    expect(cardano?.status).toBe("coming-soon");
+    expect(cardano?.description).toBeUndefined();
+    expect(cardano?.requirements).toBeUndefined();
+
+    expect(tum?.amount).toBe("€16,000 in audit credits");
     expect(tum?.trackName).toBe("TUM Blockchain Track");
+    expect(tum?.companies?.map((company) => company.name)).toEqual([
+      "Adevar Labs",
+    ]);
+    expect(tum?.companies?.[0]?.prizes?.map((prize) => prize.title)).toEqual([
+      "10K in audit credits",
+      "Pre-Audit Core",
+      "Pre-Audit Express",
+    ]);
+    expect(tum?.judges?.map((judge) => judge.name)).toEqual([
+      "Benjamin Bosnjak",
+      "Zafar Nasimov",
+    ]);
 
     expect(prizeContent.fallback).toBe("Prize tracks announced soon.");
     expect(prizeContent.trackAmountFallback).toBe(
       "Prize amount announced soon.",
     );
-    expect(prizeContent.defaultRequirements).toEqual([
-      "A working demo of your project.",
-      "A public source code repository.",
-      "A short demo video, with max length announced soon.",
-      "A README describing what you built and how to run it.",
-      "Project must be built during the hackathon. Pre-existing projects are not eligible unless meaningfully extended during the event.",
+  });
+
+  it("states the submission deadline, video limit and track limit", () => {
+    const guide = prizeContent.submission;
+
+    expect(guide.deadline).toBe("Saturday 31 October, 15:00 CET");
+    expect(new Date(guide.deadlineIso).toISOString()).toBe(
+      "2026-10-31T14:00:00.000Z",
+    );
+    expect(guide.requirements).toContain(
+      "A demo video of at most 2.5 minutes.",
+    );
+    expect(guide.rules.join(" ")).toContain("up to three partner tracks");
+    expect(guide.rules.join(" ")).toContain("All AI coding tools are allowed");
+    expect(guide.judging.map((slot) => slot.time)).toEqual([
+      "15:00",
+      "15:00–17:00",
+      "17:30",
     ]);
   });
 
@@ -197,7 +249,7 @@ describe("site content contract", () => {
       faqResources
         .filter((resource) => resource.disabled)
         .map((resource) => resource.label),
-    ).toEqual(["Starter Docs"]);
+    ).toEqual([]);
   });
 
   it("references only sponsor and speaker assets that exist in public", () => {

@@ -26,10 +26,9 @@ export const faqResources: ResourceLink[] = [
     primary: false,
   },
   {
-    label: "Starter Docs",
-    href: "#starter-docs",
+    label: "Track resources",
+    href: "/prizes",
     primary: false,
-    disabled: true,
   },
 ];
 
@@ -59,7 +58,7 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "What is the theme?",
         answer:
-          "Blockchain and AI. The partner tracks are Cardano, BSV Association and API3. Track details are on the Prizes page.",
+          "Blockchain and AI, with a focus on agentic payments. The partner tracks are BSV Association, Cardano and API3. Track briefs, requirements and resources are on the Prizes page.",
         status: "confirmed",
       },
     ],
@@ -74,6 +73,12 @@ export const faqGroups: FaqGroup[] = [
         answer:
           "Anyone interested in building in the blockchain and AI space is welcome. Whether you are a developer, designer, product manager or simply curious, we encourage you to apply.",
         status: "partial-tbd",
+      },
+      {
+        question: "Who cannot compete?",
+        answer:
+          "TUM Blockchain Club members and employees of partner companies cannot compete for prizes.",
+        status: "confirmed",
       },
       {
         question: "Do I have to be a TUM student?",
@@ -139,7 +144,7 @@ export const faqGroups: FaqGroup[] = [
         question: "Can I take part on my own, and how large can a team be?",
         answer:
           "Yes, solo participation is welcome. The maximum team size is 5.",
-        status: "partial-tbd",
+        status: "confirmed",
       },
       {
         question: "How do I find teammates?",
@@ -162,7 +167,13 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "Can I use open-source libraries or starter templates?",
         answer:
-          "Yes, standard libraries and tooling are fine. The core build should happen during the hackathon.",
+          "Yes, standard libraries and tooling are fine, including the partners' starter kits on the Prizes page. The core build should happen during the hackathon.",
+        status: "confirmed",
+      },
+      {
+        question: "Can I use AI coding tools?",
+        answer:
+          "Yes. All AI coding tools are allowed. Several partners provide MCP servers, llms.txt files and agent instructions; you find them under each track on the Prizes page.",
         status: "confirmed",
       },
     ],
@@ -181,14 +192,14 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "How and where do I submit my project?",
         answer:
-          "On Devfolio, before the deadline on 31 October at 15:00. To get your deposit back, your project must enter at least one partner track: Cardano, BSV Association or API3.",
+          "On Devfolio, before the deadline on Saturday 31 October at 15:00 CET. One submission per team, entered into up to three partner tracks. To get your deposit back, your project must enter at least one partner track: BSV Association, Cardano or API3. The step-by-step guide is under How to submit on the Prizes page.",
         status: "confirmed",
       },
       {
         question: "What do I need to submit?",
         answer:
-          "A working demo, a public code repository, a short demo video, and a short write-up or README. Exact requirements and video length will be announced soon.",
-        status: "partial-tbd",
+          "A working demo, a public code repository, a demo video of at most 2.5 minutes, and a README describing what you built and how to run it. Each partner track adds its own items, listed on the Prizes page.",
+        status: "confirmed",
       },
       {
         question: "Can I keep working after the deadline?",
@@ -215,13 +226,14 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "How are projects judged?",
         answer:
-          "Judging criteria are announced soon. Expect a focus on technical execution, originality, use of partner technology, and real-world impact.",
-        status: "partial-tbd",
+          "Each partner judges its own track between 15:00 and 17:00 on Saturday, using the criteria listed under its track on the Prizes page. Present your project to the judges of every track you entered. TUM Blockchain Club judges every project for the TUM Blockchain Track.",
+        status: "confirmed",
       },
       {
         question: "Who are the judges?",
-        answer: "Announced soon.",
-        status: "tbd",
+        answer:
+          "Each partner's judges are listed under its track on the Prizes page. The TUM Blockchain Track is judged by TUM Blockchain Club.",
+        status: "partial-tbd",
       },
       {
         question: "What are the prizes?",
@@ -231,18 +243,21 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         question: "When are winners announced?",
-        answer: "On 31 October, after judging. Exact timing is announced soon.",
-        status: "partial-tbd",
+        answer:
+          "On Saturday 31 October at 17:30, at the closing ceremony on the hackathon stage.",
+        status: "confirmed",
       },
       {
         question: "How are prizes paid out?",
-        answer: FALLBACK_TEXT,
-        status: "tbd",
+        answer:
+          "Prizes are paid out directly by TUM Blockchain Club. The payout scheme is announced later.",
+        status: "partial-tbd",
       },
       {
-        question: "Can one project win in more than one track?",
-        answer: FALLBACK_TEXT,
-        status: "tbd",
+        question: "Can one project enter more than one track?",
+        answer:
+          "Yes. A project can enter up to three partner tracks, and every project is also judged for the TUM Blockchain Track automatically.",
+        status: "confirmed",
       },
     ],
   },
@@ -263,7 +278,8 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         question: "Will there be workshops?",
-        answer: "Yes. The workshop schedule is announced soon.",
+        answer:
+          "Yes. Partner workshops run on Friday morning. Times are on the Schedule page and under each track on the Prizes page.",
         status: "partial-tbd",
       },
       {

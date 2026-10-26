@@ -63,30 +63,104 @@ export type TrackCompany = {
   prizes?: TrackCompanyPrize[];
 };
 
+/** A resource or support line; href is optional for plain text entries. */
+export type TrackLink = {
+  label: string;
+  href?: string;
+  note?: string;
+  /** The link exists but is not published yet: shows "Link coming soon". */
+  pending?: boolean;
+};
+
+export type TrackResourceGroup = {
+  title: string;
+  links: TrackLink[];
+};
+
+export type TrackJudgingCriterion = {
+  label: string;
+  /** Shown as given, e.g. "35%" or "40 pts". */
+  weight: string;
+};
+
+export type TrackWorkshop = {
+  title: string;
+  /** Human-readable slot, e.g. "Fri 30 Oct, 11:00–11:30". */
+  when: string;
+  speaker?: string;
+  description?: string;
+};
+
+/** Published as name and role only; contact details never go on the site. */
+export type TrackJudge = {
+  name: string;
+  role: string;
+};
+
 export type PrizeTrack = {
   /** Anchor id used to jump from the summary cards to the detail section. */
   slug: string;
   sponsor: string;
   trackName: string;
+  /** One-line pitch shown under the track name. */
+  tagline?: string;
   sponsorLogoSrc?: string;
   sponsorLogoScale?: number;
   sponsorLogoPadding?: string;
   /** Square mark for tight spots (summary chips); falls back to the wordmark. */
   sponsorMarkSrc?: string;
   sponsorHref?: string;
+  sponsorXHref?: string;
   /** Short primer on the partner itself, shown above the track brief. */
   about?: string;
   amount?: string;
   rightMark?: string;
+  /** Paragraphs are separated by a blank line. */
   description?: string;
   ideas?: string[];
   howToWin?: string[];
+  /** Placement split for a single-sponsor track, e.g. 1st / 2nd / 3rd. */
+  prizes?: TrackCompanyPrize[];
+  /** Caveat shown under the split, or in its place while it is pending. */
+  prizeNote?: string;
   companies?: TrackCompany[];
   /** Shared by every partner in a pooled track; shown below the partners. */
   selectionCriteria?: string[];
+  /** What a project must build or integrate to qualify. */
   requirements?: string[];
+  /** Track-specific items the Devfolio submission and demo must include. */
+  submission?: string[];
+  judgingCriteria?: TrackJudgingCriterion[];
+  judgingNote?: string;
+  resources?: TrackResourceGroup[];
+  /** Practical tips: test funds, quotas, where to start. */
+  notes?: string[];
+  workshop?: TrackWorkshop;
+  judges?: TrackJudge[];
+  support?: TrackLink[];
   /** "coming-soon" renders the track brief, ideas, and breakdown as pending. */
   status?: "confirmed" | "coming-soon";
+};
+
+export type SubmissionStep = {
+  title: string;
+  body: string;
+};
+
+export type SubmissionGuide = {
+  slug: string;
+  title: string;
+  /** Sidebar subtitle, e.g. the deadline. */
+  label: string;
+  deadline: string;
+  /** ISO timestamp with offset, drives the countdown. */
+  deadlineIso: string;
+  intro: string;
+  steps: SubmissionStep[];
+  requirements: string[];
+  judging: { time: string; title: string; body: string }[];
+  rules: string[];
+  help: TrackLink[];
 };
 
 export type ScheduleSessionType =

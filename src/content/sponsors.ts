@@ -128,7 +128,7 @@ export const premiumTrackSponsors: Sponsor[] = [
   {
     name: "BSV Association",
     tier: "Platinum",
-    href: "https://bsvblockchain.org/",
+    href: "https://bsvassociation.org/",
     // Horizontal linear lockup matching the conference design
     logoSrc: "/sponsors/bsv_association_linear.png",
     logoAlt: "BSV Association logo",

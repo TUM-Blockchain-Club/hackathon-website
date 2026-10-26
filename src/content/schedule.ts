@@ -45,7 +45,7 @@ export const scheduleDays: ScheduleDay[] = [
         location: "Workshop Room",
         sponsor: "BSV Association",
         sponsorLogoSrc: "/sponsors/bsv_icon.png",
-        note: "A 30-minute workshop from BSV Association to help you get started on the BSV Association Track.",
+        note: "A 30-minute workshop from BSV Association to help you get started on the DeFi Rails for Agentic Payments track.",
         speakers: [
           {
             name: "Speaker to be announced",
@@ -75,18 +75,16 @@ export const scheduleDays: ScheduleDay[] = [
       {
         startTime: "11:00",
         endTime: "11:30",
-        title: "API3 Workshop",
+        title: "API3 Workshop: Building with AirnodeHub",
         type: "Workshop",
-        timeTba: true,
         location: "Workshop Room",
         sponsor: "API3",
         sponsorLogoSrc: "/sponsors/api3_icon.svg",
-        note: "A 30-minute workshop from API3 to help you get started on the API3 Track.",
+        note: "An introduction to API3 and AirnodeHub: how apps and agents use authenticated external data, plus the track's challenge, submission requirements, judging and prizes.",
         speakers: [
           {
-            name: "Speaker to be announced",
-            role: "API3",
-            placeholder: true,
+            name: "Ugur Schenk",
+            role: "Strategy Lead, API3",
           },
         ],
       },
@@ -130,7 +128,7 @@ export const scheduleDays: ScheduleDay[] = [
         startTime: "15:00",
         title: "Hackathon Ends",
         type: "Milestone",
-        note: "Building time is over: submissions close and judging begins. Thanks for building with us.",
+        note: "Building time is over: Devfolio submissions close at 15:00 sharp and judging begins. Thanks for building with us.",
       },
       {
         startTime: "15:00",
@@ -138,7 +136,7 @@ export const scheduleDays: ScheduleDay[] = [
         title: "Judging",
         type: "Judging",
         location: "Partner booths",
-        note: "Teams visit the booths of the partners whose tracks they entered and pitch their projects to the judges.",
+        note: "Each partner judges its own track for two hours. Present your project to the judges of every track you entered. TUM Blockchain Club judges every project for the TUM Blockchain Track.",
       },
       {
         startTime: "17:30",

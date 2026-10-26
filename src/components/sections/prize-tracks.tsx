@@ -1,22 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Image from "next/image";
 import {
-  ArrowRight,
   ArrowUpRight,
+  CalendarClock,
   Check,
+  Clock,
+  Gavel,
   Globe,
+  Info,
+  LifeBuoy,
   Lightbulb,
   Trophy,
 } from "lucide-react";
 
 import { prizeContent } from "@/content/prizes";
 import { cn } from "@/lib/utils";
-import type { PrizeTrack, TrackCompany } from "@/types/content";
+import type {
+  PrizeTrack,
+  SubmissionGuide,
+  TrackCompany,
+  TrackLink,
+} from "@/types/content";
 
 type PrizeTracksProps = {
   tracks: PrizeTrack[];
+  submission?: SubmissionGuide;
   className?: string;
 };
 
@@ -35,6 +45,111 @@ function initials(name: string) {
     .join("")
     .slice(0, 2)
     .toUpperCase();
+}
+
+function paragraphs(text: string) {
+  return text.split(/\n\s*\n/).filter(Boolean);
+}
+
+const placeTone: Record<string, string> = {
+  "1st": "text-tbc-yellow",
+  "2nd": "text-white/80",
+  "3rd": "text-[#e0a370]",
+};
+
+function SectionTitle({ id, children }: { id?: string; children: ReactNode }) {
+  return (
+    <h3
+      id={id}
+      className="font-display text-base font-bold text-white sm:text-lg"
+    >
+      {children}
+    </h3>
+  );
+}
+
+function SubTitle({
+  icon,
+  children,
+}: {
+  icon?: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <h4 className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-white/50">
+      {icon}
+      {children}
+    </h4>
+  );
+}
+
+function DotList({ items }: { items: string[] }) {
+  return (
+    <ul className="mt-2 space-y-1.5 text-xs leading-relaxed text-white/80 sm:text-sm">
+      {items.map((item) => (
+        <li key={item} className="flex gap-2.5">
+          <span
+            aria-hidden="true"
+            className="mt-[0.45rem] size-1.5 shrink-0 rounded-full bg-tbc-yellow"
+          />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function CheckList({ items }: { items: string[] }) {
+  return (
+    <ul className="mt-2 space-y-1.5 text-xs leading-relaxed text-white/80 sm:text-sm">
+      {items.map((item) => (
+        <li key={item} className="flex gap-2.5">
+          <Check
+            aria-hidden="true"
+            className="mt-0.5 shrink-0 text-tbc-yellow"
+            size={14}
+          />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function LinkRow({ link }: { link: TrackLink }) {
+  return (
+    <li className="py-2.5">
+      {link.href ? (
+        <a
+          href={link.href}
+          target={link.href.startsWith("mailto:") ? undefined : "_blank"}
+          rel="noreferrer"
+          className="group inline-flex items-baseline gap-1.5 text-sm font-medium text-white transition-colors hover:text-tbc-yellow"
+        >
+          <span>{link.label}</span>
+          <ArrowUpRight
+            aria-hidden="true"
+            size={13}
+            className="shrink-0 translate-y-0.5 text-white/40 transition-colors group-hover:text-tbc-yellow"
+          />
+        </a>
+      ) : (
+        <span className="text-sm font-medium text-white">
+          {link.label}
+          {link.pending ? (
+            <span className="ml-2 rounded-[9999px] border border-white/15 px-2 py-0.5 text-[11px] font-normal text-white/50">
+              Link coming soon
+            </span>
+          ) : null}
+        </span>
+      )}
+      {link.note ? (
+        <p className="mt-0.5 text-xs leading-relaxed text-white/50">
+          {link.note}
+        </p>
+      ) : null}
+    </li>
+  );
 }
 
 function PartnerCard({ company }: { company: TrackCompany }) {
@@ -126,7 +241,592 @@ function PartnerCard({ company }: { company: TrackCompany }) {
   );
 }
 
-export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
+function LogoTile({
+  src,
+  alt,
+  fallback,
+}: {
+  src?: string;
+  alt: string;
+  fallback: string;
+}) {
+  return (
+    <div className="relative shrink-0">
+      <div
+        aria-hidden="true"
+        className="absolute -inset-1 rounded-[18px] bg-white/[0.04] opacity-50 blur-sm"
+      />
+      {src ? (
+        <div className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-[16px] bg-white p-2 shadow-lg sm:size-20">
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            sizes="80px"
+            className="object-contain p-2"
+          />
+        </div>
+      ) : (
+        <div className="relative flex size-16 shrink-0 items-center justify-center rounded-[16px] bg-white font-mono text-xl font-bold text-black shadow-lg sm:size-20">
+          {fallback}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Chip({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: ReactNode;
+  label: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center gap-1.5 rounded-[9999px] border border-white/20 bg-white/[0.08] px-3 py-0.5 text-xs font-medium text-white/90 backdrop-blur-md transition-all hover:border-white/40 hover:bg-white/15 hover:text-white"
+    >
+      {icon}
+      <span>{label}</span>
+    </a>
+  );
+}
+
+function TrackPanel({ track }: { track: PrizeTrack }) {
+  const ideas = track.ideas ?? [];
+  const howToWin = track.howToWin ?? [];
+  const prizes = track.prizes ?? [];
+  const companies = track.companies ?? [];
+  const selectionCriteria = track.selectionCriteria ?? [];
+  const requirements = track.requirements ?? [];
+  const submission = track.submission ?? [];
+  const judgingCriteria = track.judgingCriteria ?? [];
+  const resources = track.resources ?? [];
+  const notes = track.notes ?? [];
+  const judges = track.judges ?? [];
+  const support = track.support ?? [];
+  // Only the track's own content counts: shared defaults would hide the
+  // "coming soon" placeholder on tracks that have no brief yet.
+  const hasDetailedContent =
+    Boolean(track.description) ||
+    ideas.length > 0 ||
+    howToWin.length > 0 ||
+    companies.length > 0 ||
+    selectionCriteria.length > 0 ||
+    requirements.length > 0;
+
+  return (
+    <div>
+      {/* Header: logo, sponsor, total, website and X chips */}
+      <div className="flex items-start gap-4 sm:gap-5">
+        <LogoTile
+          src={track.sponsorLogoSrc ?? track.sponsorMarkSrc}
+          alt={`${track.sponsor} logo`}
+          fallback={track.sponsor[0]}
+        />
+        <div className="min-w-0">
+          <h2 className="font-display text-xl font-bold tracking-tight text-white sm:text-2xl md:text-3xl">
+            {track.sponsor}
+          </h2>
+          <p className="mt-0.5 font-display text-lg font-bold text-tbc-yellow drop-shadow-[0_2px_12px_rgba(255,193,16,0.25)] sm:text-xl md:text-2xl">
+            {track.amount ?? prizeContent.trackAmountFallback}
+          </p>
+          <div className="mt-2.5 flex flex-wrap items-center gap-2">
+            {track.sponsorHref ? (
+              <Chip
+                href={track.sponsorHref}
+                icon={<Globe size={12} className="text-white/70" />}
+                label={hostLabel(track.sponsorHref)}
+              />
+            ) : null}
+            {track.sponsorXHref ? (
+              <Chip
+                href={track.sponsorXHref}
+                icon={
+                  <span aria-hidden="true" className="text-[11px] font-bold">
+                    𝕏
+                  </span>
+                }
+                label={track.sponsorXHref.replace(
+                  /^https?:\/\/(x|twitter)\.com\//,
+                  "@",
+                )}
+              />
+            ) : null}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-7 space-y-9">
+        <section>
+          <SectionTitle>About</SectionTitle>
+          <p className="mt-1.5 text-xs leading-relaxed text-white/75 sm:text-sm">
+            {track.about ?? prizeContent.trackDescriptionFallback}
+          </p>
+        </section>
+
+        {hasDetailedContent ? (
+          <>
+            {/* The prize: name, split, brief and what it takes to win */}
+            <section className="space-y-5">
+              <SectionTitle>Prize</SectionTitle>
+              <div className="rounded-[18px] border border-white/10 bg-black/30 p-4 sm:p-5">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <p className="font-display text-lg font-bold text-white sm:text-xl">
+                    {track.trackName}
+                  </p>
+                  {track.amount && companies.length === 0 ? (
+                    <p className="font-display text-base font-semibold text-white/60">
+                      ⸺ {track.amount}
+                    </p>
+                  ) : null}
+                </div>
+                {track.tagline ? (
+                  <p className="mt-1 text-sm text-white/60">{track.tagline}</p>
+                ) : null}
+
+                {prizes.length > 0 ? (
+                  <dl className="mt-4 grid max-w-md grid-cols-3 divide-x divide-white/10 overflow-hidden rounded-[12px] border border-white/10 bg-white/[0.03]">
+                    {prizes.map((prize) => (
+                      <div key={prize.title} className="px-3 py-2.5">
+                        <dt
+                          className={cn(
+                            "flex items-center gap-1.5 text-xs font-semibold",
+                            placeTone[prize.place ?? ""] ?? "text-white/70",
+                          )}
+                        >
+                          <Trophy aria-hidden="true" size={12} />
+                          {prize.title}
+                        </dt>
+                        <dd className="mt-0.5 font-display text-sm font-bold tabular-nums text-white sm:text-base">
+                          {prize.amount}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : null}
+                {track.prizeNote ? (
+                  <p className="mt-3 flex gap-2 text-xs leading-relaxed text-white/60">
+                    <Info
+                      aria-hidden="true"
+                      size={14}
+                      className="mt-px shrink-0 text-tbc-yellow"
+                    />
+                    <span>{track.prizeNote}</span>
+                  </p>
+                ) : null}
+              </div>
+
+              {track.description ? (
+                <div className="space-y-2.5 text-xs leading-relaxed text-white/80 sm:text-sm">
+                  {paragraphs(track.description).map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
+              ) : null}
+
+              {howToWin.length > 0 ? (
+                <div>
+                  <SubTitle
+                    icon={
+                      <Trophy
+                        aria-hidden="true"
+                        size={13}
+                        className="text-tbc-yellow"
+                      />
+                    }
+                  >
+                    How to win
+                  </SubTitle>
+                  <DotList items={howToWin} />
+                </div>
+              ) : null}
+
+              {ideas.length > 0 ? (
+                <div>
+                  <SubTitle icon={<Lightbulb aria-hidden="true" size={13} />}>
+                    Example ideas
+                  </SubTitle>
+                  <DotList items={ideas} />
+                </div>
+              ) : null}
+            </section>
+
+            {/* Contributing partners: one card per company in the pool */}
+            {companies.length > 0 ? (
+              <section aria-labelledby="track-partners-heading">
+                <SectionTitle id="track-partners-heading">
+                  Contributing partners
+                </SectionTitle>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  {companies.map((company) => (
+                    <PartnerCard key={company.name} company={company} />
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {selectionCriteria.length > 0 ? (
+              <section aria-labelledby="track-criteria-heading">
+                <SectionTitle id="track-criteria-heading">
+                  Selection criteria
+                </SectionTitle>
+                <ol className="mt-3 divide-y divide-white/10 rounded-[16px] border border-white/10 bg-black">
+                  {selectionCriteria.map((criterion, idx) => (
+                    <li
+                      key={criterion}
+                      className="flex gap-4 px-5 py-3.5 text-sm text-white/80"
+                    >
+                      <span className="w-4 shrink-0 tabular-nums text-white/35">
+                        {idx + 1}
+                      </span>
+                      <span>{criterion}</span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ) : null}
+
+            {requirements.length > 0 ? (
+              <section>
+                <SectionTitle>Qualification requirements</SectionTitle>
+                <CheckList items={requirements} />
+              </section>
+            ) : null}
+
+            {submission.length > 0 ? (
+              <section>
+                <SectionTitle>What to submit</SectionTitle>
+                <p className="mt-1 text-xs text-white/50">
+                  On top of what every project needs: see How to submit.
+                </p>
+                <CheckList items={submission} />
+              </section>
+            ) : null}
+
+            {judgingCriteria.length > 0 ? (
+              <section>
+                <SectionTitle>Judging</SectionTitle>
+                <dl className="mt-3 divide-y divide-white/10 rounded-[16px] border border-white/10 bg-black">
+                  {judgingCriteria.map((criterion) => (
+                    <div
+                      key={criterion.label}
+                      className="flex items-baseline justify-between gap-4 px-4 py-3 text-sm sm:px-5"
+                    >
+                      <dt className="text-white/80">{criterion.label}</dt>
+                      <dd className="shrink-0 font-semibold tabular-nums text-tbc-yellow">
+                        {criterion.weight}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                {track.judgingNote ? (
+                  <p className="mt-3 text-xs leading-relaxed text-white/60 sm:text-sm">
+                    {track.judgingNote}
+                  </p>
+                ) : null}
+              </section>
+            ) : null}
+
+            {resources.length > 0 ? (
+              <section>
+                <SectionTitle>Links and resources</SectionTitle>
+                <div className="mt-3 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+                  {resources.map((group) => (
+                    <div key={group.title}>
+                      <SubTitle>{group.title}</SubTitle>
+                      <ul className="mt-1 divide-y divide-white/[0.07]">
+                        {group.links.map((link) => (
+                          <LinkRow key={link.label} link={link} />
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {notes.length > 0 ? (
+              <section>
+                <SectionTitle>Good to know</SectionTitle>
+                <DotList items={notes} />
+              </section>
+            ) : null}
+
+            {track.workshop ? (
+              <section>
+                <SectionTitle>Workshop</SectionTitle>
+                <div className="mt-3 rounded-[16px] border border-white/10 bg-black p-4 sm:p-5">
+                  <p className="font-display text-base font-semibold text-white">
+                    {track.workshop.title}
+                  </p>
+                  <p className="mt-1 flex items-center gap-1.5 text-xs font-medium text-tbc-yellow sm:text-sm">
+                    <CalendarClock aria-hidden="true" size={14} />
+                    {track.workshop.when}
+                  </p>
+                  {track.workshop.speaker ? (
+                    <p className="mt-1 text-xs text-white/60 sm:text-sm">
+                      {track.workshop.speaker}
+                    </p>
+                  ) : null}
+                  {track.workshop.description ? (
+                    <p className="mt-2 text-xs leading-relaxed text-white/70 sm:text-sm">
+                      {track.workshop.description}
+                    </p>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
+
+            {judges.length > 0 || support.length > 0 ? (
+              <div className="grid gap-9 sm:grid-cols-2 sm:gap-6">
+                {judges.length > 0 ? (
+                  <section>
+                    <SectionTitle>Judges</SectionTitle>
+                    <ul className="mt-2 divide-y divide-white/[0.07]">
+                      {judges.map((judge) => (
+                        <li key={judge.name} className="flex gap-3 py-2.5">
+                          <Gavel
+                            aria-hidden="true"
+                            size={14}
+                            className="mt-1 shrink-0 text-white/40"
+                          />
+                          <div>
+                            <p className="text-sm font-medium text-white">
+                              {judge.name}
+                            </p>
+                            <p className="text-xs text-white/50">
+                              {judge.role}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ) : null}
+                {support.length > 0 ? (
+                  <section>
+                    <SectionTitle>Support</SectionTitle>
+                    <ul className="mt-2 divide-y divide-white/[0.07]">
+                      {support.map((link) => (
+                        <li key={link.label} className="flex gap-3">
+                          <LifeBuoy
+                            aria-hidden="true"
+                            size={14}
+                            className="mt-[0.85rem] shrink-0 text-white/40"
+                          />
+                          <ul className="min-w-0">
+                            <LinkRow link={link} />
+                          </ul>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ) : null}
+              </div>
+            ) : null}
+          </>
+        ) : (
+          /* Coming soon dashed placeholder with warm ambient trophy badge */
+          <div className="flex flex-col items-center justify-center rounded-[16px] border border-dashed border-white/20 bg-gradient-to-b from-white/[0.04] to-transparent p-6 text-center backdrop-blur-sm sm:p-8">
+            <div className="mb-2.5 flex size-12 items-center justify-center rounded-full border border-tbc-yellow/30 bg-tbc-yellow/10 shadow-[0_0_20px_rgba(255,193,16,0.18)]">
+              <Trophy className="size-5 text-tbc-yellow" />
+            </div>
+            <p className="text-xs font-semibold text-white/90 sm:text-sm">
+              Prize details coming soon
+            </p>
+            <p className="mt-1 text-[11px] text-white/50">
+              Track briefs and prize breakdowns will be published soon
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function useCountdown(targetIso: string) {
+  // Rendered only after mount, so server and client markup match.
+  const [label, setLabel] = useState<string | null>(null);
+
+  useEffect(() => {
+    const target = new Date(targetIso).getTime();
+    const tick = () => {
+      const diff = target - Date.now();
+      if (diff <= 0) {
+        setLabel("Submissions are closed");
+        return;
+      }
+      const days = Math.floor(diff / 86_400_000);
+      const hours = Math.floor((diff % 86_400_000) / 3_600_000);
+      const minutes = Math.floor((diff % 3_600_000) / 60_000);
+      setLabel(`Closes in ${days > 0 ? `${days}d ` : ""}${hours}h ${minutes}m`);
+    };
+    tick();
+    const id = window.setInterval(tick, 30_000);
+    return () => window.clearInterval(id);
+  }, [targetIso]);
+
+  return label;
+}
+
+function SubmissionPanel({
+  guide,
+  tracks,
+}: {
+  guide: SubmissionGuide;
+  tracks: PrizeTrack[];
+}) {
+  const countdown = useCountdown(guide.deadlineIso);
+  // Pooled tracks (like the TUM Blockchain Track) need no extra items.
+  const partnerTracks = tracks.filter(
+    (track) => (track.companies ?? []).length === 0,
+  );
+
+  return (
+    <div>
+      <div className="flex items-start gap-4 sm:gap-5">
+        <div className="flex size-16 shrink-0 items-center justify-center rounded-[16px] border border-tbc-yellow/30 bg-tbc-yellow/10 shadow-[0_0_24px_rgba(255,193,16,0.18)] sm:size-20">
+          <Clock aria-hidden="true" className="size-7 text-tbc-yellow" />
+        </div>
+        <div className="min-w-0">
+          <h2 className="font-display text-xl font-bold tracking-tight text-white sm:text-2xl md:text-3xl">
+            {guide.title}
+          </h2>
+          <p className="mt-0.5 font-display text-lg font-bold text-tbc-yellow drop-shadow-[0_2px_12px_rgba(255,193,16,0.25)] sm:text-xl md:text-2xl">
+            {guide.deadline}
+          </p>
+          <p className="mt-1 min-h-5 font-mono text-xs uppercase tracking-[0.14em] text-white/50">
+            {countdown}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-7 space-y-9">
+        <section>
+          <p className="text-xs leading-relaxed text-white/80 sm:text-sm">
+            {guide.intro}
+          </p>
+          <ol className="mt-5 space-y-3">
+            {guide.steps.map((step, idx) => (
+              <li
+                key={step.title}
+                className="flex gap-4 rounded-[14px] border border-white/10 bg-black/30 p-4"
+              >
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-tbc-yellow font-mono text-xs font-bold text-black">
+                  {idx + 1}
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-white">
+                    {step.title}
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-white/65 sm:text-sm">
+                    {step.body}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section>
+          <SectionTitle>Every project needs</SectionTitle>
+          <CheckList items={guide.requirements} />
+        </section>
+
+        <section>
+          <SectionTitle>Extra items per track</SectionTitle>
+          <div className="mt-3 divide-y divide-white/10 rounded-[16px] border border-white/10 bg-black">
+            {partnerTracks.map((track) => {
+              const markSrc = track.sponsorMarkSrc ?? track.sponsorLogoSrc;
+              const items = track.submission ?? [];
+              return (
+                <div key={track.slug} className="p-4 sm:p-5">
+                  <a
+                    href={`#${track.slug}`}
+                    className="inline-flex items-center gap-2.5 text-sm font-semibold text-white hover:text-tbc-yellow"
+                  >
+                    {markSrc ? (
+                      <span className="relative flex size-6 shrink-0 overflow-hidden rounded-[9999px] bg-white">
+                        <Image
+                          src={markSrc}
+                          alt=""
+                          fill
+                          sizes="24px"
+                          className="object-contain p-1"
+                        />
+                      </span>
+                    ) : null}
+                    {track.sponsor}
+                    <span className="font-normal text-white/50">
+                      {track.trackName}
+                    </span>
+                  </a>
+                  {items.length > 0 ? (
+                    <CheckList items={items} />
+                  ) : (
+                    <p className="mt-2 text-xs text-white/50 sm:text-sm">
+                      {prizeContent.trackRequirementsFallback}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section>
+          <SectionTitle>Judging on Saturday</SectionTitle>
+          <ol className="mt-3 divide-y divide-white/10 rounded-[16px] border border-white/10 bg-black">
+            {guide.judging.map((slot) => (
+              <li
+                key={slot.title}
+                className="flex flex-col gap-1 px-4 py-3.5 sm:flex-row sm:gap-5 sm:px-5"
+              >
+                <span className="w-28 shrink-0 font-mono text-sm font-semibold tabular-nums text-tbc-yellow">
+                  {slot.time}
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-white">
+                    {slot.title}
+                  </p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-white/65 sm:text-sm">
+                    {slot.body}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section>
+          <SectionTitle>Rules</SectionTitle>
+          <DotList items={guide.rules} />
+        </section>
+
+        <section>
+          <SectionTitle>Questions</SectionTitle>
+          <ul className="mt-1 divide-y divide-white/[0.07]">
+            {guide.help.map((link) => (
+              <LinkRow key={link.label} link={link} />
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+export function PrizeTracks({
+  tracks,
+  submission = prizeContent.submission,
+  className,
+}: PrizeTracksProps) {
   const [activeSlug, setActiveSlug] = useState<string>(tracks[0]?.slug ?? "");
 
   // Sync active tab with URL hash (e.g. /prizes#cardano) without awkward jump scrolling
@@ -141,7 +841,13 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
         ) {
           hash = "tum-blockchain-club";
         }
-        if (hash && tracks.some((t) => t.slug === hash)) {
+        if (hash === "submit" || hash === "submission") {
+          hash = submission.slug;
+        }
+        if (
+          hash &&
+          (hash === submission.slug || tracks.some((t) => t.slug === hash))
+        ) {
           setActiveSlug(hash);
         }
       };
@@ -159,7 +865,7 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
         window.removeEventListener("hashchange", syncFromHash);
       };
     }
-  }, [tracks]);
+  }, [tracks, submission.slug]);
 
   if (tracks.length === 0) {
     return (
@@ -180,30 +886,15 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
     );
   }
 
+  const showingSubmission = activeSlug === submission.slug;
   const activeTrack = tracks.find((t) => t.slug === activeSlug) ?? tracks[0];
 
-  const ideas = activeTrack.ideas ?? [];
-  const howToWin = activeTrack.howToWin ?? [];
-  const companies = activeTrack.companies ?? [];
-  const selectionCriteria = activeTrack.selectionCriteria ?? [];
-  const requirements =
-    activeTrack.requirements && activeTrack.requirements.length > 0
-      ? activeTrack.requirements
-      : companies.length > 0
-        ? []
-        : prizeContent.defaultRequirements;
-  // Only the track's own requirements count: the defaults alone would hide
-  // the "coming soon" placeholder on tracks that have no brief yet.
-  const hasDetailedContent =
-    Boolean(activeTrack.description) ||
-    ideas.length > 0 ||
-    howToWin.length > 0 ||
-    companies.length > 0 ||
-    selectionCriteria.length > 0 ||
-    (activeTrack.requirements?.length ?? 0) > 0;
-
-  const activeLogoSrc =
-    activeTrack.sponsorLogoSrc ?? activeTrack.sponsorMarkSrc;
+  const select = (slug: string) => {
+    setActiveSlug(slug);
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", `#${slug}`);
+    }
+  };
 
   return (
     <div
@@ -225,8 +916,44 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
             className="flex flex-row gap-2 overflow-x-auto p-3 md:flex-col md:overflow-x-visible md:p-4"
             role="tablist"
           >
+            {/* Submission guide first, set apart from the prizes */}
+            <button
+              id={submission.slug}
+              type="button"
+              role="tab"
+              aria-selected={showingSubmission}
+              onClick={() => select(submission.slug)}
+              className={cn(
+                "flex shrink-0 items-center gap-3.5 rounded-[16px] border border-dashed px-4 py-3 text-left transition-all md:w-full",
+                showingSubmission
+                  ? "border-tbc-yellow/60 bg-tbc-yellow/10 text-white shadow-md"
+                  : "border-tbc-yellow/30 text-white/80 hover:border-tbc-yellow/60 hover:bg-tbc-yellow/[0.06] hover:text-white",
+              )}
+            >
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-[9999px] bg-tbc-yellow/15">
+                <Clock
+                  aria-hidden="true"
+                  size={18}
+                  className="text-tbc-yellow"
+                />
+              </span>
+              <div className="flex min-w-0 flex-col">
+                <span className="truncate text-sm font-bold tracking-tight text-white">
+                  {submission.title}
+                </span>
+                <span className="text-xs font-semibold text-tbc-yellow/80">
+                  {submission.label}
+                </span>
+              </div>
+            </button>
+            <div
+              aria-hidden="true"
+              className="hidden border-t border-white/10 md:my-2 md:block"
+            />
+
             {tracks.map((track) => {
-              const isSelected = track.slug === activeTrack.slug;
+              const isSelected =
+                !showingSubmission && track.slug === activeTrack.slug;
               const markSrc = track.sponsorMarkSrc ?? track.sponsorLogoSrc;
 
               return (
@@ -236,12 +963,7 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
                   type="button"
                   role="tab"
                   aria-selected={isSelected}
-                  onClick={() => {
-                    setActiveSlug(track.slug);
-                    if (typeof window !== "undefined") {
-                      window.history.replaceState(null, "", `#${track.slug}`);
-                    }
-                  }}
+                  onClick={() => select(track.slug)}
                   className={cn(
                     "flex shrink-0 items-center gap-3.5 rounded-[16px] px-4 py-3 text-left transition-all md:w-full",
                     isSelected
@@ -279,225 +1001,15 @@ export function PrizeTracks({ tracks, className }: PrizeTracksProps) {
         </div>
 
         {/* Right Column: Selected Tab Detail Pane */}
-        <div className="flex flex-col justify-between bg-white/[0.02] p-5 sm:p-6 md:p-8">
-          <div>
-            {/* Header: Logo, Title, Amount, Badges, & External Link */}
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-              <div className="flex items-start gap-4 sm:gap-5">
-                {/* Large Logo Badge with ambient backlight glow */}
-                <div className="relative shrink-0">
-                  <div
-                    aria-hidden="true"
-                    className="absolute -inset-1 rounded-[18px] bg-white/[0.04] blur-sm opacity-50"
-                  />
-                  {activeLogoSrc ? (
-                    <div className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-[16px] bg-white p-2 shadow-lg sm:size-20">
-                      <Image
-                        src={activeLogoSrc}
-                        alt={`${activeTrack.sponsor} logo`}
-                        fill
-                        sizes="80px"
-                        className="object-contain p-2"
-                      />
-                    </div>
-                  ) : (
-                    <div className="relative flex size-16 shrink-0 items-center justify-center rounded-[16px] bg-white font-mono text-xl font-bold text-black shadow-lg sm:size-20">
-                      {activeTrack.sponsor[0]}
-                    </div>
-                  )}
-                </div>
-
-                <div className="min-w-0">
-                  <h2 className="font-display text-xl font-bold tracking-tight text-white sm:text-2xl md:text-3xl">
-                    {activeTrack.trackName ?? activeTrack.sponsor}
-                  </h2>
-                  <p className="mt-0.5 font-display text-lg font-bold text-tbc-yellow drop-shadow-[0_2px_12px_rgba(255,193,16,0.25)] sm:text-xl md:text-2xl">
-                    {activeTrack.amount ?? prizeContent.trackAmountFallback}
-                  </p>
-
-                  {/* Badges / Links Row */}
-                  <div className="mt-2.5 flex flex-wrap items-center gap-2">
-                    {activeTrack.sponsorHref ? (
-                      <a
-                        href={activeTrack.sponsorHref}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-[9999px] border border-white/20 bg-white/[0.08] px-3 py-0.5 text-xs font-medium text-white/90 backdrop-blur-md transition-all hover:border-white/40 hover:bg-white/15 hover:text-white"
-                      >
-                        <Globe size={12} className="text-white/70" />
-                        <span>{hostLabel(activeTrack.sponsorHref)}</span>
-                      </a>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-
-              {/* Open page button on top right */}
-              {activeTrack.sponsorHref ? (
-                <a
-                  href={activeTrack.sponsorHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="prize-open-page-btn group/btn inline-flex shrink-0 items-center justify-center gap-1.5 rounded-[9999px] border border-white/25 bg-white/15 px-4 py-1.5 text-xs font-bold text-white shadow-md transition-all hover:scale-105 hover:border-white hover:bg-white hover:!text-black active:scale-95 sm:self-start"
-                >
-                  <span className="transition-colors group-hover/btn:!text-black">
-                    Open page
-                  </span>
-                  <ArrowRight
-                    size={13}
-                    className="stroke-current transition-colors group-hover/btn:!text-black"
-                  />
-                </a>
-              ) : null}
-            </div>
-
-            {/* About Section */}
-            <div className="mt-6">
-              <h3 className="font-display text-base font-bold text-white sm:text-lg">
-                About
-              </h3>
-              <p className="mt-1.5 text-xs leading-relaxed text-white/75 sm:text-sm">
-                {activeTrack.about ?? prizeContent.trackDescriptionFallback}
-              </p>
-            </div>
-
-            {/* Prize Details Section */}
-            {hasDetailedContent ? (
-              <div className="mt-8 space-y-8">
-                {activeTrack.description ? (
-                  <div>
-                    <h4 className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-white/50">
-                      Track brief
-                    </h4>
-                    <p className="mt-1.5 text-xs leading-relaxed text-white/80 sm:text-sm">
-                      {activeTrack.description}
-                    </p>
-                  </div>
-                ) : null}
-
-                {/* How to Win Section */}
-                {howToWin.length > 0 ? (
-                  <div>
-                    <h4 className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-white/50">
-                      <Trophy
-                        aria-hidden="true"
-                        size={13}
-                        className="text-tbc-yellow"
-                      />
-                      How to win
-                    </h4>
-                    <ul className="mt-2.5 space-y-2">
-                      {howToWin.map((item, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-2.5 rounded-[12px] border border-white/10 bg-white/[0.03] p-3 text-xs text-white/85 sm:text-sm"
-                        >
-                          <span
-                            aria-hidden="true"
-                            className="mt-1.5 size-1.5 shrink-0 rounded-full bg-tbc-yellow shadow-[0_0_8px_rgba(255,193,16,0.5)]"
-                          />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : ideas.length > 0 ? (
-                  <div>
-                    <h4 className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-white/50">
-                      <Lightbulb aria-hidden="true" size={13} />
-                      Example ideas
-                    </h4>
-                    <ul className="mt-1.5 space-y-1.5 text-xs text-white/80 sm:text-sm">
-                      {ideas.map((idea) => (
-                        <li key={idea} className="flex gap-2">
-                          <span
-                            aria-hidden="true"
-                            className="mt-1.5 size-1.5 shrink-0 rounded-full bg-tbc-yellow"
-                          />
-                          <span>{idea}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-
-                {/* Contributing partners: one card per company in the pool */}
-                {companies.length > 0 ? (
-                  <section aria-labelledby="track-partners-heading">
-                    <h3
-                      id="track-partners-heading"
-                      className="font-display text-base font-bold text-white sm:text-lg"
-                    >
-                      Contributing partners
-                    </h3>
-                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                      {companies.map((company) => (
-                        <PartnerCard key={company.name} company={company} />
-                      ))}
-                    </div>
-                  </section>
-                ) : null}
-
-                {selectionCriteria.length > 0 ? (
-                  <section aria-labelledby="track-criteria-heading">
-                    <h3
-                      id="track-criteria-heading"
-                      className="font-display text-base font-bold text-white sm:text-lg"
-                    >
-                      Selection criteria
-                    </h3>
-                    <ol className="mt-3 divide-y divide-white/10 rounded-[16px] border border-white/10 bg-black">
-                      {selectionCriteria.map((criterion, idx) => (
-                        <li
-                          key={criterion}
-                          className="flex gap-4 px-5 py-3.5 text-sm text-white/80"
-                        >
-                          <span className="w-4 shrink-0 tabular-nums text-white/35">
-                            {idx + 1}
-                          </span>
-                          <span>{criterion}</span>
-                        </li>
-                      ))}
-                    </ol>
-                  </section>
-                ) : null}
-
-                {/* Submission requirements */}
-                {requirements.length > 0 ? (
-                  <details className="rounded-[14px] border border-white/10 bg-black/25 p-3.5">
-                    <summary className="cursor-pointer font-mono text-xs font-semibold uppercase tracking-[0.16em] text-tbc-yellow">
-                      Submission requirements
-                    </summary>
-                    <ul className="mt-3 space-y-1.5 text-xs text-white/80 sm:text-sm">
-                      {requirements.map((requirement) => (
-                        <li key={requirement} className="flex gap-2">
-                          <Check
-                            aria-hidden="true"
-                            className="mt-0.5 shrink-0 text-tbc-yellow"
-                            size={14}
-                          />
-                          <span>{requirement}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                ) : null}
-              </div>
-            ) : (
-              /* Coming soon dashed placeholder with warm ambient trophy badge */
-              <div className="mt-6 flex flex-col items-center justify-center rounded-[16px] border border-dashed border-white/20 bg-gradient-to-b from-white/[0.04] to-transparent p-6 text-center backdrop-blur-sm sm:p-8">
-                <div className="mb-2.5 flex size-12 items-center justify-center rounded-full border border-tbc-yellow/30 bg-tbc-yellow/10 shadow-[0_0_20px_rgba(255,193,16,0.18)]">
-                  <Trophy className="size-5 text-tbc-yellow" />
-                </div>
-                <p className="text-xs font-semibold text-white/90 sm:text-sm">
-                  Prize details coming soon
-                </p>
-                <p className="mt-1 text-[11px] text-white/50">
-                  Track briefs and prize breakdowns will be published soon
-                </p>
-              </div>
-            )}
-          </div>
+        <div
+          role="tabpanel"
+          className="flex flex-col bg-white/[0.02] p-5 sm:p-6 md:p-8"
+        >
+          {showingSubmission ? (
+            <SubmissionPanel guide={submission} tracks={tracks} />
+          ) : (
+            <TrackPanel track={activeTrack} />
+          )}
         </div>
       </div>
     </div>
