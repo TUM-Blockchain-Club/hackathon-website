@@ -402,9 +402,9 @@ export const prizeTracks: PrizeTrack[] = [
     },
     support: [
       {
-        label: "1:1 slots with a Masumi engineer",
+        label: "1:1 sessions with a Masumi engineer",
         href: "https://calendly.com/sandro-schaier/hackathon",
-        note: "Book a slot during the hackathon to talk through ideas and questions live.",
+        note: "Open to all hackathon participants: discuss ideas and get live support.",
       },
     ],
   },
