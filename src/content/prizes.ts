@@ -249,8 +249,10 @@ export const prizeTracks: PrizeTrack[] = [
   {
     slug: "cardano",
     sponsor: "Cardano",
-    trackName: "Cardano Track",
-    sponsorLogoSrc: "/sponsors/cardano_logo.svg",
+    trackName: "Agentic Commerce on Cardano",
+    tagline:
+      "Build an agent, service or developer tool that does a useful job and gets paid for it on Cardano.",
+    sponsorLogoSrc: "/sponsors/cardano_icon.svg",
     sponsorLogoPadding: "p-2.5",
     sponsorMarkSrc: "/sponsors/cardano_icon.svg",
     sponsorHref: "https://cardano.org/",
@@ -258,7 +260,153 @@ export const prizeTracks: PrizeTrack[] = [
       "Cardano is a proof-of-stake blockchain platform built on peer-reviewed research, with a focus on security, sustainability, and formal methods.",
     rightMark: "ADA",
     amount: "€6,000",
-    status: "coming-soon",
+    status: "confirmed",
+    description:
+      "AI agents already do real work. What they still lack is standard and secure ways to get hired, paid and trusted, by people and by other agents. In this track, you build an agent, service or developer tool that does a useful job and gets paid for it using Cardano.\n\nWhat does the work? Not every agent needs AI inside. If the job needs writing or judgement, such as a research report, your agent calls a language model. If the job is a fixed set of steps, such as placing an order through a shop's API, fetching prices from a data service or running a calculation, regular software can do it without a model. Many projects mix both.\n\nHow does it get paid? Per job, with Masumi on Sokosumi: your agent becomes a Coworker that people hire for tasks on Sokosumi, the agent marketplace built on the open Masumi standard. The buyer's payment waits in escrow on Cardano until your agent delivers, and the buyer is refunded if it doesn't. Or per request, with x402: every call to your API or agent is paid on the spot through HTTP's 402 \"Payment Required\" status code, with no accounts or API keys. x402 is the quicker way to a first payment. Any combination works, and one project can use both.\n\nYou don't need to be a blockchain developer: x402 handles the payment, and Masumi adds agent identity and escrow, so you can focus on what your agent does. You can build an agent that writes market research per task, one that buys items online and returns the order ID, a model that charges per answer, a data API that charges per call, an agent that pays for the services it uses, or tools that make agent payments on Cardano easier, safer or more private. Whatever you build, show at least one payment going through it on Cardano preprod.",
+    howToWin: [
+      "A clear customer audience, journey and an agent job they would pay for.",
+      "Payment tied to the result: escrow, refunds, or paying only for work that passed a check.",
+      "Agents that hire other agents.",
+      "Agents that act in the real world, such as buying, publishing or booking.",
+      "A live demo of a paid task, with the transaction on a preprod explorer.",
+    ],
+    ideas: [
+      "An agent that buys real items online for its buyer. The money waits in Masumi escrow, the agent places the order and writes the order ID on-chain, and the escrow pays out, or refunds the buyer if the purchase fails.",
+      "A team of AI agents on Sokosumi that improves an online shop listing: a lead agent hires specialists for keywords, pricing, copy and images, and the shop owner pays through escrow only for work that passed checks.",
+      "A check that other agents call before they trade a token, built from market, on-chain and risk data, paid per question with x402 or per task through Masumi.",
+      "A gateway that makes any existing API payable by agents: agents buy packs of answers with x402, and only answers that pass a quality check use up the pack.",
+      "Private payments for agents: a shared privacy pool that pays x402 sellers and Masumi agents, so the payment can't be traced to the agent's own wallet.",
+      "Anything else that advances agentic commerce on Cardano.",
+    ],
+    prizes: [
+      { place: "1st", title: "1st place", amount: "€3,000" },
+      { place: "2nd", title: "2nd place", amount: "€2,000" },
+      { place: "3rd", title: "3rd place", amount: "€1,000" },
+    ],
+    requirements: [
+      "A working agent or service that completes at least one paid job or payment on Cardano preprod: per job through Masumi, or per request through x402.",
+    ],
+    submission: [
+      "The transaction hash of that payment.",
+      "A public open-source repository with a README on setup, run commands and limits.",
+      "A public demo video, within the hackathon's 2.5-minute limit: who the solution is for, the problem, the business case, and a paid business cycle end to end.",
+      "A short write-up on Devfolio: the problem, how it works, the Cardano tools used, and how it could run in real use.",
+    ],
+    judgingCriteria: [
+      {
+        label:
+          "Technical execution and use of Cardano tech (Masumi, Sokosumi or x402)",
+        weight: "30%",
+      },
+      { label: "Innovation and creativity", weight: "20%" },
+      { label: "Pitch and demo video", weight: "20%" },
+      { label: "User experience and design", weight: "15%" },
+      { label: "Impact and feasibility", weight: "15%" },
+    ],
+    judgingNote:
+      "Judges look for an original idea that opens a new use case, a project that works end to end, something a newcomer can use quickly, real-world value beyond the hackathon, and a pitch that makes the problem, the solution and the business case easy to follow.",
+    resources: [
+      {
+        title: "Paid per job: Masumi on Sokosumi",
+        links: [
+          {
+            label: "Masumi TUM guide",
+            href: "https://www.masumi.network/tum-hackathon",
+            note: "Step-by-step setup, the full agent brief and the demo checklist.",
+          },
+          {
+            label: "Starter template",
+            href: "https://github.com/masumi-network/tum-hackathon-quickstart",
+          },
+          {
+            label: "Sokosumi preprod sign-up",
+            href: "https://preprod.sokosumi.com/signup",
+          },
+          {
+            label: "Masumi dispenser: test ADA and test stablecoin",
+            href: "https://dispenser.masumi.network/",
+          },
+        ],
+      },
+      {
+        title: "Paid per request: x402",
+        links: [
+          {
+            label: "x402 on Cardano: start here",
+            href: "https://developers.cardano.org/x402/",
+          },
+          {
+            label: "x402-express template: a paid API",
+            href: "https://developers.cardano.org/templates/x402-express/",
+          },
+          {
+            label: "x402-next template: a full-stack app",
+            href: "https://developers.cardano.org/templates/x402-next/",
+            note: "Both templates pay through the Cardano Foundation's hosted facilitator on preprod.",
+          },
+          {
+            label: "Cardano testnet faucet: test ADA",
+            href: "https://docs.cardano.org/cardano-testnets/tools/faucet",
+          },
+        ],
+      },
+      {
+        title: "For your coding agents",
+        links: [
+          {
+            label: "Masumi TUM agent guide (agent-guide.md)",
+            href: "https://www.masumi.network/tum-hackathon/agent-guide.md",
+          },
+          {
+            label: "Masumi TUM skill (SKILL.md)",
+            href: "https://www.masumi.network/tum-hackathon/skill/SKILL.md",
+          },
+          {
+            label: "Masumi skills",
+            href: "https://www.masumi.network/dev/masumi/documentation/integrations/masumi-skills",
+          },
+          {
+            label: "Sokosumi MCP server",
+            href: "https://www.masumi.network/dev/sokosumi/mcp",
+          },
+          {
+            label: "Cardano Developer Plugin for Claude Code and Codex",
+            href: "https://github.com/cardano-foundation/cardano-dev-skills",
+          },
+        ],
+      },
+      {
+        title: "Everyone",
+        links: [
+          {
+            label: "Blockfrost: free key for Cardano preprod",
+            href: "https://blockfrost.io",
+            note: "The free plan is enough.",
+          },
+          {
+            label: "End-to-end x402 demo with a Masumi agent",
+            href: "https://github.com/cardano-foundation/x402-cardano-demo",
+          },
+        ],
+      },
+    ],
+    notes: [
+      "What you need: a laptop with Node.js 24 and Git, and a free Blockfrost key for Cardano preprod. Paid per job also needs a Sokosumi preprod account. If AI does the work, bring an API key for any language model with an OpenAI-compatible API.",
+      "Per job: sign up on Sokosumi preprod and join the TUM Workspace, clone the starter and give the agent its job, run a test task in your own workspace, set up payments (test ADA, Blockfrost key, register your agent), run a paid task and save its transaction hash, then demo it in the TUM Workspace.",
+      "Per request: scaffold the x402-express or x402-next template, add your Blockfrost key and get test ADA from the faucet, make a paid request and save its transaction hash, then build your product on top of it.",
+      "Everything runs on Cardano preprod, the test network, with free test money: tADA (test ADA) and tUSDM (a test US-dollar stablecoin). Escrow is money locked by a smart contract until the job is done. A transaction hash is a payment's ID, which anyone can look up on a preprod explorer.",
+    ],
+    workshop: {
+      title: "Cardano Workshop",
+      when: "Fri 30 Oct, time announced soon",
+    },
+    support: [
+      {
+        label: "1:1 slots with a Masumi engineer",
+        href: "https://calendly.com/sandro-schaier/hackathon",
+        note: "Book a slot during the hackathon to talk through ideas and questions live.",
+      },
+    ],
   },
   {
     slug: "api3",

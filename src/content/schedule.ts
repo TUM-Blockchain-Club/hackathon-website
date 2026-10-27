@@ -63,7 +63,7 @@ export const scheduleDays: ScheduleDay[] = [
         location: "Workshop Room",
         sponsor: "Cardano",
         sponsorLogoSrc: "/sponsors/cardano_icon.svg",
-        note: "A 30-minute workshop from Cardano to help you get started on the Cardano Track.",
+        note: "A 30-minute workshop from Cardano to help you get started on the Agentic Commerce on Cardano track.",
         speakers: [
           {
             name: "Speaker to be announced",

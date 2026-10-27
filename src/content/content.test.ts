@@ -83,7 +83,7 @@ describe("site content contract", () => {
     expect(dateAnswer).toContain("31 October at 15:00");
   });
 
-  it("publishes the confirmed tracks while Cardano stays explicitly pending", () => {
+  it("publishes every partner track with its confirmed details", () => {
     expect(prizeContent.mainPoolAmount).toBe("€12,000+");
     expect(prizeContent.description).toContain("€12,000+");
 
@@ -179,10 +179,21 @@ describe("site content contract", () => {
     expect(api3?.workshop?.when).toBe("Fri 30 Oct, 11:00–11:30");
 
     expect(cardano?.amount).toBe("€6,000");
-    expect(cardano?.trackName).toBe("Cardano Track");
-    expect(cardano?.status).toBe("coming-soon");
-    expect(cardano?.description).toBeUndefined();
-    expect(cardano?.requirements).toBeUndefined();
+    expect(cardano?.trackName).toBe("Agentic Commerce on Cardano");
+    expect(cardano?.status).toBe("confirmed");
+    expect(cardano?.prizes?.map((prize) => prize.amount)).toEqual([
+      "€3,000",
+      "€2,000",
+      "€1,000",
+    ]);
+    // Cardano asked for up to 3 minutes; the hackathon-wide 2.5-minute cap wins.
+    expect(cardano?.submission?.join(" ")).toContain("2.5-minute");
+    expect(
+      cardano?.judgingCriteria?.reduce(
+        (sum, criterion) => sum + Number.parseInt(criterion.weight, 10),
+        0,
+      ),
+    ).toBe(100);
 
     expect(tum?.amount).toBe("€16,000 in audit credits");
     expect(tum?.trackName).toBe("TUM Blockchain Track");
