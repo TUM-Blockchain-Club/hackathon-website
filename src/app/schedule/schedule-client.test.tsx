@@ -8,7 +8,6 @@ const { mockScheduleContent, mockScheduleDays } = vi.hoisted(() => ({
     fallback: "Full schedule coming soon.",
     timezone: "CET",
     utcOffset: "+01:00",
-    kickoff: { date: "2026-10-30", time: "09:00" },
   },
   mockScheduleDays: [
     {
@@ -59,7 +58,7 @@ import userEvent from "@testing-library/user-event";
 import { ScheduleClient } from "./schedule-client";
 
 describe("ScheduleClient", () => {
-  it("renders sessions as time-ordered agenda cards with a mission clock", () => {
+  it("renders sessions as time-ordered agenda cards", () => {
     render(<ScheduleClient />);
 
     const titles = screen
@@ -67,7 +66,8 @@ describe("ScheduleClient", () => {
       .map((heading) => heading.textContent);
     expect(titles).toEqual(["Opening Ceremony", "AI x Blockchain Workshop"]);
 
-    expect(screen.getByText("T+00:30")).toBeTruthy();
+    // No sequence number or T+ mission clock on the cards.
+    expect(screen.queryByText(/T[+-]\d{2}:\d{2}/)).toBeNull();
     expect(screen.getByText("Fri, 11:00 – 12:00 CET")).toBeTruthy();
     expect(screen.getByText("Ada Mentor")).toBeTruthy();
   });
@@ -78,7 +78,6 @@ describe("ScheduleClient", () => {
 
     await user.click(screen.getByRole("button", { name: "Day 2 Sat, Oct 31" }));
     expect(screen.getByText("Hackathon Ends")).toBeTruthy();
-    expect(screen.getByText("T+30:00")).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: "Day 1 Fri, Oct 30" }));
     await user.type(

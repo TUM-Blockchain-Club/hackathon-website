@@ -132,9 +132,15 @@ describe("site content contract", () => {
         }
       }
 
-      // Judges are published by name and role only.
+      // Judges are published by name, role and an optional photo only:
+      // never phone numbers or Telegram handles.
       for (const judge of track.judges ?? []) {
-        expect(Object.keys(judge).sort()).toEqual(["name", "role"]);
+        for (const key of Object.keys(judge)) {
+          expect(["name", "role", "imageSrc"]).toContain(key);
+        }
+        if (judge.imageSrc) {
+          expect(existsSync(publicAssetPath(judge.imageSrc))).toBe(true);
+        }
       }
 
       for (const company of track.companies ?? []) {
@@ -173,10 +179,20 @@ describe("site content contract", () => {
     expect(api3?.amount).toBe("€2,000");
     expect(api3?.trackName).toBe("Any API in your contract");
     expect(api3?.status).toBe("confirmed");
-    // The split stays unpublished until API3 confirms it.
-    expect(api3?.prizes).toBeUndefined();
-    expect(api3?.prizeNote).toContain("announced soon");
+    expect(api3?.prizes?.map((prize) => prize.amount)).toEqual([
+      "€1,000",
+      "€600",
+      "€400",
+    ]);
     expect(api3?.workshop?.when).toBe("Fri 30 Oct, 11:00–11:30");
+    expect(cardano?.workshop?.when).toBe("Fri 30 Oct, 10:30–11:00");
+    expect(bsv?.workshop?.when).toBe("Fri 30 Oct, 11:30–12:00");
+
+    // Payout formats (USDC, fiat, ...) are never published.
+    for (const track of prizeTracks) {
+      const prizeText = JSON.stringify([track.prizes, track.prizeNote]);
+      expect(prizeText).not.toMatch(/usdc|paid in|payout format/i);
+    }
 
     expect(cardano?.amount).toBe("€6,000");
     expect(cardano?.trackName).toBe("Agentic Commerce on Cardano");

@@ -591,11 +591,24 @@ function TrackPanel({ track }: { track: PrizeTrack }) {
                     <ul className="mt-2 divide-y divide-white/[0.07]">
                       {judges.map((judge) => (
                         <li key={judge.name} className="flex gap-3 py-2.5">
-                          <Gavel
-                            aria-hidden="true"
-                            size={14}
-                            className="mt-1 shrink-0 text-white/40"
-                          />
+                          {judge.imageSrc ? (
+                            <span className="relative size-9 shrink-0 overflow-hidden border border-tbc-purple/40">
+                              <Image
+                                src={judge.imageSrc}
+                                alt={judge.name}
+                                fill
+                                sizes="36px"
+                                className="photo-tinted object-cover"
+                              />
+                              <span className="photo-tint" aria-hidden="true" />
+                            </span>
+                          ) : (
+                            <Gavel
+                              aria-hidden="true"
+                              size={14}
+                              className="mt-1 shrink-0 text-white/40"
+                            />
+                          )}
                           <div>
                             <p className="text-sm font-medium text-white">
                               {judge.name}

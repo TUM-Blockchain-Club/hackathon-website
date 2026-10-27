@@ -624,6 +624,42 @@ select {
   }
 }
 
+/* Interlude: a quiet "hacking continues" note on the track, no card. */
+.schedule-row--interlude {
+  padding-bottom: 1.25rem;
+}
+
+.schedule-interlude {
+  border-left: 1px dashed rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  padding: 0.35rem 0 0.35rem 0.9rem;
+}
+
+@media (min-width: 640px) {
+  /* Dashed track through interludes; the card column needs no extra rule. */
+  .schedule-row--interlude::before {
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.28) 0 4px,
+      transparent 4px 8px
+    );
+  }
+
+  .schedule-row--interlude:last-child::before {
+    bottom: 0;
+    height: auto;
+  }
+
+  .schedule-interlude {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+
 .schedule-rail__time {
   color: #fff;
   transition: color 220ms ease;
@@ -722,12 +758,6 @@ select {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.schedule-eyebrow {
-  color: var(--session-accent-text);
-  display: flex;
-  gap: 0.6rem;
-}
-
 .schedule-icon {
   color: var(--session-accent-text);
   flex-shrink: 0;
@@ -779,6 +809,20 @@ select {
     box-shadow: 0 0 0 5px transparent;
     opacity: 0.45;
   }
+}
+
+/* People photos: monochrome with a light purple wash to match the cards. */
+.photo-tinted {
+  filter: grayscale(1) contrast(1.05) brightness(var(--photo-brightness, 1.05));
+}
+
+.photo-tint {
+  background: var(--tbc-purple);
+  inset: 0;
+  mix-blend-mode: color;
+  opacity: var(--photo-tint-opacity, 0.55);
+  pointer-events: none;
+  position: absolute;
 }
 
 .schedule-avatar {

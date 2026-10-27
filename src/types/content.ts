@@ -95,6 +95,8 @@ export type TrackWorkshop = {
 export type TrackJudge = {
   name: string;
   role: string;
+  /** Profile photo under /public, shown with the purple photo tint. */
+  imageSrc?: string;
 };
 
 export type PrizeTrack = {
@@ -209,10 +211,23 @@ export type ScheduleSession = {
   timeTba?: boolean;
 };
 
+/**
+ * A quiet note between sessions (e.g. "Hacking continues"), drawn on the
+ * timeline without a card. Not counted as a session or matched by search.
+ */
+export type ScheduleInterlude = {
+  /** Placed after the last session starting at or before this time. */
+  startTime: string;
+  /** Small mono label, e.g. "13:30 – 19:00" or "Overnight". */
+  label: string;
+  text: string;
+};
+
 export type ScheduleDay = {
   label: string;
   date: string;
   sessions: ScheduleSession[];
+  interludes?: ScheduleInterlude[];
 };
 
 export type Person = {

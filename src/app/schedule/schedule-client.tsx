@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/primitives/page-header";
 import { scheduleContent, scheduleDays } from "@/content/schedule";
 import { cn } from "@/lib/utils";
 import type {
+  ScheduleInterlude,
   ScheduleSession,
   ScheduleSessionType,
   ScheduleSpeaker,
@@ -30,6 +31,13 @@ const SESSION_ACCENTS: Record<ScheduleSessionType, string> = {
   Other: "rgba(255, 255, 255, 0.7)",
 };
 
+// Red reads far stronger than purple on a photo, so red cards get a lighter
+// wash to keep faces from turning pink.
+const RED_PHOTO_TINT = {
+  "--photo-tint-opacity": "0.3",
+  "--photo-brightness": "0.97",
+};
+
 // Point-in-time sessions (no endTime, nothing after them) stay "live" this long.
 const DEFAULT_SESSION_MINUTES = 30;
 
@@ -37,22 +45,6 @@ type SessionStatus = "upcoming" | "live" | "done";
 
 function toTimestamp(date: string, time: string) {
   return Date.parse(`${date}T${time}:00${scheduleContent.utcOffset}`);
-}
-
-const KICKOFF_TIMESTAMP = toTimestamp(
-  scheduleContent.kickoff.date,
-  scheduleContent.kickoff.time,
-);
-
-/** Offset from kickoff as a mission clock, e.g. "T+00:30" or "T+30:00". */
-function missionClock(date: string, time: string) {
-  const minutes = Math.round(
-    (toTimestamp(date, time) - KICKOFF_TIMESTAMP) / 60000,
-  );
-  const abs = Math.abs(minutes);
-  const hours = String(Math.floor(abs / 60)).padStart(2, "0");
-  const mins = String(abs % 60).padStart(2, "0");
-  return `T${minutes < 0 ? "-" : "+"}${hours}:${mins}`;
 }
 
 function weekdayLabel(date: string) {
@@ -116,40 +108,51 @@ function initials(name: string) {
 
 function SpeakerTile({ speaker }: { speaker: ScheduleSpeaker }) {
   return (
-    <div className="flex min-w-0 items-center gap-4">
+    <div className="flex min-w-0 items-center gap-4 sm:gap-5">
       <div
-        className="schedule-avatar relative size-11 shrink-0 overflow-hidden sm:size-12"
+        className="schedule-avatar relative size-16 shrink-0 overflow-hidden sm:size-20"
         // Partner logos need a light tile; dark marks vanish on the default avatar.
         style={speaker.logo ? { background: "#fff" } : undefined}
       >
-        {speaker.imageSrc ? (
+        {speaker.imageSrc && speaker.logo ? (
           <Image
             src={speaker.imageSrc}
             alt={speaker.name}
             fill
-            sizes="48px"
-            className={
-              speaker.logo
-                ? "object-contain p-2"
-                : "object-cover grayscale-[0.6] contrast-125"
-            }
+            sizes="80px"
+            className="object-contain p-2.5"
           />
+        ) : speaker.imageSrc ? (
+          <>
+            <Image
+              src={speaker.imageSrc}
+              alt={speaker.name}
+              fill
+              sizes="80px"
+              className="photo-tinted object-cover"
+            />
+            <span
+              className="photo-tint"
+              aria-hidden="true"
+              style={{ background: "var(--session-accent)" }}
+            />
+          </>
         ) : speaker.placeholder ? (
           <span className="flex size-full items-center justify-center text-white/60">
-            <UserRound className="size-5" aria-hidden="true" />
+            <UserRound className="size-7" aria-hidden="true" />
           </span>
         ) : (
-          <span className="flex size-full items-center justify-center font-mono text-sm font-bold tracking-wider text-white">
+          <span className="flex size-full items-center justify-center font-mono text-lg font-bold tracking-wider text-white sm:text-xl">
             {initials(speaker.name)}
           </span>
         )}
       </div>
       <div className="min-w-0">
-        <p className="font-display text-sm font-semibold leading-tight text-white sm:text-base">
+        <p className="font-display text-lg font-semibold leading-tight text-white sm:text-xl">
           {speaker.name}
         </p>
         {speaker.role && (
-          <p className="mt-0.5 text-xs leading-snug text-white/55 sm:text-sm">
+          <p className="mt-1 text-sm leading-snug text-white/55 sm:text-base">
             {speaker.role}
           </p>
         )}
@@ -184,6 +187,9 @@ function SessionCard({
         {
           "--session-accent": SESSION_ACCENTS[session.type],
           "--row-delay": `${index * 70}ms`,
+          ...(SESSION_ACCENTS[session.type] === "var(--tbc-red)"
+            ? RED_PHOTO_TINT
+            : {}),
         } as CSSProperties
       }
     >
@@ -229,16 +235,7 @@ function SessionCard({
 
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <p className="schedule-eyebrow font-mono text-[11px] font-semibold uppercase tracking-[0.2em]">
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              {!session.timeTba && (
-                <>
-                  <span className="text-white/25">{"//"}</span>
-                  <span>{missionClock(date, session.startTime)}</span>
-                </>
-              )}
-            </p>
-            <h3 className="mt-1.5 font-display text-xl font-semibold leading-[1.15] text-white sm:text-2xl">
+            <h3 className="font-display text-xl font-semibold leading-[1.15] text-white sm:text-2xl">
               {session.title}
               {session.titleSuffix && (
                 <span className="ml-2 text-base font-medium text-white/45 sm:text-lg">
@@ -284,11 +281,8 @@ function SessionCard({
         )}
 
         {speakers.length > 0 && (
-          <div className="mt-4 border-t border-white/10 pt-3.5">
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-white/40">
-              {speakers.length === 1 ? "Speaker" : "Speakers"}
-            </p>
-            <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          <div className="mt-4 border-t border-white/10 pt-4">
+            <div className="grid gap-4 sm:grid-cols-2">
               {speakers.map((speaker) => (
                 <SpeakerTile key={speaker.name} speaker={speaker} />
               ))}
@@ -296,6 +290,29 @@ function SessionCard({
           </div>
         )}
       </article>
+    </li>
+  );
+}
+
+function InterludeRow({
+  interlude,
+  index,
+}: {
+  interlude: ScheduleInterlude;
+  index: number;
+}) {
+  return (
+    <li
+      className="schedule-row schedule-row--interlude"
+      style={{ "--row-delay": `${index * 70}ms` } as CSSProperties}
+    >
+      <div className="schedule-rail" aria-hidden="true" />
+      <p className="schedule-interlude">
+        <span className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
+          {interlude.label}
+        </span>
+        <span className="text-base text-white/60">{interlude.text}</span>
+      </p>
     </li>
   );
 }
@@ -335,6 +352,16 @@ export function ScheduleClient({
       ].some((field) => field?.toLowerCase().includes(query)),
     );
   }, [sortedSessions, searchQuery]);
+
+  // Each interlude follows the last session that starts at or before it.
+  const interludesAfter = (session: ScheduleSession) => {
+    const next = sortedSessions[sortedSessions.indexOf(session) + 1];
+    return (activeDay.interludes ?? []).filter(
+      (interlude) =>
+        interlude.startTime >= session.startTime &&
+        (!next || interlude.startTime < next.startTime),
+    );
+  };
 
   const statusFor = (session: ScheduleSession) => {
     if (now === null || session.timeTba) return null;
@@ -435,16 +462,28 @@ export function ScheduleClient({
             </div>
 
             <ol className="schedule-timeline">
-              {filteredSessions.map((session) => (
-                <SessionCard
-                  key={`${session.startTime}-${session.title}`}
-                  session={session}
-                  date={activeDay.date}
-                  // Keep the day's sequence number stable while searching.
-                  index={sortedSessions.indexOf(session)}
-                  status={statusFor(session)}
-                />
-              ))}
+              {filteredSessions.flatMap((session) => {
+                // Keep the day's sequence number stable while searching.
+                const index = sortedSessions.indexOf(session);
+                return [
+                  <SessionCard
+                    key={`${session.startTime}-${session.title}`}
+                    session={session}
+                    date={activeDay.date}
+                    index={index}
+                    status={statusFor(session)}
+                  />,
+                  ...(searchQuery.trim() ? [] : interludesAfter(session)).map(
+                    (interlude) => (
+                      <InterludeRow
+                        key={`interlude-${interlude.startTime}-${interlude.label}`}
+                        interlude={interlude}
+                        index={index}
+                      />
+                    ),
+                  ),
+                ];
+              })}
             </ol>
           </div>
         ) : (

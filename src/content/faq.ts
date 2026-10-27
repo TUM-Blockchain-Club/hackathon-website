@@ -47,7 +47,7 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "When and where is it?",
         answer:
-          "30-31 October 2026, at the House of Communication in Munich. Doors open on Friday 30 October at 09:00, and the opening ceremony starts at 09:30. Submissions close on 31 October at 15:00. The TUM Blockchain Conference takes place the day before, on Thursday 29 October. The full agenda is on the Schedule page.",
+          "30-31 October 2026, at the House of Communication in Munich. Doors open on Friday 30 October at 08:00, hacking starts at 09:00 and the opening ceremony starts at 09:30. The venue stays open overnight. Submissions close on 31 October at 15:00. The TUM Blockchain Conference takes place the day before, on Thursday 29 October. The full agenda is on the Schedule page.",
         status: "confirmed",
       },
       {
@@ -284,8 +284,9 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         question: "Can I build overnight?",
-        answer: FALLBACK_TEXT,
-        status: "tbd",
+        answer:
+          "Yes. The venue stays open through the night, so you can keep building from Friday until the submission deadline on Saturday at 15:00.",
+        status: "confirmed",
       },
       {
         question: "What should I bring?",

@@ -42,7 +42,7 @@ const submissionGuide: SubmissionGuide = {
     },
     {
       time: "15:00–17:00",
-      title: "Judging",
+      title: "Live judging",
       body: "Each partner judges its own track for two hours. Present your project to the judges of every track you entered. TUM Blockchain Club judges every project for the TUM Blockchain Track.",
     },
     {
@@ -230,12 +230,14 @@ export const prizeTracks: PrizeTrack[] = [
     ],
     workshop: {
       title: "BSV Association Workshop",
-      when: "Fri 30 Oct, time announced soon",
+      when: "Fri 30 Oct, 11:30–12:00",
+      speaker: "Axel Maisonneuve, Head of DevRel, BSV Association",
     },
     judges: [
       {
         name: "Axel Maisonneuve",
-        role: "Education and Open Source Strategy, BSV Association",
+        role: "Head of DevRel, BSV Association",
+        imageSrc: "/speakers/axel_maisonneuve.jpg",
       },
     ],
     support: [
@@ -398,7 +400,8 @@ export const prizeTracks: PrizeTrack[] = [
     ],
     workshop: {
       title: "Cardano Workshop",
-      when: "Fri 30 Oct, time announced soon",
+      when: "Fri 30 Oct, 10:30–11:00",
+      speaker: "Bora Oben, Developer Community Advocate, Cardano",
     },
     support: [
       {
@@ -431,8 +434,11 @@ export const prizeTracks: PrizeTrack[] = [
       "A protocol safeguard triggered by a verified value.",
       "Your own idea: teams are welcome to propose other directions.",
     ],
-    prizeNote:
-      "€2,000 in total, paid in USDC. The split between 1st, 2nd and 3rd place is announced soon.",
+    prizes: [
+      { place: "1st", title: "1st place", amount: "€1,000" },
+      { place: "2nd", title: "2nd place", amount: "€600" },
+      { place: "3rd", title: "3rd place", amount: "€400" },
+    ],
     requirements: [
       "Use an AirnodeHub integration as an essential part of a core feature or workflow. Removing it must materially impair the application.",
       "Submit a signed response to a deployed contract that verifies the expected signer, the intended request and the relevant timing conditions. A testnet deployment is enough.",
@@ -530,7 +536,6 @@ export const prizeTracks: PrizeTrack[] = [
       "Priced operations accept AirnodeHub USD (aUSD) or testnet USDC through x402 on Base Sepolia. Minting aUSD needs Base Sepolia ETH; the x402 facilitator pays the access-transfer gas. Your app's own transactions need their own gas token. No promo code needed.",
       "Check the integrations guide before choosing an API: a catalogue listing alone does not guarantee hackathon availability.",
       "Provider quotas are shared by all teams. Cache responses and avoid unbounded polling.",
-      "Test tokens are separate from the prize USDC.",
     ],
     workshop: {
       title: "Building with AirnodeHub",
@@ -540,8 +545,16 @@ export const prizeTracks: PrizeTrack[] = [
         "An introduction to API3 and AirnodeHub, how apps and agents use authenticated external data, and the track's challenge, submission requirements, judging and prizes.",
     },
     judges: [
-      { name: "Matej Falat", role: "Developer, API3" },
-      { name: "Ugur Schenk", role: "Strategy Lead, API3" },
+      {
+        name: "Matej Falat",
+        role: "Software Engineer, API3",
+        imageSrc: "/speakers/matej_falat.jpg",
+      },
+      {
+        name: "Ugur Schenk",
+        role: "Strategy Lead, API3",
+        imageSrc: "/speakers/ugur_schenk.jpg",
+      },
     ],
     support: [
       {

@@ -9,6 +9,7 @@ import { CountdownBanner } from "@/components/sections/countdown-banner";
 import { CurrentYearSponsors } from "@/components/sections/current-year-sponsors";
 import { PrizeTracks } from "@/components/sections/prize-tracks";
 import { RollingSponsors } from "@/components/sections/rolling-sponsors";
+import { ScheduleClient } from "@/app/schedule/schedule-client";
 import { faqGroups, faqResources } from "@/content/faq";
 import type { PrizeTrack, Sponsor } from "@/types/content";
 
@@ -270,6 +271,22 @@ describe("site component interactions", () => {
     expect(
       screen.getByText("Track-specific requirements announced soon."),
     ).toBeTruthy();
+  });
+
+  it("shows hacking-continues interludes without counting them as sessions", async () => {
+    const user = userEvent.setup();
+    render(<ScheduleClient hideHeader />);
+
+    expect(screen.getByText("Hacking continues")).toBeTruthy();
+    expect(screen.getByText("Overnight")).toBeTruthy();
+    expect(screen.getByText("8 sessions")).toBeTruthy();
+
+    // Interludes are context, not search results.
+    await user.type(
+      screen.getByPlaceholderText("Search by session title, speaker..."),
+      "dinner",
+    );
+    expect(screen.queryByText("Hacking continues")).toBeNull();
   });
 
   it("renders countdown banner with units and target title", () => {
