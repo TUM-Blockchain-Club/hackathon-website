@@ -4,19 +4,20 @@ import { useEffect, useState, type ReactNode } from "react";
 import Image from "next/image";
 import {
   ArrowUpRight,
+  Bot,
   CalendarClock,
   Check,
+  ChevronDown,
   Clock,
-  Gavel,
   Globe,
   Info,
   LifeBuoy,
-  Lightbulb,
   Trophy,
 } from "lucide-react";
 
 import { prizeContent } from "@/content/prizes";
 import { cn } from "@/lib/utils";
+import { CopyText } from "@/components/ui/copy-text";
 import type {
   PrizeTrack,
   SubmissionGuide,
@@ -297,6 +298,105 @@ function Chip({
   );
 }
 
+/** First paragraph, clamped; "Read more" reveals the full brief. */
+function ReadMore({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
+  const parts = paragraphs(text);
+
+  return (
+    <div className="text-sm leading-relaxed text-white/75">
+      {open ? (
+        <div className="space-y-2.5">
+          {parts.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      ) : (
+        <p className="line-clamp-3">{parts[0]}</p>
+      )}
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+        className="mt-1.5 text-sm font-semibold text-tbc-yellow transition-colors hover:text-white"
+      >
+        {open ? "Show less" : "Read more"}
+      </button>
+    </div>
+  );
+}
+
+/** Collapsed detail row, so secondary information stays one click away. */
+function Disclosure({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <details className="group border-b border-white/10 [&_summary::-webkit-details-marker]:hidden">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 py-3.5 text-sm font-semibold text-white transition-colors hover:text-tbc-yellow focus-visible:outline focus-visible:outline-2 focus-visible:outline-tbc-yellow">
+        <span>{title}</span>
+        <ChevronDown
+          aria-hidden="true"
+          size={16}
+          className="shrink-0 text-white/50 transition-transform group-open:rotate-180"
+        />
+      </summary>
+      <div className="pb-4">{children}</div>
+    </details>
+  );
+}
+
+function PersonAvatar({ name, imageSrc }: { name: string; imageSrc?: string }) {
+  return (
+    <span className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden border border-tbc-purple/40 bg-tbc-purple/15">
+      {imageSrc ? (
+        <>
+          <Image
+            src={imageSrc}
+            alt={name}
+            fill
+            sizes="56px"
+            className="photo-tinted object-cover"
+          />
+          <span className="photo-tint" aria-hidden="true" />
+        </>
+      ) : (
+        <span className="font-mono text-sm font-bold tracking-wider text-white/80">
+          {initials(name)}
+        </span>
+      )}
+    </span>
+  );
+}
+
+/** Date and time pushed to the right of the workshop block. */
+function WorkshopWhen({ when }: { when: string }) {
+  // "Fri 30 Oct, 11:00–11:30" → day on top, time below in bold.
+  const [day, ...rest] = when.split(", ");
+  const time = rest.join(", ");
+
+  return (
+    <div className="flex shrink-0 items-center gap-2.5 text-right">
+      <CalendarClock
+        aria-hidden="true"
+        size={18}
+        className="hidden text-tbc-yellow sm:block"
+      />
+      <div>
+        <p className="text-xs font-medium uppercase tracking-[0.12em] text-white/50">
+          {time ? day : "Workshop"}
+        </p>
+        <p className="font-display text-base font-bold tabular-nums text-tbc-yellow sm:text-lg">
+          {time || day}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function TrackPanel({ track }: { track: PrizeTrack }) {
   const ideas = track.ideas ?? [];
   const howToWin = track.howToWin ?? [];
@@ -305,9 +405,7 @@ function TrackPanel({ track }: { track: PrizeTrack }) {
   const selectionCriteria = track.selectionCriteria ?? [];
   const requirements = track.requirements ?? [];
   const submission = track.submission ?? [];
-  const judgingCriteria = track.judgingCriteria ?? [];
   const resources = track.resources ?? [];
-  const notes = track.notes ?? [];
   const judges = track.judges ?? [];
   const support = track.support ?? [];
   // Only the track's own content counts: shared defaults would hide the
@@ -362,185 +460,220 @@ function TrackPanel({ track }: { track: PrizeTrack }) {
         </div>
       </div>
 
-      <div className="mt-7 space-y-9">
-        <section>
-          <SectionTitle>About</SectionTitle>
-          <p className="mt-1.5 text-xs leading-relaxed text-white/75 sm:text-sm">
-            {track.about ?? prizeContent.trackDescriptionFallback}
-          </p>
-        </section>
-
-        {hasDetailedContent ? (
-          <>
-            {/* The prize: name, split, brief and what it takes to win */}
-            <section className="space-y-5">
-              <SectionTitle>Prize</SectionTitle>
-              <div className="rounded-[18px] border border-white/10 bg-black/30 p-4 sm:p-5">
-                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <p className="font-display text-lg font-bold text-white sm:text-xl">
-                    {track.trackName}
-                  </p>
-                  {track.amount && companies.length === 0 ? (
-                    <p className="font-display text-base font-semibold text-white/60">
-                      ⸺ {track.amount}
-                    </p>
-                  ) : null}
-                </div>
-                {track.tagline ? (
-                  <p className="mt-1 text-sm text-white/60">{track.tagline}</p>
-                ) : null}
-
-                {prizes.length > 0 ? (
-                  <dl className="mt-4 grid max-w-md grid-cols-3 divide-x divide-white/10 overflow-hidden rounded-[12px] border border-white/10 bg-white/[0.03]">
-                    {prizes.map((prize) => (
-                      <div key={prize.title} className="px-3 py-2.5">
-                        <dt
-                          className={cn(
-                            "flex items-center gap-1.5 text-xs font-semibold",
-                            placeTone[prize.place ?? ""] ?? "text-white/70",
-                          )}
-                        >
-                          <Trophy aria-hidden="true" size={12} />
-                          {prize.title}
-                        </dt>
-                        <dd className="mt-0.5 font-display text-sm font-bold tabular-nums text-white sm:text-base">
-                          {prize.amount}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                ) : null}
-                {track.prizeNote ? (
-                  <p className="mt-3 flex gap-2 text-xs leading-relaxed text-white/60">
-                    <Info
-                      aria-hidden="true"
-                      size={14}
-                      className="mt-px shrink-0 text-tbc-yellow"
-                    />
-                    <span>{track.prizeNote}</span>
+      <div className="mt-8 space-y-10">
+        {track.workshop ? (
+          <section>
+            <SectionTitle>Workshop</SectionTitle>
+            <div className="mt-3 flex items-center justify-between gap-4 rounded-[16px] border border-white/10 bg-black p-4 sm:p-5">
+              <div className="min-w-0">
+                <p className="font-display text-base font-semibold text-white">
+                  {track.workshop.title}
+                </p>
+                {track.workshop.speaker ? (
+                  <p className="mt-1 text-sm text-white/60">
+                    {track.workshop.speaker}
                   </p>
                 ) : null}
               </div>
+              <WorkshopWhen when={track.workshop.when} />
+            </div>
+          </section>
+        ) : null}
 
-              {track.description ? (
-                <div className="space-y-2.5 text-xs leading-relaxed text-white/80 sm:text-sm">
-                  {paragraphs(track.description).map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
-              ) : null}
+        {track.about ? (
+          <section>
+            <SectionTitle>About</SectionTitle>
+            <p className="mt-2 text-sm leading-relaxed text-white/75">
+              {track.about}
+            </p>
+          </section>
+        ) : null}
 
-              {howToWin.length > 0 ? (
-                <div>
-                  <SubTitle
-                    icon={
-                      <Trophy
-                        aria-hidden="true"
-                        size={13}
-                        className="text-tbc-yellow"
-                      />
-                    }
-                  >
-                    How to win
-                  </SubTitle>
-                  <DotList items={howToWin} />
-                </div>
-              ) : null}
+        {hasDetailedContent ? (
+          <>
+            {/* The prize first: amount and split, a short brief, then what qualifies */}
+            <section className="space-y-5">
+              <SectionTitle>Prize</SectionTitle>
 
-              {ideas.length > 0 ? (
-                <div>
-                  <SubTitle icon={<Lightbulb aria-hidden="true" size={13} />}>
-                    Example ideas
-                  </SubTitle>
-                  <DotList items={ideas} />
-                </div>
-              ) : null}
-            </section>
-
-            {/* Contributing partners: one card per company in the pool */}
-            {companies.length > 0 ? (
-              <section aria-labelledby="track-partners-heading">
-                <SectionTitle id="track-partners-heading">
-                  Contributing partners
-                </SectionTitle>
-                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {companies.length > 0 ? (
+                <div className="grid gap-3 sm:grid-cols-2">
                   {companies.map((company) => (
                     <PartnerCard key={company.name} company={company} />
                   ))}
                 </div>
-              </section>
-            ) : null}
+              ) : (
+                <div className="rounded-[18px] border border-white/10 bg-black/30 p-4 sm:p-5">
+                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <p className="font-display text-lg font-bold text-white sm:text-xl">
+                      {track.trackName}
+                    </p>
+                    {track.amount ? (
+                      <p className="font-display text-base font-semibold text-white/60">
+                        ⸺ {track.amount}
+                      </p>
+                    ) : null}
+                  </div>
+                  {track.tagline ? (
+                    <p className="mt-1 text-sm text-white/60">
+                      {track.tagline}
+                    </p>
+                  ) : null}
 
-            {selectionCriteria.length > 0 ? (
-              <section aria-labelledby="track-criteria-heading">
-                <SectionTitle id="track-criteria-heading">
-                  Selection criteria
-                </SectionTitle>
-                <ol className="mt-3 divide-y divide-white/10 rounded-[16px] border border-white/10 bg-black">
-                  {selectionCriteria.map((criterion, idx) => (
+                  {prizes.length > 0 ? (
+                    <dl className="mt-4 grid max-w-md grid-cols-3 divide-x divide-white/10 overflow-hidden rounded-[12px] border border-white/10 bg-white/[0.03]">
+                      {prizes.map((prize) => (
+                        <div key={prize.title} className="px-3 py-2.5">
+                          <dt
+                            className={cn(
+                              "flex items-center gap-1.5 text-xs font-semibold",
+                              placeTone[prize.place ?? ""] ?? "text-white/70",
+                            )}
+                          >
+                            <Trophy aria-hidden="true" size={12} />
+                            {prize.title}
+                          </dt>
+                          <dd className="mt-0.5 font-display text-sm font-bold tabular-nums text-white sm:text-base">
+                            {prize.amount}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : null}
+                  {track.prizeNote ? (
+                    <p className="mt-3 flex gap-2 text-xs leading-relaxed text-white/60">
+                      <Info
+                        aria-hidden="true"
+                        size={14}
+                        className="mt-px shrink-0 text-tbc-yellow"
+                      />
+                      <span>{track.prizeNote}</span>
+                    </p>
+                  ) : null}
+                </div>
+              )}
+
+              {track.description ? (
+                <ReadMore key={track.slug} text={track.description} />
+              ) : null}
+
+              {requirements.length > 0 || selectionCriteria.length > 0 ? (
+                <div className="rounded-[16px] border border-tbc-yellow/20 bg-tbc-yellow/[0.04] p-4 sm:p-5">
+                  <SubTitle>
+                    {requirements.length > 0
+                      ? "Qualification requirements"
+                      : "How winners are chosen"}
+                  </SubTitle>
+                  <CheckList
+                    items={
+                      requirements.length > 0 ? requirements : selectionCriteria
+                    }
+                  />
+                </div>
+              ) : null}
+
+              {submission.length > 0 ||
+              track.judgingGuidance ||
+              howToWin.length > 0 ||
+              ideas.length > 0 ? (
+                <div className="border-t border-white/10">
+                  {submission.length > 0 ? (
+                    <Disclosure title="What to submit">
+                      <p className="text-xs text-white/50">
+                        On top of what every project needs: see How to submit.
+                      </p>
+                      <CheckList items={submission} />
+                    </Disclosure>
+                  ) : null}
+                  {track.judgingGuidance ? (
+                    <Disclosure title="What judges look for">
+                      <p className="text-xs text-white/50">
+                        Judges assess these qualities after checking the
+                        qualification requirements.
+                      </p>
+                      <p className="mt-2 text-sm leading-relaxed text-white/80">
+                        {track.judgingGuidance}
+                      </p>
+                    </Disclosure>
+                  ) : null}
+                  {howToWin.length > 0 ? (
+                    <Disclosure title="How to win">
+                      <DotList items={howToWin} />
+                    </Disclosure>
+                  ) : null}
+                  {ideas.length > 0 ? (
+                    <Disclosure title="Example ideas">
+                      <p className="text-xs text-white/50">
+                        These are starting points. Your own idea is welcome if
+                        it meets the qualification requirements.
+                      </p>
+                      <DotList items={ideas} />
+                    </Disclosure>
+                  ) : null}
+                </div>
+              ) : null}
+            </section>
+
+            {track.quickStart?.length ? (
+              <section>
+                <SectionTitle>Get started</SectionTitle>
+                <ol className="mt-3 space-y-2.5">
+                  {track.quickStart.map((step, idx) => (
                     <li
-                      key={criterion}
-                      className="flex gap-4 px-5 py-3.5 text-sm text-white/80"
+                      key={step}
+                      className="flex gap-3 text-sm leading-relaxed text-white/80"
                     >
-                      <span className="w-4 shrink-0 tabular-nums text-white/35">
+                      <span className="flex size-6 shrink-0 items-center justify-center border border-tbc-yellow/40 font-mono text-xs font-bold text-tbc-yellow">
                         {idx + 1}
                       </span>
-                      <span>{criterion}</span>
+                      <span>{step}</span>
                     </li>
                   ))}
                 </ol>
               </section>
             ) : null}
 
-            {requirements.length > 0 ? (
-              <section>
-                <SectionTitle>Qualification requirements</SectionTitle>
-                <CheckList items={requirements} />
-              </section>
-            ) : null}
-
-            {submission.length > 0 ? (
-              <section>
-                <SectionTitle>What to submit</SectionTitle>
-                <p className="mt-1 text-xs text-white/50">
-                  On top of what every project needs: see How to submit.
-                </p>
-                <CheckList items={submission} />
-              </section>
-            ) : null}
-
-            {judgingCriteria.length > 0 ? (
-              <section>
-                <SectionTitle>Judging</SectionTitle>
-                <dl className="mt-3 divide-y divide-white/10 rounded-[16px] border border-white/10 bg-black">
-                  {judgingCriteria.map((criterion) => (
-                    <div
-                      key={criterion.label}
-                      className="flex items-baseline justify-between gap-4 px-4 py-3 text-sm sm:px-5"
-                    >
-                      <dt className="text-white/80">{criterion.label}</dt>
-                      <dd className="shrink-0 font-semibold tabular-nums text-tbc-yellow">
-                        {criterion.weight}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                {track.judgingNote ? (
-                  <p className="mt-3 text-xs leading-relaxed text-white/60 sm:text-sm">
-                    {track.judgingNote}
-                  </p>
-                ) : null}
-              </section>
-            ) : null}
-
             {resources.length > 0 ? (
               <section>
                 <SectionTitle>Links and resources</SectionTitle>
-                <div className="mt-3 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+                {track.agentContext ? (
+                  <details className="group mt-3 rounded-[14px] border border-tbc-yellow/25 bg-tbc-yellow/[0.04] [&_summary::-webkit-details-marker]:hidden">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-tbc-yellow sm:px-5">
+                      <span className="flex items-center gap-2.5">
+                        <Bot
+                          aria-hidden="true"
+                          size={16}
+                          className="shrink-0 text-tbc-yellow"
+                        />
+                        <span className="text-sm font-semibold text-white">
+                          Context for your coding agent
+                        </span>
+                      </span>
+                      <ChevronDown
+                        aria-hidden="true"
+                        size={16}
+                        className="shrink-0 text-white/50 transition-transform group-open:rotate-180"
+                      />
+                    </summary>
+                    <div className="px-4 pb-4 sm:px-5 sm:pb-5">
+                      <p className="mb-3 text-xs leading-relaxed text-white/60">
+                        Copy a short starting prompt with sponsor docs and links
+                        to the current rules.
+                      </p>
+                      <CopyText text={track.agentContext} />
+                    </div>
+                  </details>
+                ) : null}
+                <div className="mt-6 grid gap-x-4 gap-y-6 sm:grid-cols-2">
                   {resources.map((group) => (
-                    <div key={group.title}>
-                      <SubTitle>{group.title}</SubTitle>
-                      <ul className="mt-1 divide-y divide-white/[0.07]">
+                    <div key={group.title} className="flex flex-col">
+                      <h4 className="flex items-center gap-2 font-display text-base font-bold text-white">
+                        <span
+                          aria-hidden="true"
+                          className="h-4 w-1 shrink-0 bg-tbc-yellow"
+                        />
+                        {group.title}
+                      </h4>
+                      <ul className="mt-2.5 flex-1 divide-y divide-white/[0.07] rounded-[14px] border border-white/10 bg-black/30 px-4">
                         {group.links.map((link) => (
                           <LinkRow key={link.label} link={link} />
                         ))}
@@ -551,97 +684,51 @@ function TrackPanel({ track }: { track: PrizeTrack }) {
               </section>
             ) : null}
 
-            {notes.length > 0 ? (
+            {judges.length > 0 ? (
               <section>
-                <SectionTitle>Good to know</SectionTitle>
-                <DotList items={notes} />
+                <SectionTitle>Judges</SectionTitle>
+                <ul className="mt-3 grid gap-4 sm:grid-cols-2">
+                  {judges.map((judge) => (
+                    <li key={judge.name} className="flex items-center gap-4">
+                      <PersonAvatar
+                        name={judge.name}
+                        imageSrc={judge.imageSrc}
+                      />
+                      <div className="min-w-0">
+                        <p className="font-display text-base font-semibold text-white">
+                          {judge.name}
+                        </p>
+                        <p className="text-sm text-white/55">{judge.role}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </section>
             ) : null}
 
-            {track.workshop ? (
+            {support.length > 0 || track.supportNote ? (
               <section>
-                <SectionTitle>Workshop</SectionTitle>
-                <div className="mt-3 rounded-[16px] border border-white/10 bg-black p-4 sm:p-5">
-                  <p className="font-display text-base font-semibold text-white">
-                    {track.workshop.title}
+                <SectionTitle>Support</SectionTitle>
+                {track.supportNote ? (
+                  <p className="mt-2 text-xs leading-relaxed text-white/60">
+                    {track.supportNote}
                   </p>
-                  <p className="mt-1 flex items-center gap-1.5 text-xs font-medium text-tbc-yellow sm:text-sm">
-                    <CalendarClock aria-hidden="true" size={14} />
-                    {track.workshop.when}
-                  </p>
-                  {track.workshop.speaker ? (
-                    <p className="mt-1 text-xs text-white/60 sm:text-sm">
-                      {track.workshop.speaker}
-                    </p>
-                  ) : null}
-                  {track.workshop.description ? (
-                    <p className="mt-2 text-xs leading-relaxed text-white/70 sm:text-sm">
-                      {track.workshop.description}
-                    </p>
-                  ) : null}
-                </div>
+                ) : null}
+                <ul className="mt-2 divide-y divide-white/[0.07]">
+                  {support.map((link) => (
+                    <li key={link.label} className="flex gap-3">
+                      <LifeBuoy
+                        aria-hidden="true"
+                        size={14}
+                        className="mt-[0.85rem] shrink-0 text-white/40"
+                      />
+                      <ul className="min-w-0">
+                        <LinkRow link={link} />
+                      </ul>
+                    </li>
+                  ))}
+                </ul>
               </section>
-            ) : null}
-
-            {judges.length > 0 || support.length > 0 ? (
-              <div className="grid gap-9 sm:grid-cols-2 sm:gap-6">
-                {judges.length > 0 ? (
-                  <section>
-                    <SectionTitle>Judges</SectionTitle>
-                    <ul className="mt-2 divide-y divide-white/[0.07]">
-                      {judges.map((judge) => (
-                        <li key={judge.name} className="flex gap-3 py-2.5">
-                          {judge.imageSrc ? (
-                            <span className="relative size-9 shrink-0 overflow-hidden border border-tbc-purple/40">
-                              <Image
-                                src={judge.imageSrc}
-                                alt={judge.name}
-                                fill
-                                sizes="36px"
-                                className="photo-tinted object-cover"
-                              />
-                              <span className="photo-tint" aria-hidden="true" />
-                            </span>
-                          ) : (
-                            <Gavel
-                              aria-hidden="true"
-                              size={14}
-                              className="mt-1 shrink-0 text-white/40"
-                            />
-                          )}
-                          <div>
-                            <p className="text-sm font-medium text-white">
-                              {judge.name}
-                            </p>
-                            <p className="text-xs text-white/50">
-                              {judge.role}
-                            </p>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                ) : null}
-                {support.length > 0 ? (
-                  <section>
-                    <SectionTitle>Support</SectionTitle>
-                    <ul className="mt-2 divide-y divide-white/[0.07]">
-                      {support.map((link) => (
-                        <li key={link.label} className="flex gap-3">
-                          <LifeBuoy
-                            aria-hidden="true"
-                            size={14}
-                            className="mt-[0.85rem] shrink-0 text-white/40"
-                          />
-                          <ul className="min-w-0">
-                            <LinkRow link={link} />
-                          </ul>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                ) : null}
-              </div>
             ) : null}
           </>
         ) : (
@@ -815,6 +902,36 @@ function SubmissionPanel({
               </li>
             ))}
           </ol>
+        </section>
+
+        <section>
+          <SectionTitle>Prepare for judging</SectionTitle>
+          <DotList
+            items={[
+              "Keep the demo and repository accessible to judges. Include setup steps and any demo limits in your README.",
+              "Show the working flow and the transaction or verification evidence required by each track.",
+              "Follow organizer instructions for team locations and judging queues. The schedule lists the judging window.",
+            ]}
+          />
+          <details className="mt-4 border border-white/10 bg-black/30 p-4">
+            <summary className="cursor-pointer text-sm font-semibold text-white">
+              Copy your submission checklist
+            </summary>
+            <div className="mt-4">
+              <CopyText
+                label="Copy checklist"
+                text={[
+                  `Submission deadline: ${guide.deadline}`,
+                  "Complete the global requirements and only the partner-track sections you enter. Ignore other track sections.",
+                  ...guide.requirements.map((item) => `- [ ] ${item}`),
+                  ...partnerTracks.flatMap((track) => [
+                    `\n${track.sponsor}`,
+                    ...(track.submission ?? []).map((item) => `- [ ] ${item}`),
+                  ]),
+                ].join("\n")}
+              />
+            </div>
+          </details>
         </section>
 
         <section>

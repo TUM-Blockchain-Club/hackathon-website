@@ -1,4 +1,5 @@
 import { siteConfig } from "@/content/site";
+import { buildTrackContext } from "@/lib/track-context";
 import type { PrizeTrack, SubmissionGuide } from "@/types/content";
 
 const submissionGuide: SubmissionGuide = {
@@ -76,6 +77,11 @@ const submissionGuide: SubmissionGuide = {
 };
 
 export const prizeContent = {
+  /** Until hacking starts, the deadline strip announces the start instead. */
+  hackathonStart: {
+    label: "Friday 30 October, 09:00 CET",
+    iso: "2026-10-30T09:00:00+01:00",
+  },
   title: "Prize Tracks",
   description:
     "A €12,000+ prize pool across the BSV Association, Cardano and API3 partner tracks, plus €16,000 in Adevar Labs audit credits in the TUM Blockchain Track. Enter up to three partner tracks; every project is also judged for the TUM Blockchain Track.",
@@ -95,7 +101,7 @@ export const prizeContent = {
   submission: submissionGuide,
 };
 
-export const prizeTracks: PrizeTrack[] = [
+const tracks: PrizeTrack[] = [
   {
     slug: "bsv-association",
     sponsor: "BSV Association",
@@ -115,11 +121,14 @@ export const prizeTracks: PrizeTrack[] = [
     description:
       "AI agents are starting to buy services, call APIs and pay for data on their own. To do this at scale, every agent needs identity, micropayments and traceability at once, and BSV Blockchain's very low fees make pay-per-use micropayments viable at the volume agents generate.\n\nWhat agents still lack is the financial layer: stable value to pay with, liquidity, and ways to swap and move funds between chains. Build that DeFi layer on BSV Blockchain, then show an AI agent using it to make a real payment. The DeFi product is the core of your project; the agent can be simple, for example one that swaps into the right token and pays for an API call.",
     ideas: [
-      "Non-custodial bridges that bring stablecoins such as USDT or USDC onto BSV Blockchain, for example using ICP's chain-key technology.",
-      "An order-book DEX or token swap where people and agents trade bridged assets on BSV Blockchain.",
-      "A launchpad where projects or agent-powered services raise funds in bridged stablecoins.",
-      "Cross-chain flows that bring users and liquidity from other chains into BSV Blockchain applications.",
-      "Any other DeFi idea that gives people and agents a real reason to use BSV Blockchain.",
+      "Agent token swap: build a wallet-connected swap between demo assets on BSV. Show an AI agent using your project to make a payment.",
+      "Service launchpad: prototype a funding flow for an agent-powered service using bridged stablecoins. Show the contribution and an agent payment. Confirm asset availability with BSV before choosing this route.",
+      "Cross-chain funding (advanced): bring assets into a BSV wallet through a non-custodial flow, then demonstrate an AI agent payment. A bridge from scratch is a large scope for this event.",
+    ],
+    quickStart: [
+      "Start with the ts-stack documentation and its SDK and wallet packages. Use the versions and wallet setup documented there.",
+      "Download the BSV developer pack and open START-HERE.md first. Ask the BSV support contact for test funds.",
+      "Connect a supported BSV wallet. Build one small DeFi flow and show an AI agent making a real BSV payment through it. Keep user funds non-custodial.",
     ],
     prizes: [
       { place: "1st", title: "1st place", amount: "€2,500" },
@@ -139,31 +148,15 @@ export const prizeTracks: PrizeTrack[] = [
       "Links to example transactions on BSV Blockchain, for example on WhatsOnChain.",
       "A short usage and value note (one page or a README section): the problem, the target users, how people would use it, and what it brings to BSV Blockchain.",
     ],
-    judgingCriteria: [
-      { label: "Adoption potential and real-world usefulness", weight: "35%" },
-      {
-        label: "Use of the BSV stack (SDK, Wallet Toolbox, BSV wallets)",
-        weight: "25%",
-      },
-      {
-        label: "Technical execution, including a sound non-custodial design",
-        weight: "20%",
-      },
-      {
-        label: "Agentic payments: the agent uses the project in a real payment",
-        weight: "10%",
-      },
-      { label: "Originality and presentation", weight: "10%" },
-    ],
-    judgingNote:
-      "What BSV Association values most: an app people would actually come to BSV Blockchain for, ideally bringing new users or liquidity from other chains. Working code alone is not enough.",
+    judgingGuidance:
+      "Build a useful DeFi product that gives people and agents a reason to use BSV. Show clear adoption potential and explain how it brings users or liquidity to the network. Judges look at your use of the BSV stack, technical execution, non-custodial design, a real agent payment, originality, and a clear demo.",
     resources: [
       {
         title: "Start here",
         links: [
           {
             label: "BSV developer pack",
-            pending: true,
+            href: "https://drive.google.com/drive/folders/179lAsiQEiV1Fpf9SY8b0y4456-3QfxfG?usp=sharing",
             note: "Open START-HERE.md first. Includes the complete stack guide, AGENTS.md for AI assistants, and a starter kit with 38 tests.",
           },
           {
@@ -223,11 +216,6 @@ export const prizeTracks: PrizeTrack[] = [
         ],
       },
     ],
-    notes: [
-      "No API keys needed. BSV Association sends mainnet satoshis to every team: in BSV Desktop go to Payments → Receive → BSV Address, then send the address and your team name to @lexamaison on Telegram.",
-      "Building with an AI assistant? Give it AGENTS.md and BSV_STACK_COMPLETE_GUIDE.md from the developer pack. The guide's Appendix A has tested code to copy instead of inventing it.",
-      "Never share your recovery phrase or private keys with anyone. A BSV address is public and safe to share.",
-    ],
     workshop: {
       title: "BSV Association Workshop",
       when: "Fri 30 Oct, 11:30–12:00",
@@ -273,12 +261,14 @@ export const prizeTracks: PrizeTrack[] = [
       "A live demo of a paid task, with the transaction on a preprod explorer.",
     ],
     ideas: [
-      "An agent that buys real items online for its buyer. The money waits in Masumi escrow, the agent places the order and writes the order ID on-chain, and the escrow pays out, or refunds the buyer if the purchase fails.",
-      "A team of AI agents on Sokosumi that improves an online shop listing: a lead agent hires specialists for keywords, pricing, copy and images, and the shop owner pays through escrow only for work that passed checks.",
-      "A check that other agents call before they trade a token, built from market, on-chain and risk data, paid per question with x402 or per task through Masumi.",
-      "A gateway that makes any existing API payable by agents: agents buy packs of answers with x402, and only answers that pass a quality check use up the pack.",
-      "Private payments for agents: a shared privacy pool that pays x402 sellers and Masumi agents, so the payment can't be traced to the agent's own wallet.",
-      "Anything else that advances agentic commerce on Cardano.",
+      "Paid research task: a shop owner hires your agent for a short research report through Masumi on Sokosumi. Show the completed result and preprod payment transaction.",
+      "Paid data API: your service returns a useful response after an x402 payment on Cardano preprod. Show the request, the response, and the payment transaction.",
+      "Agent team: a lead agent hires a specialist to improve a product listing. Show one paid job and its result before adding more agents.",
+    ],
+    quickStart: [
+      "Choose a paid job with Masumi on Sokosumi, or a paid request with x402. Use the corresponding official guide and starter below.",
+      "Follow the starter prerequisites for Node.js, accounts, model access if needed, and Cardano preprod test funds. Use preprod for the qualifying payment.",
+      "Complete one paid job or request. Save its transaction hash, show the result, and describe setup steps and limits in the README.",
     ],
     prizes: [
       { place: "1st", title: "1st place", amount: "€3,000" },
@@ -294,19 +284,8 @@ export const prizeTracks: PrizeTrack[] = [
       "A public demo video, within the hackathon's 2.5-minute limit: who the solution is for, the problem, the business case, and a paid business cycle end to end.",
       "A short write-up on Devfolio: the problem, how it works, the Cardano tools used, and how it could run in real use.",
     ],
-    judgingCriteria: [
-      {
-        label:
-          "Technical execution and use of Cardano tech (Masumi, Sokosumi or x402)",
-        weight: "30%",
-      },
-      { label: "Innovation and creativity", weight: "20%" },
-      { label: "Pitch and demo video", weight: "20%" },
-      { label: "User experience and design", weight: "15%" },
-      { label: "Impact and feasibility", weight: "15%" },
-    ],
-    judgingNote:
-      "Judges look for an original idea that opens a new use case, a project that works end to end, something a newcomer can use quickly, real-world value beyond the hackathon, and a pitch that makes the problem, the solution and the business case easy to follow.",
+    judgingGuidance:
+      "Show an original use case and a paid workflow that works from start to finish. Judges look at technical execution with Cardano tools, creativity, user experience, and a clear pitch and demo. Explain the real-world impact and how the project can work beyond the hackathon.",
     resources: [
       {
         title: "Paid per job: Masumi on Sokosumi",
@@ -392,17 +371,17 @@ export const prizeTracks: PrizeTrack[] = [
         ],
       },
     ],
-    notes: [
-      "What you need: a laptop with Node.js 24 and Git, and a free Blockfrost key for Cardano preprod. Paid per job also needs a Sokosumi preprod account. If AI does the work, bring an API key for any language model with an OpenAI-compatible API.",
-      "Per job: sign up on Sokosumi preprod and join the TUM Workspace, clone the starter and give the agent its job, run a test task in your own workspace, set up payments (test ADA, Blockfrost key, register your agent), run a paid task and save its transaction hash, then demo it in the TUM Workspace.",
-      "Per request: scaffold the x402-express or x402-next template, add your Blockfrost key and get test ADA from the faucet, make a paid request and save its transaction hash, then build your product on top of it.",
-      "Everything runs on Cardano preprod, the test network, with free test money: tADA (test ADA) and tUSDM (a test US-dollar stablecoin). Escrow is money locked by a smart contract until the job is done. A transaction hash is a payment's ID, which anyone can look up on a preprod explorer.",
-    ],
     workshop: {
       title: "Cardano Workshop",
       when: "Fri 30 Oct, 10:30–11:00",
       speaker: "Bora Oben, Developer Community Advocate, Cardano",
     },
+    judges: [
+      {
+        name: "Bora Oben",
+        role: "Developer Community Advocate, Cardano",
+      },
+    ],
     support: [
       {
         label: "1:1 sessions with a Masumi engineer",
@@ -429,10 +408,14 @@ export const prizeTracks: PrizeTrack[] = [
     description:
       'Build an app or agent whose core on-chain functionality depends on authenticated AirnodeHub data. A user, keeper or agent brings the response on-chain; the contract verifies the expected signer, the intended request and freshness before using the data to make a meaningful decision or state change. A single API call added to an otherwise unrelated project is not enough.\n\nStart with the integrations marked "Recommended for the hackathon" in the integrations guide. A signature authenticates the Airnode\'s response and detects changes; it does not independently prove the underlying real-world claim is true.',
     ideas: [
-      "An agent whose actions are constrained by signed market data.",
-      "A conditional payment or escrow using authenticated external evidence.",
-      "A protocol safeguard triggered by a verified value.",
-      "Your own idea: teams are welcome to propose other directions.",
+      "Signed-price guard: use the starter's ETH/USD response to permit or block a demo on-chain action. Show the accepted action and the required rejected responses.",
+      "Conditional payment: release test funds only when verified AirnodeHub data meets a condition. Choose an operation recommended for the hackathon before defining your demo.",
+      "Protocol safeguard: update a demo contract state when a signed value crosses a threshold. Show why modified, stale, wrong-request, and wrong-signer responses cannot trigger it.",
+    ],
+    quickStart: [
+      "Check the recommended integrations and the official starter. Its signed ETH/USD response provides a concrete first integration.",
+      "Follow the starter prerequisites for Foundry, Node.js and pnpm. Use the event faucet and payment instructions for priced operations.",
+      "Deploy a contract that checks the signer, intended request and freshness before acting. Show one valid response and all four required tamper-test failures.",
     ],
     prizes: [
       { place: "1st", title: "1st place", amount: "€1,000" },
@@ -451,15 +434,8 @@ export const prizeTracks: PrizeTrack[] = [
       "The tamper test (pass/fail): first a valid, timely response producing the intended on-chain action, then each of these rejected before that action: a real response with one value edited, a real response that is too old, a real response to a different request, and a response signed by a key that is not the expected Airnode's.",
       "Who relies on the data, what goes wrong if it is forged, and what data you wanted but could not find on AirnodeHub.",
     ],
-    judgingCriteria: [
-      { label: "Real use case", weight: "40 pts" },
-      { label: "Signed data matters", weight: "30 pts" },
-      { label: "Execution", weight: "20 pts" },
-      { label: "Novelty", weight: "10 pts" },
-      { label: "Bonus: autonomous agent", weight: "+10 pts" },
-    ],
-    judgingNote:
-      "The tamper test is a pass/fail eligibility requirement. The bonus rewards an agent that runs the core workflow on its own over repeated cycles: selecting data, paying through x402 when required and acting on-chain without a person starting each cycle. Payment alone or one-off MCP discovery does not earn it. Maximum total: 110 points.",
+    judgingGuidance:
+      "Show a real use case where authenticated data matters to the core workflow. Judges look at execution and originality. The tamper test is a pass/fail qualification requirement. An autonomous agent adds value when it selects data, pays through x402 when required, and acts on-chain over repeated cycles. Payment alone or one-off MCP discovery does not demonstrate that workflow.",
     resources: [
       {
         title: "Start here",
@@ -531,11 +507,6 @@ export const prizeTracks: PrizeTrack[] = [
           },
         ],
       },
-    ],
-    notes: [
-      "Priced operations accept AirnodeHub USD (aUSD) or testnet USDC through x402 on Base Sepolia. Minting aUSD needs Base Sepolia ETH; the x402 facilitator pays the access-transfer gas. Your app's own transactions need their own gas token. No promo code needed.",
-      "Check the integrations guide before choosing an API: a catalogue listing alone does not guarantee hackathon availability.",
-      "Provider quotas are shared by all teams. Cache responses and avoid unbounded polling.",
     ],
     workshop: {
       title: "Building with AirnodeHub",
@@ -610,3 +581,27 @@ export const prizeTracks: PrizeTrack[] = [
     ],
   },
 ];
+
+const hackathonHelp = {
+  label: "Hackathon help and announcements",
+  href: siteConfig.telegramUrl,
+};
+
+const defaultSupportNote =
+  "Additional developer contacts and support hours will appear once confirmed. Use the links below or ask the organizers in the hackathon Telegram group.";
+
+// Every track links the hackathon Telegram group for help. Tracks with
+// resources also get a short coding-agent prompt built from their own rules.
+export const prizeTracks: PrizeTrack[] = tracks.map((track) => {
+  const support = track.support ?? [];
+  const withHelp: PrizeTrack = {
+    ...track,
+    support: support.some((link) => link.href === siteConfig.telegramUrl)
+      ? support
+      : [...support, hackathonHelp],
+    supportNote: track.supportNote ?? defaultSupportNote,
+  };
+  return (track.resources ?? []).length > 0
+    ? { ...withHelp, agentContext: buildTrackContext(withHelp) }
+    : withHelp;
+});

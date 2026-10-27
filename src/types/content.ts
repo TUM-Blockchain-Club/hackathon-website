@@ -77,12 +77,6 @@ export type TrackResourceGroup = {
   links: TrackLink[];
 };
 
-export type TrackJudgingCriterion = {
-  label: string;
-  /** Shown as given, e.g. "35%" or "40 pts". */
-  weight: string;
-};
-
 export type TrackWorkshop = {
   title: string;
   /** Human-readable slot, e.g. "Fri 30 Oct, 11:00–11:30". */
@@ -120,6 +114,10 @@ export type PrizeTrack = {
   /** Paragraphs are separated by a blank line. */
   description?: string;
   ideas?: string[];
+  /** Short setup path that points to the official resources below. */
+  quickStart?: string[];
+  /** Copyable starting prompt for a coding agent, built from the track itself. */
+  agentContext?: string;
   howToWin?: string[];
   /** Placement split for a single-sponsor track, e.g. 1st / 2nd / 3rd. */
   prizes?: TrackCompanyPrize[];
@@ -132,14 +130,13 @@ export type PrizeTrack = {
   requirements?: string[];
   /** Track-specific items the Devfolio submission and demo must include. */
   submission?: string[];
-  judgingCriteria?: TrackJudgingCriterion[];
-  judgingNote?: string;
+  /** Descriptive judging guidance, without fixed weights or point scores. */
+  judgingGuidance?: string;
   resources?: TrackResourceGroup[];
-  /** Practical tips: test funds, quotas, where to start. */
-  notes?: string[];
   workshop?: TrackWorkshop;
   judges?: TrackJudge[];
   support?: TrackLink[];
+  supportNote?: string;
   /** "coming-soon" renders the track brief, ideas, and breakdown as pending. */
   status?: "confirmed" | "coming-soon";
 };

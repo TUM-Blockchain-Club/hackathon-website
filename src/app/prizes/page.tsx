@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { DeadlinePill } from "@/components/sections/deadline-pill";
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
 import { PrizeTracks } from "@/components/sections/prize-tracks";
 import { prizeContent, prizeTracks } from "@/content/prizes";
@@ -31,15 +32,12 @@ export default function PrizesPage() {
 
         {/* Deadline strip: jumps to the submission guide tab */}
         <div className="flex justify-center">
-          <a
+          <DeadlinePill
             href={`#${prizeContent.submission.slug}`}
-            className="group inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 rounded-[9999px] border border-tbc-yellow/30 bg-tbc-yellow/10 px-4 py-1.5 text-center text-xs font-semibold text-tbc-yellow backdrop-blur-sm transition-colors hover:border-tbc-yellow/60 sm:text-sm"
-          >
-            <span>Submissions close {prizeContent.submission.deadline}</span>
-            <span className="text-white/80 transition-colors group-hover:text-white">
-              How to submit →
-            </span>
-          </a>
+            startLabel={prizeContent.hackathonStart.label}
+            startIso={prizeContent.hackathonStart.iso}
+            deadline={prizeContent.submission.deadline}
+          />
         </div>
 
         {/* Tabbed Prize Tracks fitting comfortably in the screen */}

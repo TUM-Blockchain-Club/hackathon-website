@@ -204,12 +204,22 @@ describe("site content contract", () => {
     ]);
     // Cardano asked for up to 3 minutes; the hackathon-wide 2.5-minute cap wins.
     expect(cardano?.submission?.join(" ")).toContain("2.5-minute");
-    expect(
-      cardano?.judgingCriteria?.reduce(
-        (sum, criterion) => sum + Number.parseInt(criterion.weight, 10),
-        0,
-      ),
-    ).toBe(100);
+    // Judging is described in words, without fixed weights or point scores.
+    for (const track of [bsv, cardano, api3]) {
+      expect(track?.judgingGuidance).toBeTruthy();
+      expect(track?.judgingGuidance).not.toMatch(/\d+\s*(%|pts|points)/);
+      expect(track?.quickStart?.length).toBeGreaterThan(0);
+    }
+    // API3's tamper test stays a pass/fail qualification requirement.
+    expect(api3?.judgingGuidance).toContain("pass/fail");
+    expect(api3?.submission?.join(" ")).toContain("tamper test");
+
+    // Every track links the hackathon Telegram group for help.
+    for (const track of prizeTracks) {
+      expect(
+        track.support?.some((link) => link.href === siteConfig.telegramUrl),
+      ).toBe(true);
+    }
 
     expect(tum?.amount).toBe("€16,000 in audit credits");
     expect(tum?.trackName).toBe("TUM Blockchain Track");
