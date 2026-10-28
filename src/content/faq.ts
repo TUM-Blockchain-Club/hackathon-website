@@ -238,7 +238,7 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "What are the prizes?",
         answer:
-          "€12,000 in cash prizes across the Cardano, BSV Association and API3 tracks, plus €16,000 in audit credits. Details are on the Prizes page.",
+          "€12,000 in cash prizes across the Cardano, BSV Association and API3 tracks, plus $16,000 in audit credits. Details are on the Prizes page.",
         status: "confirmed",
       },
       {

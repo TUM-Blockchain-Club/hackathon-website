@@ -70,6 +70,8 @@ export type TrackLink = {
   note?: string;
   /** The link exists but is not published yet: shows "Link coming soon". */
   pending?: boolean;
+  /** Support entries for people rather than links show a person icon. */
+  icon?: "person";
 };
 
 export type TrackResourceGroup = {
@@ -106,7 +108,6 @@ export type PrizeTrack = {
   /** Square mark for tight spots (summary chips); falls back to the wordmark. */
   sponsorMarkSrc?: string;
   sponsorHref?: string;
-  sponsorXHref?: string;
   /** Short primer on the partner itself, shown above the track brief. */
   about?: string;
   amount?: string;
@@ -136,7 +137,6 @@ export type PrizeTrack = {
   workshop?: TrackWorkshop;
   judges?: TrackJudge[];
   support?: TrackLink[];
-  supportNote?: string;
   /** "coming-soon" renders the track brief, ideas, and breakdown as pending. */
   status?: "confirmed" | "coming-soon";
 };
@@ -151,14 +151,17 @@ export type SubmissionGuide = {
   title: string;
   /** Sidebar subtitle, e.g. the deadline. */
   label: string;
+  /** Sidebar subtitle while the guide is locked, before hacking starts. */
+  lockedLabel: string;
   deadline: string;
   /** ISO timestamp with offset, drives the countdown. */
   deadlineIso: string;
+  /** When hacking starts: unlocks the guide and starts the countdown. */
+  hackingStartsIso: string;
   intro: string;
   steps: SubmissionStep[];
   requirements: string[];
   judging: { time: string; title: string; body: string }[];
-  rules: string[];
   help: TrackLink[];
 };
 

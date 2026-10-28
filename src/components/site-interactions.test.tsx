@@ -227,7 +227,29 @@ describe("site component interactions", () => {
     ).toBeGreaterThan(0);
   });
 
+  it("keeps the submission guide locked until hacking starts", () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-10-29T20:00:00+01:00"));
+    window.history.replaceState(null, "", "/prizes#how-to-submit");
+    const tracks: PrizeTrack[] = [
+      { slug: "protocol-labs", sponsor: "Protocol Labs", trackName: "UX" },
+    ];
+    const { container } = render(<PrizeTracks tracks={tracks} />);
+
+    const submitTab =
+      container.querySelector<HTMLButtonElement>("#how-to-submit");
+    expect(submitTab?.disabled).toBe(true);
+    expect(screen.getByText("Opens Fri 30 Oct, 09:00")).toBeTruthy();
+    // The hash alone does not open the locked guide.
+    expect(screen.queryByText("Submissions close in")).toBeNull();
+    expect(screen.queryByText("Every project needs")).toBeNull();
+    vi.useRealTimers();
+  });
+
   it("opens the submission guide tab with each track's extra items", () => {
+    // Hacking has started: the guide is unlocked and the countdown runs.
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-10-31T09:00:00+01:00"));
     const tracks: PrizeTrack[] = [
       {
         slug: "protocol-labs",
@@ -261,8 +283,11 @@ describe("site component interactions", () => {
     }
 
     expect(
-      screen.getAllByText("Saturday 31 October, 15:00 CET").length,
+      screen.getAllByText("Saturday 31 October, 15:00").length,
     ).toBeGreaterThan(0);
+    expect(screen.getByText("Submissions close in")).toBeTruthy();
+    expect(screen.getByRole("timer").textContent).toBe("06:00:00");
+    expect(screen.queryByText("Rules")).toBeNull();
     expect(
       screen.getByText("A demo video of at most 2.5 minutes."),
     ).toBeTruthy();
@@ -271,6 +296,7 @@ describe("site component interactions", () => {
     expect(
       screen.getByText("Track-specific requirements announced soon."),
     ).toBeTruthy();
+    vi.useRealTimers();
   });
 
   it("shows hacking-continues interludes without counting them as sessions", async () => {

@@ -13,9 +13,11 @@ import {
   Info,
   LifeBuoy,
   Trophy,
+  UserRound,
 } from "lucide-react";
 
 import { prizeContent } from "@/content/prizes";
+import { useHasStarted, useNow } from "@/lib/use-now";
 import { cn } from "@/lib/utils";
 import { CopyText } from "@/components/ui/copy-text";
 import type {
@@ -302,6 +304,8 @@ function Chip({
 function ReadMore({ text }: { text: string }) {
   const [open, setOpen] = useState(false);
   const parts = paragraphs(text);
+  // Short single paragraphs fit in three lines; no button needed.
+  const hasMore = parts.length > 1 || parts[0].length > 280;
 
   return (
     <div className="text-sm leading-relaxed text-white/75">
@@ -312,16 +316,18 @@ function ReadMore({ text }: { text: string }) {
           ))}
         </div>
       ) : (
-        <p className="line-clamp-3">{parts[0]}</p>
+        <p className={hasMore ? "line-clamp-3" : undefined}>{parts[0]}</p>
       )}
-      <button
-        type="button"
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
-        className="mt-1.5 text-sm font-semibold text-tbc-yellow transition-colors hover:text-white"
-      >
-        {open ? "Show less" : "Read more"}
-      </button>
+      {hasMore ? (
+        <button
+          type="button"
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+          className="mt-1.5 text-sm font-semibold text-tbc-yellow transition-colors hover:text-white"
+        >
+          {open ? "Show less" : "Read more"}
+        </button>
+      ) : null}
     </div>
   );
 }
@@ -442,20 +448,6 @@ function TrackPanel({ track }: { track: PrizeTrack }) {
                 label={hostLabel(track.sponsorHref)}
               />
             ) : null}
-            {track.sponsorXHref ? (
-              <Chip
-                href={track.sponsorXHref}
-                icon={
-                  <span aria-hidden="true" className="text-[11px] font-bold">
-                    𝕏
-                  </span>
-                }
-                label={track.sponsorXHref.replace(
-                  /^https?:\/\/(x|twitter)\.com\//,
-                  "@",
-                )}
-              />
-            ) : null}
           </div>
         </div>
       </div>
@@ -480,12 +472,19 @@ function TrackPanel({ track }: { track: PrizeTrack }) {
           </section>
         ) : null}
 
-        {track.about ? (
+        {track.about || track.description ? (
           <section>
             <SectionTitle>About</SectionTitle>
-            <p className="mt-2 text-sm leading-relaxed text-white/75">
-              {track.about}
-            </p>
+            <div className="mt-2 space-y-3">
+              {track.about ? (
+                <p className="text-sm leading-relaxed text-white/75">
+                  {track.about}
+                </p>
+              ) : null}
+              {track.description ? (
+                <ReadMore key={track.slug} text={track.description} />
+              ) : null}
+            </div>
           </section>
         ) : null}
 
@@ -552,10 +551,6 @@ function TrackPanel({ track }: { track: PrizeTrack }) {
                 </div>
               )}
 
-              {track.description ? (
-                <ReadMore key={track.slug} text={track.description} />
-              ) : null}
-
               {requirements.length > 0 || selectionCriteria.length > 0 ? (
                 <div className="rounded-[16px] border border-tbc-yellow/20 bg-tbc-yellow/[0.04] p-4 sm:p-5">
                   <SubTitle>
@@ -578,10 +573,16 @@ function TrackPanel({ track }: { track: PrizeTrack }) {
                 <div className="border-t border-white/10">
                   {submission.length > 0 ? (
                     <Disclosure title="What to submit">
-                      <p className="text-xs text-white/50">
-                        On top of what every project needs: see How to submit.
-                      </p>
-                      <CheckList items={submission} />
+                      <div className="space-y-4">
+                        <div>
+                          <SubTitle>Every team</SubTitle>
+                          <CheckList items={prizeContent.defaultRequirements} />
+                        </div>
+                        <div>
+                          <SubTitle>For this track</SubTitle>
+                          <CheckList items={submission} />
+                        </div>
+                      </div>
                     </Disclosure>
                   ) : null}
                   {track.judgingGuidance ? (
@@ -706,27 +707,26 @@ function TrackPanel({ track }: { track: PrizeTrack }) {
               </section>
             ) : null}
 
-            {support.length > 0 || track.supportNote ? (
+            {support.length > 0 ? (
               <section>
                 <SectionTitle>Support</SectionTitle>
-                {track.supportNote ? (
-                  <p className="mt-2 text-xs leading-relaxed text-white/60">
-                    {track.supportNote}
-                  </p>
-                ) : null}
                 <ul className="mt-2 divide-y divide-white/[0.07]">
-                  {support.map((link) => (
-                    <li key={link.label} className="flex gap-3">
-                      <LifeBuoy
-                        aria-hidden="true"
-                        size={14}
-                        className="mt-[0.85rem] shrink-0 text-white/40"
-                      />
-                      <ul className="min-w-0">
-                        <LinkRow link={link} />
-                      </ul>
-                    </li>
-                  ))}
+                  {support.map((link) => {
+                    const Icon = link.icon === "person" ? UserRound : LifeBuoy;
+                    return (
+                      <li key={link.label} className="flex gap-3">
+                        <Icon
+                          aria-hidden="true"
+                          size={14}
+                          className="mt-[0.85rem] shrink-0 text-white/40"
+                        />
+                        <ul className="min-w-0">
+                          {/* Titles only: the labels say enough. */}
+                          <LinkRow link={{ ...link, note: undefined }} />
+                        </ul>
+                      </li>
+                    );
+                  })}
                 </ul>
               </section>
             ) : null}
@@ -750,29 +750,45 @@ function TrackPanel({ track }: { track: PrizeTrack }) {
   );
 }
 
-function useCountdown(targetIso: string) {
-  // Rendered only after mount, so server and client markup match.
-  const [label, setLabel] = useState<string | null>(null);
+function formatRemaining(ms: number) {
+  const total = Math.floor(ms / 1000);
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${pad(Math.floor(total / 3600))}:${pad(Math.floor((total % 3600) / 60))}:${pad(total % 60)}`;
+}
 
-  useEffect(() => {
-    const target = new Date(targetIso).getTime();
-    const tick = () => {
-      const diff = target - Date.now();
-      if (diff <= 0) {
-        setLabel("Submissions are closed");
-        return;
-      }
-      const days = Math.floor(diff / 86_400_000);
-      const hours = Math.floor((diff % 86_400_000) / 3_600_000);
-      const minutes = Math.floor((diff % 3_600_000) / 60_000);
-      setLabel(`Closes in ${days > 0 ? `${days}d ` : ""}${hours}h ${minutes}m`);
-    };
-    tick();
-    const id = window.setInterval(tick, 30_000);
-    return () => window.clearInterval(id);
-  }, [targetIso]);
+/** Big countdown to the deadline, shown only once hacking has started. */
+function SubmissionTimer({
+  startIso,
+  deadlineIso,
+}: {
+  startIso: string;
+  deadlineIso: string;
+}) {
+  const now = useNow();
+  if (now === null || now < Date.parse(startIso)) return null;
+  const remaining = Date.parse(deadlineIso) - now;
 
-  return label;
+  return (
+    <div className="mt-6 rounded-[18px] border border-tbc-yellow/30 bg-tbc-yellow/[0.06] px-5 py-5 text-center sm:py-7">
+      {remaining > 0 ? (
+        <>
+          <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
+            Submissions close in
+          </p>
+          <p
+            role="timer"
+            className="mt-2 font-display text-5xl font-bold tabular-nums tracking-tight text-tbc-yellow drop-shadow-[0_2px_18px_rgba(255,193,16,0.3)] sm:text-6xl md:text-7xl"
+          >
+            {formatRemaining(remaining)}
+          </p>
+        </>
+      ) : (
+        <p className="font-display text-3xl font-bold text-white sm:text-4xl">
+          Submissions are closed
+        </p>
+      )}
+    </div>
+  );
 }
 
 function SubmissionPanel({
@@ -782,7 +798,6 @@ function SubmissionPanel({
   guide: SubmissionGuide;
   tracks: PrizeTrack[];
 }) {
-  const countdown = useCountdown(guide.deadlineIso);
   // Pooled tracks (like the TUM Blockchain Track) need no extra items.
   const partnerTracks = tracks.filter(
     (track) => (track.companies ?? []).length === 0,
@@ -801,11 +816,13 @@ function SubmissionPanel({
           <p className="mt-0.5 font-display text-lg font-bold text-tbc-yellow drop-shadow-[0_2px_12px_rgba(255,193,16,0.25)] sm:text-xl md:text-2xl">
             {guide.deadline}
           </p>
-          <p className="mt-1 min-h-5 font-mono text-xs uppercase tracking-[0.14em] text-white/50">
-            {countdown}
-          </p>
         </div>
       </div>
+
+      <SubmissionTimer
+        startIso={guide.hackingStartsIso}
+        deadlineIso={guide.deadlineIso}
+      />
 
       <div className="mt-7 space-y-9">
         <section>
@@ -935,11 +952,6 @@ function SubmissionPanel({
         </section>
 
         <section>
-          <SectionTitle>Rules</SectionTitle>
-          <DotList items={guide.rules} />
-        </section>
-
-        <section>
           <SectionTitle>Questions</SectionTitle>
           <ul className="mt-1 divide-y divide-white/[0.07]">
             {guide.help.map((link) => (
@@ -958,6 +970,8 @@ export function PrizeTracks({
   className,
 }: PrizeTracksProps) {
   const [activeSlug, setActiveSlug] = useState<string>(tracks[0]?.slug ?? "");
+  // The submission guide unlocks when hacking starts (Fri 30 Oct, 09:00).
+  const unlocked = useHasStarted(submission.hackingStartsIso);
 
   // Sync active tab with URL hash (e.g. /prizes#cardano) without awkward jump scrolling
   useEffect(() => {
@@ -1016,7 +1030,7 @@ export function PrizeTracks({
     );
   }
 
-  const showingSubmission = activeSlug === submission.slug;
+  const showingSubmission = unlocked && activeSlug === submission.slug;
   const activeTrack = tracks.find((t) => t.slug === activeSlug) ?? tracks[0];
 
   const select = (slug: string) => {
@@ -1052,12 +1066,16 @@ export function PrizeTracks({
               type="button"
               role="tab"
               aria-selected={showingSubmission}
+              disabled={!unlocked}
+              title={unlocked ? undefined : submission.lockedLabel}
               onClick={() => select(submission.slug)}
               className={cn(
                 "flex shrink-0 items-center gap-3.5 rounded-[16px] border border-dashed px-4 py-3 text-left transition-all md:w-full",
-                showingSubmission
-                  ? "border-tbc-yellow/60 bg-tbc-yellow/10 text-white shadow-md"
-                  : "border-tbc-yellow/30 text-white/80 hover:border-tbc-yellow/60 hover:bg-tbc-yellow/[0.06] hover:text-white",
+                !unlocked
+                  ? "cursor-not-allowed border-white/15 opacity-50 grayscale"
+                  : showingSubmission
+                    ? "border-tbc-yellow/60 bg-tbc-yellow/10 text-white shadow-md"
+                    : "border-tbc-yellow/30 text-white/80 hover:border-tbc-yellow/60 hover:bg-tbc-yellow/[0.06] hover:text-white",
               )}
             >
               <span className="flex size-10 shrink-0 items-center justify-center rounded-[9999px] bg-tbc-yellow/15">
@@ -1072,7 +1090,7 @@ export function PrizeTracks({
                   {submission.title}
                 </span>
                 <span className="text-xs font-semibold text-tbc-yellow/80">
-                  {submission.label}
+                  {unlocked ? submission.label : submission.lockedLabel}
                 </span>
               </div>
             </button>

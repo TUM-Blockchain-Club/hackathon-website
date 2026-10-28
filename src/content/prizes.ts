@@ -1,13 +1,16 @@
 import { siteConfig } from "@/content/site";
+import { agentContexts } from "@/content/agent-contexts";
 import { buildTrackContext } from "@/lib/track-context";
-import type { PrizeTrack, SubmissionGuide } from "@/types/content";
+import type { PrizeTrack, SubmissionGuide, TrackLink } from "@/types/content";
 
 const submissionGuide: SubmissionGuide = {
   slug: "how-to-submit",
   title: "How to submit",
   label: "Deadline: Sat 31 Oct, 15:00",
-  deadline: "Saturday 31 October, 15:00 CET",
+  lockedLabel: "Opens Fri 30 Oct, 09:00",
+  deadline: "Saturday 31 October, 15:00",
   deadlineIso: "2026-10-31T15:00:00+01:00",
+  hackingStartsIso: "2026-10-30T09:00:00+01:00",
   intro:
     "Every project is submitted on Devfolio. One submission per team, entered into up to three partner tracks. Every project is also judged for the TUM Blockchain Track automatically.",
   steps: [
@@ -21,19 +24,17 @@ const submissionGuide: SubmissionGuide = {
     },
     {
       title: "Add everything the judges need",
-      body: "Your public repository, a demo video of at most 2.5 minutes, a README, and the extra items for each track you entered (listed below).",
+      body: "A demo video of at most 2.5 minutes, a detailed project description, a link to your public repository, and the extra items for each track you entered (listed below).",
     },
     {
       title: "Submit before 15:00",
-      body: "You can edit your submission until the deadline. Only what is submitted by Saturday 31 October, 15:00 CET is judged.",
+      body: "You can edit your submission until the deadline. Only what is submitted by Saturday 31 October, 15:00 is judged.",
     },
   ],
   requirements: [
-    "A working demo of your project.",
-    "A public source code repository.",
     "A demo video of at most 2.5 minutes.",
-    "A README describing what you built and how to run it.",
-    "Built during the hackathon. An existing project only qualifies if it is meaningfully extended during the event.",
+    "A detailed project description on Devfolio: the problem, what you built and how it works.",
+    "A link to your repository, with a README on how to set it up and run it. Make the repository public before the deadline.",
   ],
   judging: [
     {
@@ -52,14 +53,6 @@ const submissionGuide: SubmissionGuide = {
       body: "The winning teams are announced on stage at the closing ceremony.",
     },
   ],
-  rules: [
-    "Teams of 1 to 5 people. Solo projects are welcome.",
-    "Enter up to three partner tracks. Every project is also judged for the TUM Blockchain Track.",
-    "To get your €50 deposit back, your project must enter at least one partner track.",
-    "All AI coding tools are allowed.",
-    "TUM Blockchain Club members and employees of partner companies cannot compete.",
-    "Prizes are paid out directly by TUM Blockchain Club. The payout scheme is announced later.",
-  ],
   help: [
     {
       label: "Submit on Devfolio",
@@ -77,14 +70,10 @@ const submissionGuide: SubmissionGuide = {
 };
 
 export const prizeContent = {
-  /** Until hacking starts, the deadline strip announces the start instead. */
-  hackathonStart: {
-    label: "Friday 30 October, 09:00 CET",
-    iso: "2026-10-30T09:00:00+01:00",
-  },
+  trackLimitLabel: "Choose up to 3 tracks",
   title: "Prize Tracks",
   description:
-    "A €12,000+ prize pool across the BSV Association, Cardano and API3 partner tracks, plus €16,000 in Adevar Labs audit credits in the TUM Blockchain Track. Enter up to three partner tracks; every project is also judged for the TUM Blockchain Track.",
+    "A €12,000+ prize pool across the BSV Association, Cardano and API3 partner tracks, plus $16,000 in Adevar Labs audit credits in the TUM Blockchain Track. Enter up to three partner tracks; every project is also judged for the TUM Blockchain Track.",
   fallback: "Prize tracks announced soon.",
   trackAmountFallback: "Prize amount announced soon.",
   trackDescriptionFallback: "Track brief announced soon.",
@@ -112,9 +101,8 @@ const tracks: PrizeTrack[] = [
     sponsorLogoPadding: "p-1",
     sponsorMarkSrc: "/sponsors/bsv_icon.png",
     sponsorHref: "https://bsvassociation.org/",
-    sponsorXHref: "https://x.com/BSVAssociation",
     about:
-      "BSV Association is a non-profit organisation based in Zug, Switzerland, and the global advocate for the BSV Blockchain. It supports developers, enterprises and public-sector institutions through technical education, open-source developer tools and real-world use cases. The BSV Blockchain is a scalable public blockchain built for high transaction volumes at very low cost, which makes it well suited to micropayments and data-integrity applications.",
+      "BSV Association is a non-profit organisation based in Zug, Switzerland, and the global advocate for the BSV Blockchain. The BSV Blockchain is a scalable public blockchain built for high transaction volumes at very low cost, which makes it well suited to micropayments and data-integrity applications.",
     rightMark: "BSV",
     amount: "€4,000",
     status: "confirmed",
@@ -143,10 +131,9 @@ const tracks: PrizeTrack[] = [
       "Include at least one AI agent that uses your project to make a payment. A simple agent is enough.",
     ],
     submission: [
-      "An open-source repository with a README explaining what the project does and how to run it.",
-      "A live demo, or the demo video, showing the project working end to end, including the agent payment.",
-      "Links to example transactions on BSV Blockchain, for example on WhatsOnChain.",
-      "A short usage and value note (one page or a README section): the problem, the target users, how people would use it, and what it brings to BSV Blockchain.",
+      "Links to example transactions on WhatsOnChain.",
+      "In the demo video: the project working end to end, including the agent payment.",
+      "In the description: the problem, the target users, how people would use it and what it brings to BSV Blockchain.",
     ],
     judgingGuidance:
       "Build a useful DeFi product that gives people and agents a reason to use BSV. Show clear adoption potential and explain how it brings users or liquidity to the network. Judges look at your use of the BSV stack, technical execution, non-custodial design, a real agent payment, originality, and a clear demo.",
@@ -160,12 +147,12 @@ const tracks: PrizeTrack[] = [
             note: "Open START-HERE.md first. Includes the complete stack guide, AGENTS.md for AI assistants, and a starter kit with 38 tests.",
           },
           {
-            label: "ts-stack: SDK, Wallet Toolbox, overlays and middleware",
-            href: "https://github.com/bsv-blockchain/ts-stack",
-          },
-          {
             label: "ts-stack documentation",
             href: "https://bsv-blockchain.github.io/ts-stack/",
+          },
+          {
+            label: "ts-stack on GitHub",
+            href: "https://github.com/bsv-blockchain/ts-stack",
           },
         ],
       },
@@ -183,12 +170,11 @@ const tracks: PrizeTrack[] = [
         ],
       },
       {
-        title: "Infrastructure and standards",
+        title: "Build and broadcast",
         links: [
           {
-            label: "Arcade: broadcasting, transaction status and block headers",
+            label: "Arcade transaction broadcaster",
             href: "https://arcade-v2-us-1.bsvblockchain.tech",
-            note: "No API key needed.",
           },
           {
             label: "BRC standards",
@@ -198,7 +184,15 @@ const tracks: PrizeTrack[] = [
             label: "BSV-21 token spec",
             href: "https://docs.1satordinals.com/fungible-tokens/bsv-21",
           },
-          { label: "WhatsOnChain explorer", href: "https://whatsonchain.com" },
+        ],
+      },
+      {
+        title: "Explorers",
+        links: [
+          {
+            label: "WhatsOnChain",
+            href: "https://whatsonchain.com",
+          },
           {
             label: "BananaBlocks token explorer",
             href: "https://bananablocks.com/tokens",
@@ -209,9 +203,8 @@ const tracks: PrizeTrack[] = [
         title: "AI tooling",
         links: [
           {
-            label: "bOpen plugins for Claude Code: bsv-skills, 1sat, bsv-mcp",
+            label: "bOpen agent plugins (community)",
             href: "https://bopen.ai/agents",
-            note: "Community tools, not maintained by BSV Association.",
           },
         ],
       },
@@ -229,11 +222,7 @@ const tracks: PrizeTrack[] = [
       },
     ],
     support: [
-      {
-        label: "@lexamaison on Telegram",
-        href: "https://t.me/lexamaison",
-        note: "Questions about the stack, the starter kit or the track.",
-      },
+      { label: "DM Axel on Telegram", href: "https://t.me/lexamaison" },
     ],
   },
   {
@@ -247,19 +236,12 @@ const tracks: PrizeTrack[] = [
     sponsorMarkSrc: "/sponsors/cardano_icon.svg",
     sponsorHref: "https://cardano.org/",
     about:
-      "Cardano is a proof-of-stake blockchain platform built on peer-reviewed research, with a focus on security, sustainability, and formal methods.",
+      "Cardano is a decentralized proof-of-stake blockchain platform built through peer-reviewed research, with an extended UTXO model whose results and fees can be checked in advance. Masumi, built on top, is a payment network for AI agents with escrow, on-chain identity and a public registry, and Sokosumi is its agent marketplace.",
     rightMark: "ADA",
     amount: "€6,000",
     status: "confirmed",
     description:
       "AI agents already do real work. What they still lack is standard and secure ways to get hired, paid and trusted, by people and by other agents. In this track, you build an agent, service or developer tool that does a useful job and gets paid for it using Cardano.\n\nWhat does the work? Not every agent needs AI inside. If the job needs writing or judgement, such as a research report, your agent calls a language model. If the job is a fixed set of steps, such as placing an order through a shop's API, fetching prices from a data service or running a calculation, regular software can do it without a model. Many projects mix both.\n\nHow does it get paid? Per job, with Masumi on Sokosumi: your agent becomes a Coworker that people hire for tasks on Sokosumi, the agent marketplace built on the open Masumi standard. The buyer's payment waits in escrow on Cardano until your agent delivers, and the buyer is refunded if it doesn't. Or per request, with x402: every call to your API or agent is paid on the spot through HTTP's 402 \"Payment Required\" status code, with no accounts or API keys. x402 is the quicker way to a first payment. Any combination works, and one project can use both.\n\nYou don't need to be a blockchain developer: x402 handles the payment, and Masumi adds agent identity and escrow, so you can focus on what your agent does. You can build an agent that writes market research per task, one that buys items online and returns the order ID, a model that charges per answer, a data API that charges per call, an agent that pays for the services it uses, or tools that make agent payments on Cardano easier, safer or more private. Whatever you build, show at least one payment going through it on Cardano preprod.",
-    howToWin: [
-      "A clear customer audience, journey and an agent job they would pay for.",
-      "Payment tied to the result: escrow, refunds, or paying only for work that passed a check.",
-      "Agents that hire other agents.",
-      "Agents that act in the real world, such as buying, publishing or booking.",
-      "A live demo of a paid task, with the transaction on a preprod explorer.",
-    ],
     ideas: [
       "Paid research task: a shop owner hires your agent for a short research report through Masumi on Sokosumi. Show the completed result and preprod payment transaction.",
       "Paid data API: your service returns a useful response after an x402 payment on Cardano preprod. Show the request, the response, and the payment transaction.",
@@ -279,32 +261,40 @@ const tracks: PrizeTrack[] = [
       "A working agent or service that completes at least one paid job or payment on Cardano preprod: per job through Masumi, or per request through x402.",
     ],
     submission: [
-      "The transaction hash of that payment.",
-      "A public open-source repository with a README on setup, run commands and limits.",
-      "A public demo video, within the hackathon's 2.5-minute limit: who the solution is for, the problem, the business case, and a paid business cycle end to end.",
-      "A short write-up on Devfolio: the problem, how it works, the Cardano tools used, and how it could run in real use.",
+      "The transaction hash of a paid job or paid request on Cardano preprod.",
+      "In the demo video: who the project is for, the problem, the business case and one paid job or request from start to finish.",
+      "In the description: how it works, the Cardano tools used and how it could run in real use.",
     ],
     judgingGuidance:
-      "Show an original use case and a paid workflow that works from start to finish. Judges look at technical execution with Cardano tools, creativity, user experience, and a clear pitch and demo. Explain the real-world impact and how the project can work beyond the hackathon.",
+      "Show an original use case and a paid workflow that works from start to finish. Judges look at technical execution with Cardano tools, creativity, user experience, and a clear pitch and demo. Explain the real-world impact and how the project can work beyond the hackathon. Cardano especially wants to see a clear customer, their journey and an agent job they would pay for; payment tied to the result, such as escrow, refunds or paying only for work that passed a check; agents that hire other agents or act in the real world by buying, publishing or booking; and a live demo of a paid task with its transaction on a preprod explorer.",
     resources: [
       {
-        title: "Paid per job: Masumi on Sokosumi",
+        title: "Start here",
         links: [
           {
-            label: "Masumi TUM guide",
+            label: "Masumi hackathon guide",
             href: "https://www.masumi.network/tum-hackathon",
             note: "Step-by-step setup, the full agent brief and the demo checklist.",
           },
           {
-            label: "Starter template",
+            label: "Masumi starter template",
             href: "https://github.com/masumi-network/tum-hackathon-quickstart",
           },
+          {
+            label: "x402 on Cardano",
+            href: "https://developers.cardano.org/x402/",
+          },
+        ],
+      },
+      {
+        title: "Paid per job: Masumi",
+        links: [
           {
             label: "Sokosumi preprod sign-up",
             href: "https://preprod.sokosumi.com/signup",
           },
           {
-            label: "Masumi dispenser: test ADA and test stablecoin",
+            label: "Masumi dispenser: test ADA and tUSDM",
             href: "https://dispenser.masumi.network/",
           },
         ],
@@ -313,33 +303,37 @@ const tracks: PrizeTrack[] = [
         title: "Paid per request: x402",
         links: [
           {
-            label: "x402 on Cardano: start here",
-            href: "https://developers.cardano.org/x402/",
-          },
-          {
-            label: "x402-express template: a paid API",
+            label: "x402-express template",
             href: "https://developers.cardano.org/templates/x402-express/",
           },
           {
-            label: "x402-next template: a full-stack app",
+            label: "x402-next template",
             href: "https://developers.cardano.org/templates/x402-next/",
-            note: "Both templates pay through the Cardano Foundation's hosted facilitator on preprod.",
           },
           {
-            label: "Cardano testnet faucet: test ADA",
+            label: "Cardano testnet faucet",
             href: "https://docs.cardano.org/cardano-testnets/tools/faucet",
           },
         ],
       },
       {
-        title: "For your coding agents",
+        title: "Shared tools",
         links: [
           {
-            label: "Masumi TUM agent guide (agent-guide.md)",
-            href: "https://www.masumi.network/tum-hackathon/agent-guide.md",
+            label: "Blockfrost preprod key (free)",
+            href: "https://blockfrost.io",
           },
           {
-            label: "Masumi TUM skill (SKILL.md)",
+            label: "End-to-end x402 demo with a Masumi agent",
+            href: "https://github.com/cardano-foundation/x402-cardano-demo",
+          },
+        ],
+      },
+      {
+        title: "AI tooling",
+        links: [
+          {
+            label: "Masumi hackathon skill (SKILL.md)",
             href: "https://www.masumi.network/tum-hackathon/skill/SKILL.md",
           },
           {
@@ -347,26 +341,12 @@ const tracks: PrizeTrack[] = [
             href: "https://www.masumi.network/dev/masumi/documentation/integrations/masumi-skills",
           },
           {
-            label: "Sokosumi MCP server",
+            label: "Sokosumi MCP server setup",
             href: "https://www.masumi.network/dev/sokosumi/mcp",
           },
           {
-            label: "Cardano Developer Plugin for Claude Code and Codex",
+            label: "Cardano Developer Plugin",
             href: "https://github.com/cardano-foundation/cardano-dev-skills",
-          },
-        ],
-      },
-      {
-        title: "Everyone",
-        links: [
-          {
-            label: "Blockfrost: free key for Cardano preprod",
-            href: "https://blockfrost.io",
-            note: "The free plan is enough.",
-          },
-          {
-            label: "End-to-end x402 demo with a Masumi agent",
-            href: "https://github.com/cardano-foundation/x402-cardano-demo",
           },
         ],
       },
@@ -386,7 +366,6 @@ const tracks: PrizeTrack[] = [
       {
         label: "1:1 sessions with a Masumi engineer",
         href: "https://calendly.com/sandro-schaier/hackathon",
-        note: "Open to all hackathon participants: discuss ideas and get live support.",
       },
     ],
   },
@@ -399,7 +378,6 @@ const tracks: PrizeTrack[] = [
     sponsorLogoPadding: "p-2.5",
     sponsorMarkSrc: "/sponsors/api3_icon.svg",
     sponsorHref: "https://api3.org/",
-    sponsorXHref: "https://x.com/API3DAO",
     about:
       "API3 builds oracle infrastructure that connects smart contracts to external data, for developers and protocols whose applications depend on information from outside the blockchain. AirnodeHub helps developers and AI agents discover APIs and obtain signed responses that their contracts can authenticate before acting.",
     rightMark: "API3",
@@ -428,11 +406,10 @@ const tracks: PrizeTrack[] = [
       "Use a value bound to the exact signed response to drive a meaningful on-chain action or state change, with protection against duplicate execution where needed.",
     ],
     submission: [
-      "A public source repository with setup instructions.",
-      "The deployed contract address and network, and a working demo.",
+      "The deployed contract address and network.",
       "A way for judges to submit their own responses, through the app or a documented script, so they can run the tamper test.",
-      "The tamper test (pass/fail): first a valid, timely response producing the intended on-chain action, then each of these rejected before that action: a real response with one value edited, a real response that is too old, a real response to a different request, and a response signed by a key that is not the expected Airnode's.",
-      "Who relies on the data, what goes wrong if it is forged, and what data you wanted but could not find on AirnodeHub.",
+      "In the demo video: the tamper test (pass/fail). First a valid, timely response that triggers the intended on-chain action, then four responses rejected before that action: a real response with one value edited, a real response that is too old, a real response to a different request, and a response signed by a key that is not the expected Airnode's.",
+      "In the description: who relies on the data, what goes wrong if it is forged, and what data you wanted but could not find on AirnodeHub.",
     ],
     judgingGuidance:
       "Show a real use case where authenticated data matters to the core workflow. Judges look at execution and originality. The tamper test is a pass/fail qualification requirement. An autonomous agent adds value when it selects data, pays through x402 when required, and acts on-chain over repeated cycles. Payment alone or one-off MCP discovery does not demonstrate that workflow.",
@@ -441,13 +418,13 @@ const tracks: PrizeTrack[] = [
         title: "Start here",
         links: [
           {
-            label: "Challenge and onboarding",
-            href: "https://api3dao.github.io/airnodehub-hackathon/",
-          },
-          {
             label: "Starter template",
             href: "https://github.com/api3dao/airnodehub-hackathon-starter",
             note: "A Nodary ETH/USD signed-response consumer and logger, a client and verification tests.",
+          },
+          {
+            label: "Challenge and onboarding",
+            href: "https://api3dao.github.io/airnodehub-hackathon/",
           },
           {
             label: "Hackathon documentation",
@@ -481,20 +458,6 @@ const tracks: PrizeTrack[] = [
         ],
       },
       {
-        title: "AI tooling",
-        links: [
-          {
-            label: "MCP server",
-            href: "https://airnodehub.api3.org/mcp",
-            note: "Use MCP for discovery, then call priced operations directly on the Airnode.",
-          },
-          {
-            label: "Agent discovery file (llms.txt)",
-            href: "https://airnodehub.api3.org/llms.txt",
-          },
-        ],
-      },
-      {
         title: "Test funds",
         links: [
           {
@@ -504,6 +467,15 @@ const tracks: PrizeTrack[] = [
           {
             label: "Testnet USDC (Circle faucet)",
             href: "https://faucet.circle.com",
+          },
+        ],
+      },
+      {
+        title: "AI tooling",
+        links: [
+          {
+            label: "AirnodeHub MCP server setup",
+            href: "https://airnodehub-docs.api3.org/api-consumers/mcp",
           },
         ],
       },
@@ -527,15 +499,6 @@ const tracks: PrizeTrack[] = [
         imageSrc: "/speakers/ugur_schenk.jpg",
       },
     ],
-    support: [
-      {
-        label: "API3 mentors on-site",
-      },
-      {
-        label: "API3 Support topic in the hackathon Telegram group",
-        href: siteConfig.telegramUrl,
-      },
-    ],
   },
   {
     slug: "tum-blockchain-club",
@@ -547,9 +510,9 @@ const tracks: PrizeTrack[] = [
     sponsorMarkSrc: "/sponsors/tbc_icon.png",
     sponsorHref: "https://tum-blockchain.com/",
     about:
-      "The TUM Blockchain Track pools rewards from partners who support the hackathon without running a named track of their own. TUM Blockchain Club judges every submitted project and picks three winners, and the partners below distribute their prizes among them.",
+      "TUM Blockchain Club is the largest student-led blockchain club in Germany and an officially accredited student club at the Technical University of Munich. It organises the TUM Blockchain Conference and this hackathon, and its judges review every submitted project for the TUM Blockchain Track.",
     rightMark: "TBC",
-    amount: "€16,000 in audit credits",
+    amount: "$16,000 in audit credits",
     status: "confirmed",
     companies: [
       {
@@ -559,14 +522,14 @@ const tracks: PrizeTrack[] = [
         markSrc: "/sponsors/adevar_labs_icon.png",
         logoAlt: "Adevar Labs logo",
         href: "https://adevarlabs.com/",
-        amount: "€16,000",
+        amount: "$16,000",
         amountNote: "in audit credits",
         description:
           "Smart contract audit and pre-audit packages for the top 3 projects. Credits are valid for one year.",
         prizes: [
-          { place: "1st", title: "10K in audit credits", amount: "€10,000" },
-          { place: "2nd", title: "Pre-Audit Core", amount: "€4,000" },
-          { place: "3rd", title: "Pre-Audit Express", amount: "€2,000" },
+          { place: "1st", title: "10K in audit credits", amount: "$10,000" },
+          { place: "2nd", title: "Pre-Audit Core", amount: "$4,000" },
+          { place: "3rd", title: "Pre-Audit Express", amount: "$2,000" },
         ],
       },
     ],
@@ -582,26 +545,27 @@ const tracks: PrizeTrack[] = [
   },
 ];
 
-const hackathonHelp = {
-  label: "Hackathon help and announcements",
-  href: siteConfig.telegramUrl,
-};
+// Every partner track ends its support list the same way: the hackathon
+// Telegram group, then the partner mentors at the venue.
+const sharedSupport: TrackLink[] = [
+  {
+    label: "Support on Telegram during hackathon",
+    href: siteConfig.telegramUrl,
+  },
+  { label: "Mentors on site", icon: "person" },
+];
 
-const defaultSupportNote =
-  "Additional developer contacts and support hours will appear once confirmed. Use the links below or ask the organizers in the hackathon Telegram group.";
-
-// Every track links the hackathon Telegram group for help. Tracks with
-// resources also get a short coding-agent prompt built from their own rules.
+// Tracks with resources also get a coding-agent prompt: the partner's own
+// text from agent-contexts.ts, or a short generic one built from the track.
 export const prizeTracks: PrizeTrack[] = tracks.map((track) => {
-  const support = track.support ?? [];
-  const withHelp: PrizeTrack = {
-    ...track,
-    support: support.some((link) => link.href === siteConfig.telegramUrl)
-      ? support
-      : [...support, hackathonHelp],
-    supportNote: track.supportNote ?? defaultSupportNote,
+  // The pooled TUM Blockchain Track has no partner of its own to contact.
+  const pooled = (track.companies ?? []).length > 0;
+  const withSupport: PrizeTrack = pooled
+    ? track
+    : { ...track, support: [...(track.support ?? []), ...sharedSupport] };
+  if ((track.resources ?? []).length === 0) return withSupport;
+  return {
+    ...withSupport,
+    agentContext: agentContexts[track.slug] ?? buildTrackContext(withSupport),
   };
-  return (track.resources ?? []).length > 0
-    ? { ...withHelp, agentContext: buildTrackContext(withHelp) }
-    : withHelp;
 });

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { DeadlinePill } from "@/components/sections/deadline-pill";
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
 import { PrizeTracks } from "@/components/sections/prize-tracks";
+import { TrackLimitPill } from "@/components/sections/track-limit-pill";
 import { prizeContent, prizeTracks } from "@/content/prizes";
 
 export const metadata: Metadata = {
@@ -30,13 +30,12 @@ export default function PrizesPage() {
           tracks={prizeTracks}
         />
 
-        {/* Deadline strip: jumps to the submission guide tab */}
+        {/* Track-limit strip: jumps to the submission guide tab */}
         <div className="flex justify-center">
-          <DeadlinePill
+          <TrackLimitPill
+            label={prizeContent.trackLimitLabel}
             href={`#${prizeContent.submission.slug}`}
-            startLabel={prizeContent.hackathonStart.label}
-            startIso={prizeContent.hackathonStart.iso}
-            deadline={prizeContent.submission.deadline}
+            startIso={prizeContent.submission.hackingStartsIso}
           />
         </div>
 

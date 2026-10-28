@@ -117,9 +117,6 @@ describe("site content contract", () => {
       }
 
       expectAbsoluteUrl(track.sponsorHref ?? "");
-      if (track.sponsorXHref) {
-        expectAbsoluteUrl(track.sponsorXHref);
-      }
       expect(track.amount).toBeTruthy();
 
       for (const group of track.resources ?? []) {
@@ -202,8 +199,16 @@ describe("site content contract", () => {
       "€2,000",
       "€1,000",
     ]);
-    // Cardano asked for up to 3 minutes; the hackathon-wide 2.5-minute cap wins.
-    expect(cardano?.submission?.join(" ")).toContain("2.5-minute");
+    // Track extras use the same wording: evidence first, then what the demo
+    // video and the description must show. Repo and video are global.
+    for (const track of [bsv, cardano, api3]) {
+      const items = track?.submission ?? [];
+      expect(items.some((item) => item.startsWith("In the demo video:"))).toBe(
+        true,
+      );
+      expect(items.at(-1)).toMatch(/^In the description:/);
+      expect(items.join(" ")).not.toMatch(/repository|open-source/i);
+    }
     // Judging is described in words, without fixed weights or point scores.
     for (const track of [bsv, cardano, api3]) {
       expect(track?.judgingGuidance).toBeTruthy();
@@ -214,14 +219,75 @@ describe("site content contract", () => {
     expect(api3?.judgingGuidance).toContain("pass/fail");
     expect(api3?.submission?.join(" ")).toContain("tamper test");
 
-    // Every track links the hackathon Telegram group for help.
+    // Partner agent contexts link the track rules; API3's names its MCP
+    // server and Cardano's points to Masumi's agent guide.
+    for (const track of [bsv, cardano, api3]) {
+      expect(track?.agentContext).toContain(`/prizes#${track?.slug}`);
+      expect(track?.agentContext).toContain("/prizes#how-to-submit");
+    }
+    expect(api3?.agentContext).toContain("https://airnodehub.api3.org/mcp");
+    expect(cardano?.agentContext).toContain(
+      "https://www.masumi.network/tum-hackathon/agent-guide.md",
+    );
+    expect(bsv?.agentContext).toContain("/plugin install bsv-skills@b-open-io");
+    expect(tum?.agentContext).toBeUndefined();
+
+    // Links lead to guides, not raw endpoints, and only each track's main
+    // starting point carries a note.
+    const links = (track?: (typeof prizeTracks)[number]) =>
+      (track?.resources ?? []).flatMap((group) => group.links);
+    for (const track of [bsv, cardano, api3]) {
+      expect(track?.resources?.[0]?.title).toBe("Start here");
+      expect(links(track).filter((link) => link.note)).toHaveLength(1);
+    }
+    expect(links(api3).map((link) => link.href)).not.toContain(
+      "https://airnodehub.api3.org/mcp",
+    );
+    expect(links(api3).map((link) => link.href)).not.toContain(
+      "https://airnodehub.api3.org/llms.txt",
+    );
+    expect(links(api3)[0]?.label).toBe("Starter template");
+    expect(links(cardano)[0]?.label).toBe("Masumi hackathon guide");
+    expect(
+      links(cardano).some((link) => link.href?.endsWith("agent-guide.md")),
+    ).toBe(false);
+    expect(cardano?.howToWin).toBeUndefined();
+
+    // Company intros are two sentences; the problem statement follows.
     for (const track of prizeTracks) {
+      const sentences = (track.about ?? "").split(/(?<=[.!?])\s+/);
+      expect(sentences.length).toBeLessThanOrEqual(2);
+    }
+    for (const track of [bsv, cardano, api3]) {
+      expect(track?.description).toBeTruthy();
+    }
+
+    // Support ends the same way on every partner track, with titles only.
+    for (const track of [bsv, cardano, api3]) {
+      expect(track?.support?.slice(-2).map((link) => link.label)).toEqual([
+        "Support on Telegram during hackathon",
+        "Mentors on site",
+      ]);
+      expect(track?.support?.at(-1)?.icon).toBe("person");
+      expect(track?.support?.some((link) => link.note)).toBe(false);
+    }
+    expect(bsv?.support?.[0]?.label).toBe("DM Axel on Telegram");
+
+    // Every partner track links the hackathon Telegram group for help.
+    for (const track of [bsv, cardano, api3]) {
       expect(
-        track.support?.some((link) => link.href === siteConfig.telegramUrl),
+        track?.support?.some((link) => link.href === siteConfig.telegramUrl),
       ).toBe(true);
     }
 
-    expect(tum?.amount).toBe("€16,000 in audit credits");
+    expect(tum?.amount).toBe("$16,000 in audit credits");
+    expect(tum?.companies?.[0]?.prizes?.map((prize) => prize.amount)).toEqual([
+      "$10,000",
+      "$4,000",
+      "$2,000",
+    ]);
+    expect(tum?.support ?? []).toEqual([]);
+    expect(tum?.description).toBeUndefined();
     expect(tum?.trackName).toBe("TUM Blockchain Track");
     expect(tum?.companies?.map((company) => company.name)).toEqual([
       "Adevar Labs",
@@ -245,15 +311,26 @@ describe("site content contract", () => {
   it("states the submission deadline, video limit and track limit", () => {
     const guide = prizeContent.submission;
 
-    expect(guide.deadline).toBe("Saturday 31 October, 15:00 CET");
+    // Everyone is on site in Munich: no time zone on the guide.
+    expect(guide.deadline).toBe("Saturday 31 October, 15:00");
+    expect(JSON.stringify(guide)).not.toContain("CET");
+    expect(new Date(guide.hackingStartsIso).toISOString()).toBe(
+      "2026-10-30T08:00:00.000Z",
+    );
     expect(new Date(guide.deadlineIso).toISOString()).toBe(
       "2026-10-31T14:00:00.000Z",
     );
+    // Every team: a 2.5-minute video, a detailed description, a public repo.
+    expect(guide.requirements).toHaveLength(3);
     expect(guide.requirements).toContain(
       "A demo video of at most 2.5 minutes.",
     );
-    expect(guide.rules.join(" ")).toContain("up to three partner tracks");
-    expect(guide.rules.join(" ")).toContain("All AI coding tools are allowed");
+    expect(guide.requirements.join(" ")).toContain(
+      "detailed project description",
+    );
+    expect(guide.requirements.join(" ")).toContain(
+      "Make the repository public before the deadline.",
+    );
     expect(guide.judging.map((slot) => slot.time)).toEqual([
       "15:00",
       "15:00–17:00",
