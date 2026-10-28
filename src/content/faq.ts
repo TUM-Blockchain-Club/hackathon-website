@@ -250,7 +250,7 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "Will there be workshops?",
         answer:
-          "Yes, on Friday in the Workshop Room: Cardano at 10:30, API3 at 11:00 and BSV Association at 11:30.",
+          "Yes, on Friday in the Workshop Room: Cardano at 10:30, API3 at 11:00 and BSV Association at 11:30, plus a hands-on zk-SNARK workshop with Veronika Bauer (TUM) at 16:00.",
         status: "confirmed",
       },
       {

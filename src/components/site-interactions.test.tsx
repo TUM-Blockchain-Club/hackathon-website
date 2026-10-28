@@ -304,7 +304,7 @@ describe("site component interactions", () => {
     expect(screen.getByText("Hacking continues")).toBeTruthy();
     expect(screen.getByText("Overnight")).toBeTruthy();
     // Only sessions get a card; interludes render as plain rows.
-    expect(screen.getAllByRole("article")).toHaveLength(8);
+    expect(screen.getAllByRole("article")).toHaveLength(9);
 
     // Interludes are context, not search results.
     await user.type(

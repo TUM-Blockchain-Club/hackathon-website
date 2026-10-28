@@ -110,6 +110,20 @@ export const scheduleDays: ScheduleDay[] = [
         location: "Hacker Area",
       },
       {
+        startTime: "16:00",
+        title: "Hands-on Privacy: Building a zk-SNARK Proof",
+        type: "Workshop",
+        location: "Workshop Room",
+        note: "An introduction to zk-SNARKs and their core properties, a look at the frameworks that implement them, then a hands-on tutorial in which you build your first zk-SNARK proof. Bring your laptop.",
+        speakers: [
+          {
+            name: "Veronika Bauer",
+            role: "Research Associate, Chair of Network Architectures and Services, TUM",
+            imageSrc: "/speakers/veronika_bauer.jpg",
+          },
+        ],
+      },
+      {
         startTime: "19:00",
         title: "Dinner",
         titleSuffix: "sponsored by BSV Association and Cardano",
