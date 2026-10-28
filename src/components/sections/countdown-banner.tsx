@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { scheduleContent } from "@/content/schedule";
 import { cn } from "@/lib/utils";
 
-// Hackathon starts October 30, 2026 at 09:30 AM Munich time (CET / UTC+1)
-const DEFAULT_TARGET_DATE = "2026-10-30T09:30:00+01:00";
+// Use the same kickoff and explicit Munich offset as the published agenda.
+const DEFAULT_TARGET_DATE = `${scheduleContent.kickoff.date}T${scheduleContent.kickoff.time}:00${scheduleContent.utcOffset}`;
 
 type TimeRemaining = {
   days: number;
@@ -25,7 +26,7 @@ function calculateTimeRemaining(targetIso: string): TimeRemaining {
 
   const seconds = Math.floor((diff / 1000) % 60);
   const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const hours = Math.floor((diff / (1000 * 60)) % 24);
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
   return { days, hours, minutes, seconds, isComplete: false };

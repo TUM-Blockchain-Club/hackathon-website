@@ -8,6 +8,8 @@ export const scheduleContent = {
   /** Munich is back on CET (UTC+1) after the 25 October 2026 clock change. */
   timezone: "CET",
   utcOffset: "+01:00",
+  /** Hacking starts; the homepage countdown counts down to this moment. */
+  kickoff: { date: "2026-10-30", time: "09:00" },
 };
 
 export const scheduleDays: ScheduleDay[] = [
