@@ -362,6 +362,7 @@ const tracks: PrizeTrack[] = [
       {
         name: "Bora Oben",
         role: "Developer Community Advocate, Cardano",
+        imageSrc: "/speakers/bora_oben.jpg",
       },
       {
         name: "Vladislav Kudrin",
