@@ -41,24 +41,24 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "What is the TUM Blockchain & AI Hackathon?",
         answer:
-          "An in-person hackathon in Munich at the intersection of blockchain and AI, run by TUM Blockchain Club as part of TUM Blockchain Conference + Hackathon 26.",
+          "An in-person blockchain and AI hackathon in Munich, run by TUM Blockchain Club as part of TUM Blockchain Conference + Hackathon 26.",
         status: "confirmed",
       },
       {
         question: "When and where is it?",
         answer:
-          "30-31 October 2026, at the House of Communication in Munich. Doors open on Friday 30 October at 08:00, hacking starts at 09:00 and the opening ceremony starts at 09:30. The venue stays open overnight. Submissions close on 31 October at 15:00. The TUM Blockchain Conference takes place the day before, on Thursday 29 October. The full agenda is on the Schedule page.",
+          "30-31 October 2026 at the House of Communication, Munich. Doors open Friday at 08:00, hacking starts at 09:00, and submissions close on 31 October at 15:00. The conference is the day before, Thursday 29 October.",
         status: "confirmed",
       },
       {
         question: "Is it in person or online?",
-        answer: "Fully in person, in Munich.",
+        answer: "Fully in person, in Munich. There is no remote participation.",
         status: "confirmed",
       },
       {
         question: "What is the theme?",
         answer:
-          "Blockchain and AI, with a focus on agentic payments. The partner tracks are BSV Association, Cardano and API3. Track briefs, requirements and resources are on the Prizes page.",
+          "Blockchain and AI, with a focus on agentic payments. The partner tracks are BSV Association, Cardano and API3, all detailed on the Prizes page.",
         status: "confirmed",
       },
     ],
@@ -71,8 +71,8 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "Who can participate?",
         answer:
-          "Anyone interested in building in the blockchain and AI space is welcome. Whether you are a developer, designer, product manager or simply curious, we encourage you to apply.",
-        status: "partial-tbd",
+          "Anyone who wants to build with blockchain and AI: developers, designers, product people. You don't need to be a TUM student.",
+        status: "confirmed",
       },
       {
         question: "Who cannot compete?",
@@ -81,56 +81,49 @@ export const faqGroups: FaqGroup[] = [
         status: "confirmed",
       },
       {
-        question: "Do I have to be a TUM student?",
-        answer:
-          "No, you do not need to be a TUM student. Everyone from all around the world is welcome to TUM Blockchain Hackathon.",
-        status: "tbd",
-      },
-      {
         question: "What happens after I apply?",
         answer:
-          "If we select you, you get an email from hackathon@tum-blockchain.com with a personal Luma link and a personal single-use code. You use them to pay your deposit on Luma. Once your deposit is paid, we accept you on Devfolio.",
+          "If you're selected, you get an email from hackathon@tum-blockchain.com with a personal Luma link and code to pay your deposit. Once it's paid, we accept you on Devfolio.",
         status: "confirmed",
       },
       {
         question: "How much does it cost?",
         answer:
-          "You pay a €50 refundable deposit on Luma to confirm your place. You get the full €50 back after the event if you meet the refund conditions.",
+          "Nothing, apart from a €50 refundable deposit on Luma that confirms your place.",
         status: "confirmed",
       },
       {
         question: "When do I have to pay the deposit?",
         answer:
-          "Within five days of your selection email. The deadline is in the email and cannot be extended. If you don't pay in time, your place goes to someone on the waitlist.",
+          "Within five days of your selection email. The deadline can't be extended; unpaid places go to the waitlist.",
         status: "confirmed",
       },
       {
         question: "Does every team member pay the deposit?",
-        answer:
-          "Yes. Every team member pays the deposit individually. Check that your teammates are listed on the hacker dashboard.",
+        answer: "Yes, every team member pays individually.",
         status: "confirmed",
       },
       {
         question: "How do I get my deposit back?",
         answer:
-          "Do all three, in person, at House of Communication. Thursday 29 October: check in and attend the TUM Blockchain Conference. Friday 30 October: check in separately at the hackathon. Saturday 31 October: submit your project on Devfolio before 15:00. The project must enter at least one partner track: Cardano, BSV Association or API3. You then get the full €50 back after the event.",
+          "Check in at the conference on Thursday 29 October, check in at the hackathon on Friday 30 October, and submit a project in at least one partner track before Saturday 15:00. You then get the full €50 back after the event.",
         status: "confirmed",
       },
       {
         question: "When is the deposit not refunded?",
         answer:
-          "If you miss a check-in, take part remotely, do not submit a project, or submit a project that is not in a partner track.",
+          "If you miss a check-in, don't submit a project, or your project isn't in a partner track.",
         status: "confirmed",
       },
       {
         question: "Can I give my place to someone else?",
-        answer: "No. Your acceptance is personal and cannot be transferred.",
+        answer: "No. Your place is personal and can't be transferred.",
         status: "confirmed",
       },
       {
         question: "I already bought a student ticket. Can I use it?",
         answer:
-          'No. Hackers can only take part with the dedicated hacker ticket. If you already bought a student ticket, request a refund for it. The "Refund a student ticket" guide at the top of this page shows how.',
+          'No, hackers need the hacker ticket. Refund your student ticket using the "Refund a student ticket" guide at the top of this page.',
         status: "confirmed",
       },
     ],
@@ -142,38 +135,37 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         question: "Can I take part on my own, and how large can a team be?",
-        answer:
-          "Yes, solo participation is welcome. The maximum team size is 5.",
+        answer: "Yes, solo hackers are welcome. Teams can have up to 5 people.",
         status: "confirmed",
       },
       {
         question: "How do I find teammates?",
         answer:
-          "Through team formation at the kickoff and in our Telegram community.",
+          "In the hackathon Telegram group (Join the Telegram, at the top of this page), or at the venue on Friday morning before hacking starts.",
         status: "confirmed",
       },
       {
         question: "Do I need prior experience?",
         answer:
-          "Some programming and blockchain familiarity is recommended. Workshops and mentors are there to support you during the event.",
+          "Some programming experience helps. Partner workshops and mentors help you get started with each track.",
         status: "confirmed",
       },
       {
         question: "Can I start building before the event?",
         answer:
-          "No. Work on your project during the hackathon. An existing project only qualifies if it is meaningfully extended during the event.",
+          "No. Build during the hackathon. An existing project only counts if you extend it meaningfully during the event.",
         status: "confirmed",
       },
       {
         question: "Can I use open-source libraries or starter templates?",
         answer:
-          "Yes, standard libraries and tooling are fine, including the partners' starter kits on the Prizes page. The core build should happen during the hackathon.",
+          "Yes, including the partners' starter kits on the Prizes page. The core build must happen during the hackathon.",
         status: "confirmed",
       },
       {
         question: "Can I use AI coding tools?",
         answer:
-          "Yes. All AI coding tools are allowed. Several partners provide MCP servers, llms.txt files and agent instructions; you find them under each track on the Prizes page.",
+          "Yes, all of them. Several partners offer MCP servers, llms.txt files and agent prompts under their track on the Prizes page.",
         status: "confirmed",
       },
     ],
@@ -186,34 +178,29 @@ export const faqGroups: FaqGroup[] = [
       {
         question: "How do I register?",
         answer:
-          "Apply on Devfolio at https://tum.devfolio.co. Every team member applies individually. If we select you, you get an email with the next steps. You are accepted on Devfolio once your deposit is paid.",
+          "Apply individually on Devfolio at tum.devfolio.co. If you're selected, we email you the next steps.",
         status: "confirmed",
       },
       {
         question: "How and where do I submit my project?",
         answer:
-          "On Devfolio, before the deadline on Saturday 31 October at 15:00 CET. One submission per team, entered into up to three partner tracks. To get your deposit back, your project must enter at least one partner track: BSV Association, Cardano or API3. The step-by-step guide is under How to submit on the Prizes page.",
+          "On Devfolio, by Saturday 31 October at 15:00. One submission per team, in up to three partner tracks. The step-by-step guide is under How to submit on the Prizes page.",
         status: "confirmed",
       },
       {
         question: "What do I need to submit?",
         answer:
-          "A working demo, a public code repository, a demo video of at most 2.5 minutes, and a README describing what you built and how to run it. Each partner track adds its own items, listed on the Prizes page.",
+          "A demo video of at most 2.5 minutes, a project description, and a public repository with a README. Each track adds its own items, listed on the Prizes page.",
         status: "confirmed",
       },
       {
         question: "Can I keep working after the deadline?",
-        answer: "No. Only what you submit by the deadline is judged.",
+        answer: "No. Only what you submit by 15:00 is judged.",
         status: "confirmed",
       },
       {
         question: "Who owns the intellectual property of my project?",
         answer: "Your team keeps full ownership of your project and its IP.",
-        status: "confirmed",
-      },
-      {
-        question: "Who do I contact with questions?",
-        answer: "Email hackathon@tum-blockchain.com.",
         status: "confirmed",
       },
     ],
@@ -224,40 +211,34 @@ export const faqGroups: FaqGroup[] = [
     title: "Judging and prizes",
     items: [
       {
-        question: "How are projects judged?",
+        question: "What are the prizes?",
         answer:
-          "Each partner judges its own track between 15:00 and 17:00 on Saturday, using the criteria listed under its track on the Prizes page. Present your project to the judges of every track you entered. TUM Blockchain Club judges every project for the TUM Blockchain Track.",
+          "€12,000 across the partner tracks (Cardano €6,000, BSV Association €4,000, API3 €2,000), plus $16,000 in Adevar Labs audit credits in the TUM Blockchain Track.",
         status: "confirmed",
       },
       {
-        question: "Who are the judges?",
+        question: "Can one project enter more than one track?",
         answer:
-          "Each partner's judges are listed under its track on the Prizes page. The TUM Blockchain Track is judged by TUM Blockchain Club.",
-        status: "partial-tbd",
+          "Yes, up to three partner tracks. Every project is also judged for the TUM Blockchain Track automatically.",
+        status: "confirmed",
       },
       {
-        question: "What are the prizes?",
+        question: "How are projects judged?",
         answer:
-          "€12,000 in cash prizes across the Cardano, BSV Association and API3 tracks, plus $16,000 in audit credits. Details are on the Prizes page.",
+          "Live, on Saturday from 15:00 to 17:00. Each partner judges its own track; present to the judges of every track you entered. Judges and criteria are listed under each track on the Prizes page.",
         status: "confirmed",
       },
       {
         question: "When are winners announced?",
         answer:
-          "On Saturday 31 October at 17:30, at the closing ceremony on the hackathon stage.",
+          "Saturday at 17:30, at the closing ceremony on the hackathon stage.",
         status: "confirmed",
       },
       {
         question: "How are prizes paid out?",
         answer:
-          "Prizes are paid out directly by TUM Blockchain Club. The payout scheme is announced later.",
+          "Prizes are paid out by TUM Blockchain Club. Details will be announced.",
         status: "partial-tbd",
-      },
-      {
-        question: "Can one project enter more than one track?",
-        answer:
-          "Yes. A project can enter up to three partner tracks, and every project is also judged for the TUM Blockchain Track automatically.",
-        status: "confirmed",
       },
     ],
   },
@@ -267,42 +248,28 @@ export const faqGroups: FaqGroup[] = [
     title: "During the event",
     items: [
       {
-        question: "Will there be mentors?",
-        answer: "Yes. Mentor support details will be announced soon.",
-        status: "partial-tbd",
-      },
-      {
-        question: "How do I get help while building?",
-        answer: "From mentors on-site and in our Telegram community.",
+        question: "Will there be workshops?",
+        answer:
+          "Yes, on Friday in the Workshop Room: Cardano at 10:30, API3 at 11:00 and BSV Association at 11:30.",
         status: "confirmed",
       },
       {
-        question: "Will there be workshops?",
+        question: "Will there be mentors, and how do I get help?",
         answer:
-          "Yes. Partner workshops run on Friday morning. Times are on the Schedule page and under each track on the Prizes page.",
-        status: "partial-tbd",
+          "Yes. Partner teams support their tracks on-site and online; each track's support options are on the Prizes page. For anything else, ask in the Telegram group.",
+        status: "confirmed",
+      },
+      {
+        question: "Is food provided?",
+        answer:
+          "Yes. Lunch and dinner on Friday, breakfast and lunch on Saturday, sponsored by BSV Association and Cardano. Times are on the Schedule page.",
+        status: "confirmed",
       },
       {
         question: "Can I build overnight?",
         answer:
-          "Yes. The venue stays open through the night, so you can keep building from Friday until the submission deadline on Saturday at 15:00.",
+          "Yes. The venue stays open through Friday night until the deadline on Saturday.",
         status: "confirmed",
-      },
-      {
-        question: "What should I bring?",
-        answer:
-          "Your laptop, charger, and a valid ID. Any additional packing notes will be announced soon.",
-        status: "partial-tbd",
-      },
-      {
-        question: "Is food provided?",
-        answer: FALLBACK_TEXT,
-        status: "tbd",
-      },
-      {
-        question: "Is there accommodation?",
-        answer: "Announced soon.",
-        status: "tbd",
       },
       {
         question: "Will there be WiFi and power?",
@@ -310,10 +277,22 @@ export const faqGroups: FaqGroup[] = [
         status: "confirmed",
       },
       {
-        question: "Do you have accessibility arrangements?",
+        question: "What should I bring?",
         answer:
-          "Accessibility details will be announced soon. For specific needs, contact hackathon@tum-blockchain.com.",
-        status: "partial-tbd",
+          "Your laptop, charger and a valid ID; IDs are checked at the entrance. If you plan to stay overnight, bring a sleeping bag.",
+        status: "confirmed",
+      },
+      {
+        question: "Is there accommodation?",
+        answer:
+          "Only on the night of 30 to 31 October, at the venue. Bring your own sleeping bag and mat if you want to sleep there.",
+        status: "confirmed",
+      },
+      {
+        question: "Who do I contact with questions?",
+        answer:
+          "Email hackathon@tum-blockchain.com or ask in the hackathon Telegram group.",
+        status: "confirmed",
       },
     ],
   },

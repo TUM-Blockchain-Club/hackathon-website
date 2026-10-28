@@ -74,9 +74,7 @@ describe("site component interactions", () => {
     await user.click(participantQuestion);
 
     expect(
-      screen.getByText(
-        /Anyone interested in building in the blockchain and AI space/i,
-      ),
+      screen.getByText(/Anyone who wants to build with blockchain and AI/i),
     ).toBeTruthy();
   });
 
@@ -305,7 +303,8 @@ describe("site component interactions", () => {
 
     expect(screen.getByText("Hacking continues")).toBeTruthy();
     expect(screen.getByText("Overnight")).toBeTruthy();
-    expect(screen.getByText("8 sessions")).toBeTruthy();
+    // Only sessions get a card; interludes render as plain rows.
+    expect(screen.getAllByRole("article")).toHaveLength(8);
 
     // Interludes are context, not search results.
     await user.type(

@@ -5,8 +5,10 @@ export const scheduleContent = {
   description:
     "Find workshops, connecting hours, meal times and start and finish times here.",
   fallback: "Full schedule coming soon.",
-  /** Munich is back on CET (UTC+1) after the 25 October 2026 clock change. */
-  timezone: "CET",
+  /**
+   * Munich is back on CET (UTC+1) after the 25 October 2026 clock change.
+   * Only used for countdown/live maths; times are shown without a zone.
+   */
   utcOffset: "+01:00",
   /** Hacking starts; the homepage countdown counts down to this moment. */
   kickoff: { date: "2026-10-30", time: "09:00" },
@@ -29,13 +31,11 @@ export const scheduleDays: ScheduleDay[] = [
         startTime: "08:00",
         title: "Doors Open",
         type: "Milestone",
-        note: "Doors open at the House of Communication. Check in, grab your badge, find your team and get set up for two days of building.",
       },
       {
         startTime: "09:00",
         title: "Hackathon Starts",
         type: "Milestone",
-        note: "Hacking begins. The venue stays open through the night, so you can keep building until Saturday 15:00.",
       },
       {
         startTime: "09:30",
@@ -105,18 +105,16 @@ export const scheduleDays: ScheduleDay[] = [
         startTime: "12:45",
         endTime: "13:30",
         title: "Lunch",
-        titleSuffix: "sponsored by BSV and Cardano",
+        titleSuffix: "sponsored by BSV Association and Cardano",
         type: "Meal",
         location: "Hacker Area",
-        note: "Lunch break. Step away from the keyboard, refuel, and meet the other teams.",
       },
       {
         startTime: "19:00",
         title: "Dinner",
-        titleSuffix: "sponsored by BSV and Cardano",
+        titleSuffix: "sponsored by BSV Association and Cardano",
         type: "Meal",
         location: "Hacker Area",
-        note: "Dinner is served. Take a break, refuel, and catch up with the other teams.",
       },
     ],
   },
@@ -131,25 +129,22 @@ export const scheduleDays: ScheduleDay[] = [
       {
         startTime: "09:00",
         title: "Breakfast",
-        titleSuffix: "sponsored by BSV and Cardano",
+        titleSuffix: "sponsored by BSV Association and Cardano",
         type: "Meal",
         location: "Hacker Area",
-        note: "Breakfast to start day two. Grab a coffee and get back to building.",
       },
       {
         startTime: "12:45",
         endTime: "13:30",
         title: "Lunch",
-        titleSuffix: "sponsored by BSV and Cardano",
+        titleSuffix: "sponsored by BSV Association and Cardano",
         type: "Meal",
         location: "Hacker Area",
-        note: "Lunch break. Step away from the keyboard, refuel, and meet the other teams.",
       },
       {
         startTime: "15:00",
         title: "Submission Deadline",
         type: "Milestone",
-        note: "Building time is over: Devfolio submissions close at 15:00 sharp and judging begins. Thanks for building with us.",
       },
       {
         startTime: "15:00",

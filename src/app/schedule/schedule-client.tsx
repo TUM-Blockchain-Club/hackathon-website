@@ -54,18 +54,6 @@ function weekdayLabel(date: string) {
   });
 }
 
-function longDateLabel(date: string) {
-  return new Date(`${date}T12:00:00Z`)
-    .toLocaleDateString("en-GB", {
-      weekday: "short",
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      timeZone: "UTC",
-    })
-    .replace(",", "");
-}
-
 function getSessionStatus(
   now: number,
   date: string,
@@ -175,8 +163,8 @@ function SessionCard({
   const timeRange = session.timeTba
     ? "time to be announced"
     : session.endTime
-      ? `${session.startTime} – ${session.endTime} ${scheduleContent.timezone}`
-      : `${session.startTime} ${scheduleContent.timezone}`;
+      ? `${session.startTime} – ${session.endTime}`
+      : session.startTime;
   const speakers = session.speakers ?? [];
 
   return (
@@ -198,11 +186,6 @@ function SessionCard({
         <span className="schedule-rail__time font-mono text-xl font-semibold tabular-nums lg:text-2xl">
           {session.timeTba ? "TBA" : session.startTime}
         </span>
-        {!session.timeTba && (
-          <span className="mt-1 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-white/35">
-            {scheduleContent.timezone}
-          </span>
-        )}
       </div>
       <span className="schedule-node" aria-hidden="true" />
 
@@ -233,6 +216,18 @@ function SessionCard({
           </div>
         )}
 
+        {/* Mobile time: the rail above is hidden below sm */}
+        <p className="mb-2 flex items-baseline gap-2 font-mono tabular-nums sm:hidden">
+          <span className="schedule-rail__time text-2xl font-bold tracking-tight">
+            {session.timeTba ? "TBA" : session.startTime}
+          </span>
+          {!session.timeTba && session.endTime && (
+            <span className="text-sm font-semibold text-white/60">
+              – {session.endTime}
+            </span>
+          )}
+        </p>
+
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
             <h3 className="font-display text-xl font-semibold leading-[1.15] text-white sm:text-2xl">
@@ -245,7 +240,7 @@ function SessionCard({
             </h3>
           </div>
 
-          <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <div className="flex shrink-0 flex-wrap items-center gap-2 empty:hidden">
             {status === "live" && (
               <span className="schedule-chip schedule-chip--live">
                 <span className="schedule-live-dot" aria-hidden="true" />
@@ -268,7 +263,7 @@ function SessionCard({
               {session.location}
             </span>
           )}
-          <span className="inline-flex items-center gap-2 tabular-nums">
+          <span className="hidden items-center gap-2 tabular-nums sm:inline-flex">
             <Clock className="schedule-icon size-[1.1em]" aria-hidden="true" />
             {weekdayLabel(date)}, {timeRange}
           </span>
@@ -445,22 +440,6 @@ export function ScheduleClient({
           </div>
         ) : filteredSessions.length > 0 ? (
           <div className="mt-8">
-            {/* Day readout strip */}
-            <div className="mb-6 flex items-center gap-4 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
-              <span className="text-tbc-yellow">
-                Day {String(activeDayIdx + 1).padStart(2, "0")}
-              </span>
-              <span>{longDateLabel(activeDay.date)}</span>
-              <span
-                className="schedule-strip-rule h-px flex-1"
-                aria-hidden="true"
-              />
-              <span>
-                {filteredSessions.length}{" "}
-                {filteredSessions.length === 1 ? "session" : "sessions"}
-              </span>
-            </div>
-
             <ol className="schedule-timeline">
               {filteredSessions.flatMap((session) => {
                 // Keep the day's sequence number stable while searching.

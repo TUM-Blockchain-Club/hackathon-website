@@ -179,7 +179,7 @@ export default function HomePage() {
                     8 AM - 6 PM
                   </p>
                 </div>
-                <div className="grid grid-cols-[96px_1fr]">
+                <div className="grid grid-cols-[64px_minmax(0,1fr)] sm:grid-cols-[96px_minmax(0,1fr)]">
                   {day.sessions.slice(0, 6).map((session) => {
                     const typeStyle = compactScheduleTypeStyles[session.type];
 
@@ -188,15 +188,15 @@ export default function HomePage() {
                         key={`${day.date}-${session.startTime}-${session.title}`}
                         className="contents"
                       >
-                        <div className="flex items-center justify-center border-t border-white/10 bg-black/60 px-3 py-3">
-                          <span className="font-mono text-lg font-bold tracking-tight text-white tabular-nums drop-shadow-[0_1px_4px_rgba(255,255,255,0.2)] sm:text-xl">
+                        <div className="flex items-center justify-center border-t border-white/10 bg-black/60 px-1.5 py-3 sm:px-3">
+                          <span className="font-mono text-base font-bold tracking-tight text-white tabular-nums drop-shadow-[0_1px_4px_rgba(255,255,255,0.2)] sm:text-xl">
                             {session.timeTba ? "TBA" : session.startTime}
                           </span>
                         </div>
-                        <div className="border-t border-white/[0.08] p-2">
+                        <div className="min-w-0 border-t border-white/[0.08] p-1.5 sm:p-2">
                           <div
                             className={cn(
-                              "flex min-h-14 items-center gap-3 border px-3.5 py-2.5 transition-colors",
+                              "flex min-h-14 items-center gap-3 border px-3 py-2.5 transition-colors sm:px-3.5",
                               typeStyle.card,
                             )}
                           >
@@ -216,10 +216,10 @@ export default function HomePage() {
                                   </p>
                                 ) : null}
                               </div>
-                              <p className="mt-1 truncate font-display text-sm font-semibold leading-tight text-white">
+                              <p className="mt-1 break-words font-display text-sm font-semibold leading-tight text-white sm:truncate">
                                 {session.title}
                                 {session.titleSuffix ? (
-                                  <span className="ml-1.5 text-xs font-medium text-white/45">
+                                  <span className="mt-0.5 block text-xs font-medium text-white/45 sm:ml-1.5 sm:mt-0 sm:inline">
                                     {session.titleSuffix}
                                   </span>
                                 ) : null}

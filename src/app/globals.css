@@ -840,16 +840,6 @@ select {
   border: 1px solid color-mix(in srgb, var(--session-accent) 45%, transparent);
 }
 
-.schedule-strip-rule {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 193, 16, 0.5),
-    rgba(244, 67, 54, 0.3) 40%,
-    rgba(111, 61, 226, 0.25) 70%,
-    transparent
-  );
-}
-
 /* Marquee continuous scroll animations */
 @keyframes marquee-left {
   0% {

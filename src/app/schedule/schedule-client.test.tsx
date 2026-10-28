@@ -6,7 +6,6 @@ const { mockScheduleContent, mockScheduleDays } = vi.hoisted(() => ({
     description:
       "Find workshops, connecting hours, meal times and start and finish times here.",
     fallback: "Full schedule coming soon.",
-    timezone: "CET",
     utcOffset: "+01:00",
   },
   mockScheduleDays: [
@@ -68,8 +67,10 @@ describe("ScheduleClient", () => {
 
     // No sequence number or T+ mission clock on the cards.
     expect(screen.queryByText(/T[+-]\d{2}:\d{2}/)).toBeNull();
-    expect(screen.getByText("Fri, 11:00 – 12:00 CET")).toBeTruthy();
+    expect(screen.getByText("Fri, 11:00 – 12:00")).toBeTruthy();
     expect(screen.getByText("Ada Mentor")).toBeTruthy();
+    // Everyone is on site in Munich: times carry no time zone.
+    expect(document.body.textContent).not.toMatch(/\b(CET|CEST|UTC)\b/);
   });
 
   it("switches days and filters sessions by speaker and title", async () => {
