@@ -352,14 +352,21 @@ const tracks: PrizeTrack[] = [
       },
     ],
     workshop: {
-      title: "Cardano Workshop",
+      title: "Agentic Commerce on Cardano: get your agent hired and paid",
       when: "Fri 30 Oct, 10:30–11:00",
       speaker: "Bora Oben, Developer Community Advocate, Cardano",
+      description:
+        "How agents get hired and paid on Cardano, per job with Masumi escrow on Sokosumi or per request with x402, plus build ideas, judging, and where to find starters, guides and help.",
     },
     judges: [
       {
         name: "Bora Oben",
         role: "Developer Community Advocate, Cardano",
+      },
+      {
+        name: "Vladislav Kudrin",
+        role: "Web3 Solutions Architect, Cardano Foundation",
+        imageSrc: "/speakers/vladislav_kudrin.jpg",
       },
     ],
     support: [

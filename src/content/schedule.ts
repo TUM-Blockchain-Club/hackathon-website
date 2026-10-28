@@ -54,12 +54,12 @@ export const scheduleDays: ScheduleDay[] = [
       {
         startTime: "10:30",
         endTime: "11:00",
-        title: "Cardano Workshop",
+        title: "Agentic Commerce on Cardano: get your agent hired and paid",
         type: "Workshop",
         location: "Workshop Room",
         sponsor: "Cardano",
         sponsorLogoSrc: "/sponsors/cardano_icon.svg",
-        note: "A 30-minute workshop from Cardano to help you get started on the Agentic Commerce on Cardano track.",
+        note: "How agents get hired and paid on Cardano, per job with Masumi escrow on Sokosumi or per request with x402, plus build ideas, judging, and where to find starters, guides and help.",
         speakers: [
           {
             name: "Bora Oben",
