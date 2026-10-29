@@ -52,23 +52,6 @@ export const scheduleDays: ScheduleDay[] = [
         ],
       },
       {
-        startTime: "10:30",
-        endTime: "11:00",
-        title: "Agentic Commerce on Cardano: get your agent hired and paid",
-        type: "Workshop",
-        location: "Workshop Room",
-        sponsor: "Cardano",
-        sponsorLogoSrc: "/sponsors/cardano_icon.svg",
-        note: "How agents get hired and paid on Cardano, per job with Masumi escrow on Sokosumi or per request with x402, plus build ideas, judging, and where to find starters, guides and help.",
-        speakers: [
-          {
-            name: "Bora Oben",
-            role: "Developer Community Advocate, Cardano",
-            imageSrc: "/speakers/bora_oben.jpg",
-          },
-        ],
-      },
-      {
         startTime: "11:00",
         endTime: "11:30",
         title: "API3 Workshop: Building with AirnodeHub",
@@ -99,6 +82,23 @@ export const scheduleDays: ScheduleDay[] = [
             name: "Axel Maisonneuve",
             role: "Head of DevRel, BSV Association",
             imageSrc: "/speakers/axel_maisonneuve.jpg",
+          },
+        ],
+      },
+      {
+        startTime: "12:00",
+        endTime: "12:30",
+        title: "Agentic Commerce on Cardano: get your agent hired and paid",
+        type: "Workshop",
+        location: "Workshop Room",
+        sponsor: "Cardano",
+        sponsorLogoSrc: "/sponsors/cardano_icon.svg",
+        note: "How agents get hired and paid on Cardano, per job with Masumi escrow on Sokosumi or per request with x402, plus build ideas, judging, and where to find starters, guides and help.",
+        speakers: [
+          {
+            name: "Bora Oben",
+            role: "Developer Community Advocate, Cardano",
+            imageSrc: "/speakers/bora_oben.jpg",
           },
         ],
       },

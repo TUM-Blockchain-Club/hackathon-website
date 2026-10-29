@@ -182,7 +182,7 @@ describe("site content contract", () => {
       "€400",
     ]);
     expect(api3?.workshop?.when).toBe("Fri 30 Oct, 11:00–11:30");
-    expect(cardano?.workshop?.when).toBe("Fri 30 Oct, 10:30–11:00");
+    expect(cardano?.workshop?.when).toBe("Fri 30 Oct, 12:00–12:30");
     expect(bsv?.workshop?.when).toBe("Fri 30 Oct, 11:30–12:00");
 
     // Payout formats (USDC, fiat, ...) are never published.

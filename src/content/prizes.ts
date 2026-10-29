@@ -353,7 +353,7 @@ const tracks: PrizeTrack[] = [
     ],
     workshop: {
       title: "Agentic Commerce on Cardano: get your agent hired and paid",
-      when: "Fri 30 Oct, 10:30–11:00",
+      when: "Fri 30 Oct, 12:00–12:30",
       speaker: "Bora Oben, Developer Community Advocate, Cardano",
       description:
         "How agents get hired and paid on Cardano, per job with Masumi escrow on Sokosumi or per request with x402, plus build ideas, judging, and where to find starters, guides and help.",
