@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { scheduleContent } from "@/content/schedule";
 import { cn } from "@/lib/utils";
 
-// Use the same kickoff and explicit Munich offset as the published agenda.
-const DEFAULT_TARGET_DATE = `${scheduleContent.kickoff.date}T${scheduleContent.kickoff.time}:00${scheduleContent.utcOffset}`;
+// Use the same doors-open time and explicit Munich offset as the published agenda.
+const DEFAULT_TARGET_DATE = `${scheduleContent.doorsOpen.date}T${scheduleContent.doorsOpen.time}:00${scheduleContent.utcOffset}`;
 
 type TimeRemaining = {
   days: number;
@@ -42,7 +42,7 @@ type CountdownBannerProps = {
 export function CountdownBanner({
   targetDate = DEFAULT_TARGET_DATE,
   eyebrow = "COUNTDOWN TO",
-  title = "TUM Blockchain Hackathon",
+  title = "Doors Open",
   className,
 }: CountdownBannerProps) {
   const [timeLeft, setTimeLeft] = useState<TimeRemaining>(() =>

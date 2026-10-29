@@ -20,10 +20,11 @@ describe("CountdownBanner timing", () => {
     vi.restoreAllMocks();
   });
 
-  it("counts down to the published 09:00 CET kickoff (08:00 UTC)", () => {
-    vi.spyOn(Date, "now").mockReturnValue(Date.UTC(2026, 9, 27, 8));
+  it("counts down to the published 08:00 CET doors open (07:00 UTC)", () => {
+    vi.spyOn(Date, "now").mockReturnValue(Date.UTC(2026, 9, 27, 7));
     const { container } = render(<CountdownBanner />);
 
+    expect(container.querySelector("h2")?.textContent).toBe("Doors Open");
     expect(digits(container)).toEqual(["03", "00", "00", "00"]);
     act(() => {
       vi.mocked(Date.now).mockReturnValue(Date.now() + 1000);
@@ -35,11 +36,11 @@ describe("CountdownBanner timing", () => {
   it("shows hours, minutes and seconds independently", () => {
     vi.spyOn(Date, "now").mockReturnValue(Date.UTC(2026, 9, 27, 10, 25, 4));
     const { container } = render(<CountdownBanner />);
-    expect(digits(container)).toEqual(["02", "21", "34", "56"]);
+    expect(digits(container)).toEqual(["02", "20", "34", "56"]);
   });
 
-  it("stays at zero from kickoff onward", () => {
-    vi.spyOn(Date, "now").mockReturnValue(Date.UTC(2026, 9, 30, 7, 59, 59));
+  it("stays at zero from doors open onward", () => {
+    vi.spyOn(Date, "now").mockReturnValue(Date.UTC(2026, 9, 30, 6, 59, 59));
     const { container } = render(<CountdownBanner />);
     expect(digits(container)).toEqual(["00", "00", "00", "01"]);
 

@@ -10,7 +10,9 @@ export const scheduleContent = {
    * Only used for countdown/live maths; times are shown without a zone.
    */
   utcOffset: "+01:00",
-  /** Hacking starts; the homepage countdown counts down to this moment. */
+  /** Doors open; the homepage countdown counts down to this moment. */
+  doorsOpen: { date: "2026-10-30", time: "08:00" },
+  /** Hacking starts. */
   kickoff: { date: "2026-10-30", time: "09:00" },
 };
 
@@ -28,7 +30,7 @@ export const scheduleDays: ScheduleDay[] = [
     ],
     sessions: [
       {
-        startTime: "08:00",
+        startTime: scheduleContent.doorsOpen.time,
         title: "Doors Open",
         type: "Milestone",
       },
