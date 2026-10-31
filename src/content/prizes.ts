@@ -547,8 +547,8 @@ const tracks: PrizeTrack[] = [
       "Adevar Labs distributes its audit credits among these three projects. The credits are valid for one year from the award.",
     ],
     judges: [
-      { name: "Benjamin Bosnjak", role: "Member, TUM Blockchain Club" },
       { name: "Zafar Nasimov", role: "Member, TUM Blockchain Club" },
+      { name: "Vasily Sizykh", role: "Member, TUM Blockchain Club" },
     ],
   },
 ];

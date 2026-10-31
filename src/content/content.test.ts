@@ -298,8 +298,8 @@ describe("site content contract", () => {
       "Pre-Audit Express",
     ]);
     expect(tum?.judges?.map((judge) => judge.name)).toEqual([
-      "Benjamin Bosnjak",
       "Zafar Nasimov",
+      "Vasily Sizykh",
     ]);
 
     expect(prizeContent.fallback).toBe("Prize tracks announced soon.");
