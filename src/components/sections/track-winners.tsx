@@ -3,7 +3,53 @@ import Link from "next/link";
 import { ArrowUpRight, LockKeyhole, Trophy } from "lucide-react";
 
 import { prizeTracks } from "@/content/prizes";
-import { winnerResults, type WinnerResults } from "@/content/winners";
+import {
+  winnerResults,
+  type TrackWinner,
+  type WinnerResults,
+} from "@/content/winners";
+
+function WinnerDetails({ winner }: { winner: TrackWinner }) {
+  const identity = (
+    <>
+      <p className="break-words text-sm font-semibold text-tbc-yellow">
+        {winner.team}
+      </p>
+      <p className="mt-1 break-words text-xs leading-relaxed text-white/70">
+        {winner.project}
+      </p>
+    </>
+  );
+
+  // Missing or invalid destinations leave the same plain text in place.
+  // Accept Devfolio project/profile URLs, not arbitrary protocols or lookalike hosts.
+  let href: string | undefined;
+  try {
+    const url = new URL(winner.devfolioUrl ?? "");
+    if (
+      url.protocol === "https:" &&
+      (url.hostname === "devfolio.co" ||
+        url.hostname.endsWith(".devfolio.co")) &&
+      !url.username &&
+      !url.password
+    ) {
+      href = url.href;
+    }
+  } catch {
+    // An incomplete content edit must not break the landing page.
+  }
+
+  return href ? (
+    <a
+      href={href}
+      className="block hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tbc-yellow"
+    >
+      {identity}
+    </a>
+  ) : (
+    identity
+  );
+}
 
 export function TrackWinners({
   results = winnerResults,
@@ -123,14 +169,9 @@ export function TrackWinners({
                         )}
                         <div className="mt-5 border-t border-white/10 pt-4">
                           {announced ? (
-                            <>
-                              <p className="break-words text-sm font-semibold text-tbc-yellow">
-                                {announced.team}
-                              </p>
-                              <p className="mt-1 break-words text-xs leading-relaxed text-white/70">
-                                {announced.project}
-                              </p>
-                            </>
+                            // Only pass published identities to the link renderer.
+                            // Locked entries render neither names nor Devfolio URLs.
+                            <WinnerDetails winner={announced} />
                           ) : (
                             <>
                               <p className="flex items-center gap-2 text-xs font-medium text-white/75">

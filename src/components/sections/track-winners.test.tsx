@@ -8,8 +8,16 @@ const stagedResults: WinnerResults = {
   published: false,
   tracks: {
     "bsv-association": {
-      "1st": { team: "Unannounced team", project: "Unannounced project" },
-      "2nd": { team: "Incomplete entry", project: " " },
+      "1st": {
+        team: "Unannounced team",
+        project: "Unannounced project",
+        devfolioUrl: "https://devfolio.co/projects/first-project",
+      },
+      "2nd": {
+        team: "Incomplete entry",
+        project: " ",
+        devfolioUrl: "https://devfolio.co/projects/incomplete-project",
+      },
     },
   },
 };
@@ -21,6 +29,7 @@ describe("track winner publication", () => {
     expect(screen.getAllByText("Winner locked")).toHaveLength(12);
     expect(container.innerHTML).not.toContain("Unannounced");
     expect(container.innerHTML).not.toContain("Incomplete entry");
+    expect(container.innerHTML).not.toContain("devfolio.co");
     expect(screen.getByText("€2,500")).toBeInTheDocument();
     expect(screen.getByText("€3,000")).toBeInTheDocument();
     expect(screen.getByText("$10,000")).toBeInTheDocument();
@@ -37,5 +46,76 @@ describe("track winner publication", () => {
     expect(screen.queryByText("Incomplete entry")).not.toBeInTheDocument();
     expect(screen.getAllByText("Winner locked")).toHaveLength(11);
     expect(screen.queryByText("Results locked")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("link", {
+        name: "Unannounced team Unannounced project",
+      }),
+    ).toHaveAttribute("href", "https://devfolio.co/projects/first-project");
+    expect(
+      document.querySelector('a[href*="incomplete-project"]'),
+    ).not.toBeInTheDocument();
   });
+
+  it("keeps the locked markup identical when URLs are added", () => {
+    const { container, rerender } = render(<TrackWinners />);
+    const lockedMarkup = container.innerHTML;
+    rerender(<TrackWinners results={stagedResults} />);
+    expect(container.innerHTML).toBe(lockedMarkup);
+  });
+
+  it("links each track's winner to their own supplied destination", () => {
+    render(
+      <TrackWinners
+        results={{
+          published: true,
+          tracks: {
+            ...stagedResults.tracks,
+            cardano: {
+              "2nd": {
+                team: "Cardano winner",
+                project: "Second project",
+                devfolioUrl: "https://devfolio.co/@supplied-profile",
+              },
+            },
+          },
+        }}
+      />,
+    );
+    expect(
+      screen.getByRole("link", { name: "Cardano winner Second project" }),
+    ).toHaveAttribute("href", "https://devfolio.co/@supplied-profile");
+    expect(
+      screen.getByRole("link", {
+        name: "Unannounced team Unannounced project",
+      }),
+    ).toHaveAttribute("href", "https://devfolio.co/projects/first-project");
+  });
+
+  it.each([
+    undefined,
+    "",
+    "not-a-url",
+    "javascript:alert(1)",
+    "http://devfolio.co/projects/example",
+    "https://devfolio.co.example.com/projects/example",
+    "https://example.com/projects/example",
+  ])(
+    "leaves winners without a valid Devfolio URL as plain text (%s)",
+    (devfolioUrl) => {
+      render(
+        <TrackWinners
+          results={{
+            published: true,
+            tracks: {
+              api3: {
+                "1st": { team: "API3 winner", project: "Project", devfolioUrl },
+              },
+            },
+          }}
+        />,
+      );
+      expect(screen.getByText("API3 winner")).toBeInTheDocument();
+      expect(screen.getByText("API3 winner").closest("a")).toBeNull();
+    },
+  );
 });
