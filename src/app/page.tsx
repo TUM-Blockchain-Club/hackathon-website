@@ -7,6 +7,7 @@ import { CountdownBanner } from "@/components/sections/countdown-banner";
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
 import { SpeakersJudges } from "@/components/sections/speakers-judges";
 import { RollingSponsors } from "@/components/sections/rolling-sponsors";
+import { TrackWinners } from "@/components/sections/track-winners";
 import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { buttonVariants } from "@/components/ui/button";
 import { homeContent } from "@/content/home";
@@ -103,6 +104,8 @@ export default function HomePage() {
       <SectionShell>
         <PrizeMainPool tracks={prizeTracks} showDetailsLink />
       </SectionShell>
+
+      <TrackWinners />
 
       {/* 2. 2026 Sponsors */}
       <SectionShell
