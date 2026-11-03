@@ -1,7 +1,7 @@
 import { act, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { CountdownBanner } from "./countdown-banner";
+import { CountdownBanner, ThankYouBanner } from "./countdown-banner";
 
 function digits(container: HTMLElement) {
   return Array.from(
@@ -64,5 +64,20 @@ describe("CountdownBanner timing", () => {
     expect(digits(container)).toEqual(["00", "00", "30", "00"]);
     unmount();
     expect(vi.getTimerCount()).toBe(0);
+  });
+});
+
+describe("ThankYouBanner", () => {
+  it("thanks attendees in the countdown's frame, without any digits", () => {
+    const { container, getByRole } = render(<ThankYouBanner />);
+
+    expect(getByRole("region", { name: "Thank you" })).toBeInTheDocument();
+    expect(container.querySelector("h2")?.textContent).toBe(
+      "Thanks for attending",
+    );
+    expect(container.querySelector(".countdown-3d-num")?.textContent).toBe(
+      "See you next year",
+    );
+    expect(container.textContent).not.toMatch(/DAYS|HOURS|MINUTES|SECONDS/);
   });
 });

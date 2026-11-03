@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { scheduleContent } from "@/content/schedule";
 import { cn } from "@/lib/utils";
 
@@ -32,41 +32,24 @@ function calculateTimeRemaining(targetIso: string): TimeRemaining {
   return { days, hours, minutes, seconds, isComplete: false };
 }
 
-type CountdownBannerProps = {
-  targetDate?: string;
-  eyebrow?: string;
-  title?: string;
-  className?: string;
-};
-
-export function CountdownBanner({
-  targetDate = DEFAULT_TARGET_DATE,
-  eyebrow = "COUNTDOWN TO",
-  title = "Doors Open",
+// The banner frame shared by the countdown and the post-event thank-you:
+// black band, faint grid, yellow and purple glows, eyebrow + title on the left.
+function BannerShell({
+  label,
+  eyebrow,
+  title,
   className,
-}: CountdownBannerProps) {
-  const [timeLeft, setTimeLeft] = useState<TimeRemaining>(() =>
-    calculateTimeRemaining(targetDate),
-  );
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft(calculateTimeRemaining(targetDate));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [targetDate]);
-
-  const units = [
-    { label: "DAYS", value: timeLeft.days },
-    { label: "HOURS", value: timeLeft.hours },
-    { label: "MINUTES", value: timeLeft.minutes },
-    { label: "SECONDS", value: timeLeft.seconds },
-  ];
-
+  children,
+}: {
+  label: string;
+  eyebrow: string;
+  title: string;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
     <section
-      aria-label="Hackathon Countdown"
+      aria-label={label}
       className={cn(
         "relative isolate overflow-hidden border-y border-white/10 bg-black py-8 md:py-10",
         className,
@@ -102,28 +85,100 @@ export function CountdownBanner({
           </h2>
         </div>
 
-        {/* Right Side: 4 Countdown Digits */}
-        <div className="grid grid-cols-4 gap-3 sm:gap-6 md:gap-8 lg:gap-10">
-          {units.map((unit) => (
-            <div
-              key={unit.label}
-              className="flex min-w-[62px] flex-col items-center sm:min-w-[76px] md:min-w-[90px] lg:min-w-[104px]"
-            >
-              <div className="relative flex items-center justify-center">
-                <span
-                  suppressHydrationWarning
-                  className="countdown-3d-num block select-none text-center font-display text-3xl font-black leading-none tracking-tight sm:text-5xl md:text-6xl lg:text-7xl tabular-nums"
-                >
-                  {String(unit.value).padStart(2, "0")}
-                </span>
-              </div>
-              <span className="mt-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/70 sm:text-xs">
-                {unit.label}
-              </span>
-            </div>
-          ))}
-        </div>
+        {children}
       </div>
     </section>
+  );
+}
+
+type CountdownBannerProps = {
+  targetDate?: string;
+  eyebrow?: string;
+  title?: string;
+  className?: string;
+};
+
+export function CountdownBanner({
+  targetDate = DEFAULT_TARGET_DATE,
+  eyebrow = "COUNTDOWN TO",
+  title = "Doors Open",
+  className,
+}: CountdownBannerProps) {
+  const [timeLeft, setTimeLeft] = useState<TimeRemaining>(() =>
+    calculateTimeRemaining(targetDate),
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft(calculateTimeRemaining(targetDate));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [targetDate]);
+
+  const units = [
+    { label: "DAYS", value: timeLeft.days },
+    { label: "HOURS", value: timeLeft.hours },
+    { label: "MINUTES", value: timeLeft.minutes },
+    { label: "SECONDS", value: timeLeft.seconds },
+  ];
+
+  return (
+    <BannerShell
+      label="Hackathon Countdown"
+      eyebrow={eyebrow}
+      title={title}
+      className={className}
+    >
+      {/* Right Side: 4 Countdown Digits */}
+      <div className="grid grid-cols-4 gap-3 sm:gap-6 md:gap-8 lg:gap-10">
+        {units.map((unit) => (
+          <div
+            key={unit.label}
+            className="flex min-w-[62px] flex-col items-center sm:min-w-[76px] md:min-w-[90px] lg:min-w-[104px]"
+          >
+            <div className="relative flex items-center justify-center">
+              <span
+                suppressHydrationWarning
+                className="countdown-3d-num block select-none text-center font-display text-3xl font-black leading-none tracking-tight sm:text-5xl md:text-6xl lg:text-7xl tabular-nums"
+              >
+                {String(unit.value).padStart(2, "0")}
+              </span>
+            </div>
+            <span className="mt-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-white/70 sm:text-xs">
+              {unit.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </BannerShell>
+  );
+}
+
+type ThankYouBannerProps = {
+  eyebrow?: string;
+  title?: string;
+  message?: string;
+  className?: string;
+};
+
+// Replaces the countdown once the hackathon is over.
+export function ThankYouBanner({
+  eyebrow = "HACKATHON 2026",
+  title = "Thanks for attending",
+  message = "See you next year",
+  className,
+}: ThankYouBannerProps) {
+  return (
+    <BannerShell
+      label="Thank you"
+      eyebrow={eyebrow}
+      title={title}
+      className={className}
+    >
+      <p className="countdown-3d-num select-none pb-3 text-center font-display text-3xl font-black leading-none tracking-tight sm:text-5xl md:text-right lg:text-6xl xl:text-7xl">
+        {message}
+      </p>
+    </BannerShell>
   );
 }

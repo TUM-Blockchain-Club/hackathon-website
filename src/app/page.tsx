@@ -3,10 +3,9 @@ import { ArrowRight, Calendar } from "lucide-react";
 
 import { SectionShell } from "@/components/primitives/section-shell";
 import { CurrentYearSponsors } from "@/components/sections/current-year-sponsors";
-import { CountdownBanner } from "@/components/sections/countdown-banner";
+import { ThankYouBanner } from "@/components/sections/countdown-banner";
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
 import { SpeakersJudges } from "@/components/sections/speakers-judges";
-import { RollingSponsors } from "@/components/sections/rolling-sponsors";
 import { TrackWinners } from "@/components/sections/track-winners";
 import { HeroAsciiOne } from "@/components/ui/hero-ascii-one";
 import { buttonVariants } from "@/components/ui/button";
@@ -15,7 +14,6 @@ import { people, peopleContent } from "@/content/people";
 import { prizeTracks } from "@/content/prizes";
 import { scheduleDays } from "@/content/schedule";
 import {
-  allSponsors,
   generalTrackSponsors,
   platformPartners,
   premiumTrackSponsors,
@@ -99,7 +97,7 @@ export default function HomePage() {
         primaryCta={homeContent.primaryCta}
         secondaryCta={homeContent.secondaryCta}
       />
-      <CountdownBanner />
+      <ThankYouBanner />
       {/* 1. Prize Pool */}
       <SectionShell>
         <PrizeMainPool tracks={prizeTracks} showDetailsLink />
@@ -266,15 +264,6 @@ export default function HomePage() {
           />
         </SectionShell>
       ) : null}
-
-      {/* 5. Past Sponsors */}
-      <SectionShell
-        eyebrow="Last year"
-        title="Past Sponsors & Partners"
-        description="A look back at the teams that powered previous editions of the hackathon."
-      >
-        <RollingSponsors sponsors={allSponsors} variant="compact" />
-      </SectionShell>
     </>
   );
 }
