@@ -64,14 +64,14 @@ function WinnerDetails({ winner }: { winner: TrackWinner }) {
   return href ? (
     <a
       href={href}
-      className="group flex items-end justify-between gap-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tbc-yellow"
+      className="group flex flex-1 items-start justify-between gap-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tbc-yellow"
     >
       {identity}
       {/* Signals that the winner opens its Devfolio project page. */}
       <ArrowUpRight
         aria-hidden="true"
         size={16}
-        className="mb-0.5 shrink-0 text-white/55 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-tbc-yellow"
+        className="mb-0.5 shrink-0 self-end text-white/55 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-tbc-yellow"
       />
     </a>
   ) : (
@@ -125,9 +125,9 @@ export function TrackWinners({
             <article
               key={track.slug}
               aria-labelledby={`winner-track-${track.slug}`}
-              className="surface-panel prize-pool-field min-w-0 overflow-hidden"
+              className="surface-panel prize-pool-field flex min-w-0 flex-col overflow-hidden"
             >
-              <div className="p-5 sm:p-7">
+              <div className="flex flex-1 flex-col p-5 sm:p-7">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex min-w-0 items-center gap-3">
                     {mark && (
@@ -159,7 +159,7 @@ export function TrackWinners({
                 </div>
                 <p className="mt-5 text-sm text-white/70">{track.trackName}</p>
 
-                <ol className="mt-5 grid gap-2 sm:grid-cols-3">
+                <ol className="mt-5 grid flex-1 gap-2 sm:grid-cols-3">
                   {prizes.map((prize) => {
                     const winner =
                       results.published && prize.place
@@ -193,8 +193,10 @@ export function TrackWinners({
                             {company.amountNote}
                           </p>
                         )}
-                        <div aria-hidden="true" className="h-5 shrink-0" />
-                        <div className="mt-auto border-t border-white/10 pt-4">
+                        {/* Names start right under the amount so the dividers and
+                            project names line up across a row; the link fills the
+                            rest of the cell so every arrow sits bottom-right. */}
+                        <div className="mt-5 flex flex-1 flex-col border-t border-white/10 pt-4">
                           {announced ? (
                             // Only pass published identities to the link renderer.
                             // Locked entries render neither names nor Devfolio URLs.
