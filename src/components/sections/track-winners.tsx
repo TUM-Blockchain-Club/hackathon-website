@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, LockKeyhole, Trophy } from "lucide-react";
+import { ArrowUpRight, LockKeyhole, Medal, Trophy } from "lucide-react";
 
 import { prizeTracks } from "@/content/prizes";
 import {
@@ -9,16 +9,38 @@ import {
   type WinnerResults,
 } from "@/content/winners";
 
+// Gold, silver and bronze so the three places read apart at a glance.
+const placeStyles: Record<
+  string,
+  { cell: string; badge: string; Icon: typeof Trophy }
+> = {
+  "1st": {
+    cell: "border-tbc-yellow/45 border-t-tbc-yellow bg-tbc-yellow/[0.07]",
+    badge: "bg-tbc-yellow text-black",
+    Icon: Trophy,
+  },
+  "2nd": {
+    cell: "border-[#d9dde3]/30 border-t-[#d9dde3] bg-white/[0.04]",
+    badge: "bg-[#d9dde3] text-black",
+    Icon: Medal,
+  },
+  "3rd": {
+    cell: "border-[#e0965a]/35 border-t-[#e0965a] bg-[#e0965a]/[0.05]",
+    badge: "bg-[#e0965a] text-black",
+    Icon: Medal,
+  },
+};
+
 function WinnerDetails({ winner }: { winner: TrackWinner }) {
   const identity = (
-    <>
-      <p className="break-words text-sm font-semibold text-tbc-yellow">
-        {winner.team}
-      </p>
-      <p className="mt-1 break-words text-xs leading-relaxed text-white/70">
+    <div className="min-w-0">
+      <p className="break-words text-[15px] font-semibold leading-snug text-white">
         {winner.project}
       </p>
-    </>
+      <p className="mt-1 break-words text-xs leading-relaxed text-white/60">
+        {winner.team}
+      </p>
+    </div>
   );
 
   // Missing or invalid destinations leave the same plain text in place.
@@ -42,9 +64,15 @@ function WinnerDetails({ winner }: { winner: TrackWinner }) {
   return href ? (
     <a
       href={href}
-      className="block hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tbc-yellow"
+      className="group flex items-end justify-between gap-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tbc-yellow"
     >
       {identity}
+      {/* Signals that the winner opens its Devfolio project page. */}
+      <ArrowUpRight
+        aria-hidden="true"
+        size={16}
+        className="mb-0.5 shrink-0 text-white/55 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-tbc-yellow"
+      />
     </a>
   ) : (
     identity
@@ -142,23 +170,21 @@ export function TrackWinners({
                         ? winner
                         : undefined;
 
+                    const place = prize.place
+                      ? placeStyles[prize.place]
+                      : undefined;
+
                     return (
                       <li
                         key={prize.place ?? prize.title}
-                        className="min-w-0 border border-white/15 bg-black/25 p-4 first:border-tbc-yellow/35 first:bg-tbc-yellow/[0.04]"
+                        className={`flex min-w-0 flex-col border border-t-2 p-4 ${place?.cell ?? "border-white/15 bg-black/25"}`}
                       >
-                        <div className="flex items-center justify-between gap-2">
-                          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-white/65">
-                            {prize.place} place
-                          </p>
-                          {prize.place === "1st" && (
-                            <Trophy
-                              aria-hidden="true"
-                              size={14}
-                              className="text-tbc-yellow"
-                            />
-                          )}
-                        </div>
+                        <p
+                          className={`inline-flex w-fit items-center gap-1.5 px-2.5 py-1 font-mono text-xs font-bold uppercase tracking-[0.12em] ${place?.badge ?? "bg-white/10 text-white"}`}
+                        >
+                          {place && <place.Icon aria-hidden="true" size={13} />}
+                          {prize.place} place
+                        </p>
                         <p className="mt-2 font-display text-2xl font-bold tracking-tight">
                           {prize.amount}
                         </p>
@@ -167,7 +193,8 @@ export function TrackWinners({
                             {company.amountNote}
                           </p>
                         )}
-                        <div className="mt-5 border-t border-white/10 pt-4">
+                        <div aria-hidden="true" className="h-5 shrink-0" />
+                        <div className="mt-auto border-t border-white/10 pt-4">
                           {announced ? (
                             // Only pass published identities to the link renderer.
                             // Locked entries render neither names nor Devfolio URLs.
@@ -194,11 +221,13 @@ export function TrackWinners({
                 </ol>
               </div>
               <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 bg-black/20 px-5 py-3 sm:px-7">
-                <p className="text-xs text-white/55">
-                  {company
-                    ? `Audit credits by ${company.name}`
-                    : "1st · 2nd · 3rd"}
-                </p>
+                {company ? (
+                  <p className="text-xs text-white/55">
+                    Audit credits by {company.name}
+                  </p>
+                ) : (
+                  <span aria-hidden="true" />
+                )}
                 <Link
                   href={`/prizes#${track.slug}`}
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/80 transition-colors hover:text-tbc-yellow focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tbc-yellow"

@@ -48,7 +48,7 @@ describe("track winner publication", () => {
     expect(screen.queryByText("Results locked")).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", {
-        name: "Unannounced team Unannounced project",
+        name: "Unannounced project Unannounced team",
       }),
     ).toHaveAttribute("href", "https://devfolio.co/projects/first-project");
     expect(
@@ -84,11 +84,11 @@ describe("track winner publication", () => {
       />,
     );
     expect(
-      screen.getByRole("link", { name: "Cardano winner Second project" }),
+      screen.getByRole("link", { name: "Second project Cardano winner" }),
     ).toHaveAttribute("href", "https://devfolio.co/@supplied-profile");
     expect(
       screen.getByRole("link", {
-        name: "Unannounced team Unannounced project",
+        name: "Unannounced project Unannounced team",
       }),
     ).toHaveAttribute("href", "https://devfolio.co/projects/first-project");
   });
@@ -127,22 +127,41 @@ describe("track winner publication", () => {
     expect(screen.queryByText("Winner locked")).not.toBeInTheDocument();
     expect(screen.queryByText("Results locked")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "Dar el eeers Hedgy" }),
+      screen.getByRole("link", { name: "Hedgy Dar el eeers" }),
     ).toHaveAttribute("href", "https://devfolio.co/projects/hedgy-91c5");
     expect(
-      screen.getByRole("link", { name: "Kiko Devs Kiko" }),
+      screen.getByRole("link", { name: "Kiko Kiko Devs" }),
     ).toHaveAttribute("href", "https://devfolio.co/projects/kiko-38f0");
     expect(
-      screen.getByRole("link", { name: "BitcoinMiners AfterLife" }),
+      screen.getByRole("link", { name: "AfterLife BitcoinMiners" }),
     ).toHaveAttribute("href", "https://devfolio.co/projects/afterlife-943e");
     // CreatorPay places in both the API3 and TUM Blockchain tracks.
     expect(
-      screen.getAllByRole("link", { name: "Vibeathon CreatorPay" }),
+      screen.getAllByRole("link", { name: "CreatorPay Vibeathon" }),
     ).toHaveLength(2);
     expect(
       Object.values(winnerResults.tracks).flatMap((places) =>
         Object.values(places),
       ),
     ).toHaveLength(12);
+  });
+
+  it("leads with the project, marks each link with an arrow and drops the place footer", () => {
+    const { container } = render(<TrackWinners results={winnerResults} />);
+
+    const link = screen.getByRole("link", { name: "Hedgy Dar el eeers" });
+    const [project, team] = Array.from(
+      link.querySelectorAll("p"),
+      (node) => node.textContent,
+    );
+    expect([project, team]).toEqual(["Hedgy", "Dar el eeers"]);
+    expect(link.querySelector("svg.lucide-arrow-up-right")).not.toBeNull();
+    expect(
+      container.querySelectorAll('a[href^="https://devfolio.co/"] svg'),
+    ).toHaveLength(12);
+    expect(container.textContent).not.toContain("1st · 2nd · 3rd");
+    expect(
+      screen.getByText("Audit credits by Adevar Labs"),
+    ).toBeInTheDocument();
   });
 });
