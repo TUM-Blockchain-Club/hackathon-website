@@ -18,7 +18,7 @@ Edit `src/content/winners.ts`. Each track accepts `1st`, `2nd` and `3rd` entries
 ```
 
 The track keys are `bsv-association`, `cardano`, `api3`, and `tum-blockchain-club`.
-Leave `published: false` until the announcement is approved. The server component
+Leave `published: false` until the announcement is approved. The 2026 results were published after the closing ceremony on 31 October 2026. The server component
 does not render result names while locked; there is no timed or visitor-operated
 unlock. This switch controls the website display, not visibility of source code
 in the public repository.

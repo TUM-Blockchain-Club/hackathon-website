@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { TrackWinners } from "@/components/sections/track-winners";
-import type { WinnerResults } from "@/content/winners";
+import { winnerResults, type WinnerResults } from "@/content/winners";
 
 const stagedResults: WinnerResults = {
   published: false,
@@ -57,7 +57,9 @@ describe("track winner publication", () => {
   });
 
   it("keeps the locked markup identical when URLs are added", () => {
-    const { container, rerender } = render(<TrackWinners />);
+    const { container, rerender } = render(
+      <TrackWinners results={{ published: false, tracks: {} }} />,
+    );
     const lockedMarkup = container.innerHTML;
     rerender(<TrackWinners results={stagedResults} />);
     expect(container.innerHTML).toBe(lockedMarkup);
@@ -118,4 +120,29 @@ describe("track winner publication", () => {
       expect(screen.getByText("API3 winner").closest("a")).toBeNull();
     },
   );
+
+  it("publishes all twelve 2026 winners with their Devfolio links", () => {
+    render(<TrackWinners results={winnerResults} />);
+
+    expect(screen.queryByText("Winner locked")).not.toBeInTheDocument();
+    expect(screen.queryByText("Results locked")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "Dar el eeers Hedgy" }),
+    ).toHaveAttribute("href", "https://devfolio.co/projects/hedgy-91c5");
+    expect(
+      screen.getByRole("link", { name: "Kiko Devs Kiko" }),
+    ).toHaveAttribute("href", "https://devfolio.co/projects/kiko-38f0");
+    expect(
+      screen.getByRole("link", { name: "BitcoinMiners AfterLife" }),
+    ).toHaveAttribute("href", "https://devfolio.co/projects/afterlife-943e");
+    // CreatorPay places in both the API3 and TUM Blockchain tracks.
+    expect(
+      screen.getAllByRole("link", { name: "Vibeathon CreatorPay" }),
+    ).toHaveLength(2);
+    expect(
+      Object.values(winnerResults.tracks).flatMap((places) =>
+        Object.values(places),
+      ),
+    ).toHaveLength(12);
+  });
 });

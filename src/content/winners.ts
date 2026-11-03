@@ -27,11 +27,77 @@ export type WinnerResults = {
 // if a project wins multiple tracks, add its supplied URL to each matching entry.
 // Adding a URL does NOT authorize changing published: keep false until told to reveal.
 export const winnerResults: WinnerResults = {
-  published: false,
+  // Announced at the Winners & Closing Ceremony on 31 October 2026.
+  published: true,
   tracks: {
-    "bsv-association": {},
-    cardano: {},
-    api3: {},
-    "tum-blockchain-club": {},
+    "bsv-association": {
+      "1st": {
+        team: "Dar el eeers",
+        project: "Hedgy",
+        devfolioUrl: "https://devfolio.co/projects/hedgy-91c5",
+      },
+      "2nd": {
+        team: "Beste Informatiker EuW",
+        project: "Quorum",
+        devfolioUrl: "https://devfolio.co/projects/quorum-53d2",
+      },
+      "3rd": {
+        team: "spritz",
+        project: "mercaTUM",
+        devfolioUrl: "https://devfolio.co/projects/mercatum-2a92",
+      },
+    },
+    cardano: {
+      "1st": {
+        team: "Kiko Devs",
+        project: "Kiko",
+        devfolioUrl: "https://devfolio.co/projects/kiko-38f0",
+      },
+      "2nd": {
+        team: "Los Curiosos",
+        project: "Shelfie",
+        devfolioUrl: "https://devfolio.co/projects/shelfie-7cfa",
+      },
+      "3rd": {
+        team: "LMUblock",
+        project: "AiTelier",
+        devfolioUrl: "https://devfolio.co/projects/aitlier-d8a3",
+      },
+    },
+    api3: {
+      "1st": {
+        team: "Vibeathon",
+        project: "CreatorPay",
+        devfolioUrl: "https://devfolio.co/projects/creatorpay-83fb",
+      },
+      "2nd": {
+        team: "Power puff boys",
+        project: "SupplierPulse",
+        devfolioUrl: "https://devfolio.co/projects/supplierpulse-a820",
+      },
+      "3rd": {
+        // Solo entry without a Devfolio team name.
+        team: "Max Glatzel",
+        project: "DisasterDAO",
+        devfolioUrl: "https://devfolio.co/projects/disasterdao-e213",
+      },
+    },
+    "tum-blockchain-club": {
+      "1st": {
+        team: "BitcoinMiners",
+        project: "AfterLife",
+        devfolioUrl: "https://devfolio.co/projects/afterlife-943e",
+      },
+      "2nd": {
+        team: "Les Léopards de l'Atlas",
+        project: "AgentTresor",
+        devfolioUrl: "https://devfolio.co/projects/agenttresor-27bc",
+      },
+      "3rd": {
+        team: "Vibeathon",
+        project: "CreatorPay",
+        devfolioUrl: "https://devfolio.co/projects/creatorpay-83fb",
+      },
+    },
   },
 };
