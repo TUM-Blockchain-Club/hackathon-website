@@ -88,8 +88,8 @@ export const hackathonPhotos: Slide[] = [
   },
   {
     image: "/images/hackathon-2026/l1036277.webp",
-    title: "See you at the next one",
-    alt: "An attendee smiling at a table in the venue's cafe area",
+    title: "Participant",
+    alt: "A hackathon participant smiling at a table in the venue's cafe area",
   },
 ].map((photo) => ({
   ...photo,
