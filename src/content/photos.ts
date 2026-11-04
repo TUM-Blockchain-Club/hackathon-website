@@ -23,7 +23,7 @@ export const hackathonPhotos: Slide[] = [
   },
   {
     image: "/images/hackathon-2026/l1020346.webp",
-    title: "BSV Track Workshop",
+    title: "BSV Association Track Workshop",
     alt: "A speaker presenting to a seated group of participants",
   },
   {
