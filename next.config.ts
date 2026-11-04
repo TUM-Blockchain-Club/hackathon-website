@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  async redirects() {
+    return [{ source: "/photos", destination: "/#photos", permanent: true }];
+  },
   images: {
     // Serve images as-is: the Vercel plan's Image Optimization quota is used
     // up (new images return 402), and our assets are small logos anyway.

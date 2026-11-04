@@ -1,6 +1,5 @@
 import type { ContentSection } from "@/types/content";
 import { siteConfig } from "@/content/site";
-import { photoAlbum } from "@/content/photos";
 
 export const homeContent = {
   date: "October 30 – 31, 2026",
@@ -15,8 +14,7 @@ export const homeContent = {
     "An in-person hackathon in Munich, hosted by the team behind Europe's largest student-led Web3 event.",
   primaryCta: {
     label: "View all photos",
-    href: photoAlbum.url,
-    external: true,
+    href: "/#photos",
   },
   secondaryCta: {
     label: "View Prizes",

@@ -18,12 +18,11 @@ never stretch a portrait to fill the frame. The carousel lives in
 `src/components/ui/polaroid-line-carousel.tsx` with scoped CSS beside it; homepage
 integration is in `src/components/sections/photo-gallery.tsx`.
 
-The hero box retains its original date and location layout and links to the same
-full album with a "View all photos" primary action, opening in a new tab. Hero text lives in
-`src/content/home.ts`; the album URL remains in `src/content/photos.ts`.
+The hero box retains its original date and location layout. Its "View all photos"
+action links to `/#photos` in the same tab. The gallery's arrow icon opens the
+full Picdrop album. Hero text lives in `src/content/home.ts`; the external album
+URL remains in `src/content/photos.ts`.
 
-Link directly to `/photos` for a dedicated page displaying the same gallery.
-The homepage section also remains available at `/#photos`.
-
-The shared gallery displays the "See you next year" thank-you banner above the
-Polaroids on both the homepage and `/photos`.
+`/photos` permanently redirects to `/#photos`, scrolling directly to the homepage
+section. There is no separate photos page. The "See you next year" thank-you
+banner sits above the Polaroids inside this section.
