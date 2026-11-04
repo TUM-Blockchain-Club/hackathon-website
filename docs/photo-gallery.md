@@ -4,8 +4,8 @@ The homepage displays a looping Polaroid photo strip below the hero. Drag, swipe
 click a neighboring print, scroll horizontally, or use the left/right arrow keys
 to browse. Autoplay pauses on hover or keyboard focus and stays off when reduced
 motion is enabled. TBC logo mounts sit on a curved rope; the gallery has no visible
-navigation buttons or surrounding headings. The arrow icon opens the full Picdrop
-album in a new tab.
+navigation buttons or surrounding headings. A minimal outlined "View full photo album" link below the strip opens the full
+Picdrop album in a new tab, with a short browse-and-download description.
 
 Edit photo order, handwritten captions, alt text, and the album URL in
 `src/content/photos.ts`. The 17 square WebP crops in
@@ -19,8 +19,7 @@ never stretch a portrait to fill the frame. The carousel lives in
 integration is in `src/components/sections/photo-gallery.tsx`.
 
 The hero box retains its original date and location layout. Its "View all photos"
-action links to `/#photos` in the same tab. The gallery's arrow icon opens the
-full Picdrop album. Hero text lives in `src/content/home.ts`; the external album
+action links to `/#photos` in the same tab. The gallery's "View full photo album" button opens the full Picdrop album. Hero text lives in `src/content/home.ts`; the external album
 URL remains in `src/content/photos.ts`.
 
 `/photos` permanently redirects to `/#photos`, scrolling directly to the homepage

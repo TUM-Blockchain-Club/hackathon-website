@@ -17,16 +17,20 @@ export function PhotoGallery() {
             background="transparent"
             ariaLabel="Hackathon photo highlights"
           />
-          <a
-            href={photoAlbum.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="View all photos in the full album"
-            title="View all photos"
-            className="absolute bottom-0 right-0 flex size-11 items-center justify-center text-white/50 transition-colors hover:text-tbc-yellow focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
-          >
-            <ArrowUpRight size={20} aria-hidden="true" />
-          </a>
+          <div className="flex flex-col gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-white/60">
+              Browse and download all event photos.
+            </p>
+            <a
+              href={photoAlbum.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center justify-center gap-3 border border-white/20 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-tbc-yellow hover:text-tbc-yellow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+            >
+              View full photo album
+              <ArrowUpRight size={16} aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </SectionShell>
     </div>
