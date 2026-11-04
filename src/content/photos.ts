@@ -83,8 +83,8 @@ export const hackathonPhotos: Slide[] = [
   },
   {
     image: "/images/hackathon-2026/l1030280.webp",
-    title: "People behind the projects",
-    alt: "Hackathon teams gathered on stage at the end of the event",
+    title: "Participants",
+    alt: "Hackathon participants gathered on stage at the end of the event",
   },
   {
     image: "/images/hackathon-2026/l1036277.webp",
