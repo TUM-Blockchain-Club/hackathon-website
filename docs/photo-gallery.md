@@ -4,7 +4,7 @@ The homepage displays a looping Polaroid photo strip below the hero. Drag, swipe
 click a neighboring print, scroll horizontally, or use the left/right arrow keys
 to browse. Autoplay pauses on hover or keyboard focus and stays off when reduced
 motion is enabled. TBC logo mounts sit on a curved rope; the gallery has no visible
-navigation buttons or surrounding headings. A solid TBC-yellow "View full photo album" button below the strip opens the full
+navigation buttons or surrounding headings. A compact red "View full photo album" button using the landing page button style below the strip opens the full
 Picdrop album in a new tab. The button is centered with no supporting description.
 
 Edit photo order, handwritten captions, alt text, and the album URL in
