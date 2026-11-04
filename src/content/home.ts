@@ -1,5 +1,6 @@
 import type { ContentSection } from "@/types/content";
 import { siteConfig } from "@/content/site";
+import { photoAlbum } from "@/content/photos";
 
 export const homeContent = {
   date: "October 30 – 31, 2026",
@@ -9,12 +10,13 @@ export const homeContent = {
     href: siteConfig.sponsorFormUrl,
   },
   eyebrow: `${siteConfig.venue} // ${siteConfig.dateLabel}`,
-  headline: "Where blockchain meets AI, and ideas become reality overnight.",
+  headline: "Thanks for hacking with us",
   subhead:
-    "An in-person hackathon in Munich, hosted by the team behind Europe's largest student-led Web3 event.",
+    "Relive the hackathon. Browse and download your photos from the full album.",
   primaryCta: {
-    label: "Apply",
-    href: siteConfig.applicationUrl,
+    label: "View all photos",
+    href: photoAlbum.url,
+    external: true,
   },
   secondaryCta: {
     label: "View Prizes",

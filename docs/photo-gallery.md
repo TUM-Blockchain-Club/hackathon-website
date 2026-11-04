@@ -10,6 +10,14 @@ album in a new tab.
 Edit photo order, handwritten captions, alt text, and the album URL in
 `src/content/photos.ts`. The 17 square WebP crops in
 `public/images/hackathon-2026` come from the supplied TBC Hackathon Pics folder.
-Crops retain the original camera angle. The carousel lives in
+Crops retain the original camera angle. Five portrait images (L1010947,
+L1020605, L1020176, L1020188, L1020319) use high-resolution previews from the
+linked Picdrop album because the supplied local JPEGs had already been stretched
+into landscape dimensions. Crop the correctly proportioned originals to a square;
+never stretch a portrait to fill the frame. The carousel lives in
 `src/components/ui/polaroid-line-carousel.tsx` with scoped CSS beside it; homepage
 integration is in `src/components/sections/photo-gallery.tsx`.
+
+The hero box thanks participants and links to the same full album with a
+"View all photos" primary action, opening in a new tab. Hero text lives in
+`src/content/home.ts`; the album URL remains in `src/content/photos.ts`.

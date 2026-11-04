@@ -17,6 +17,7 @@ type HeroAsciiOneProps = {
     label: string;
     href: string;
     disabled?: boolean;
+    external?: boolean;
   };
   secondaryCta: {
     label: string;
@@ -32,6 +33,8 @@ export function HeroAsciiOne({
   eyebrow,
   date,
   location,
+  headline,
+  subhead,
   primaryCta,
   secondaryCta,
   partnerInquiry,
@@ -92,10 +95,33 @@ export function HeroAsciiOne({
             aria-hidden="true"
           />
 
+          {headline && (
+            <h1 className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              {headline}
+            </h1>
+          )}
+          {subhead && (
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-white/75 sm:text-base">
+              {subhead}
+            </p>
+          )}
+
           {/* Date & Location block */}
-          <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+          <div
+            className={cn(
+              "flex flex-col items-center gap-1.5 sm:gap-2",
+              headline && "mt-4",
+            )}
+          >
             {displayDate && (
-              <p className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl [@media(max-height:500px)]:text-2xl">
+              <p
+                className={cn(
+                  "font-display font-bold tracking-tight text-white",
+                  headline
+                    ? "text-base sm:text-lg"
+                    : "text-2xl sm:text-3xl [@media(max-height:500px)]:text-2xl",
+                )}
+              >
                 {displayDate}
               </p>
             )}
@@ -121,7 +147,12 @@ export function HeroAsciiOne({
                   <ArrowRight aria-hidden="true" size={18} />
                 </button>
               ) : (
-                <ShaderCtaLink href={primaryCta.href} size="lg">
+                <ShaderCtaLink
+                  href={primaryCta.href}
+                  size="lg"
+                  target={primaryCta.external ? "_blank" : undefined}
+                  rel={primaryCta.external ? "noopener noreferrer" : undefined}
+                >
                   {primaryCta.label}
                   <ArrowRight aria-hidden="true" size={18} />
                 </ShaderCtaLink>
