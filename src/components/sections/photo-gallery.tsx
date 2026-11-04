@@ -17,10 +17,7 @@ export function PhotoGallery() {
             background="transparent"
             ariaLabel="Hackathon photo highlights"
           />
-          <div className="flex flex-col gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-white/60">
-              Browse and download all event photos.
-            </p>
+          <div className="flex justify-center border-t border-white/10 pt-5">
             <a
               href={photoAlbum.url}
               target="_blank"

@@ -5,7 +5,7 @@ click a neighboring print, scroll horizontally, or use the left/right arrow keys
 to browse. Autoplay pauses on hover or keyboard focus and stays off when reduced
 motion is enabled. TBC logo mounts sit on a curved rope; the gallery has no visible
 navigation buttons or surrounding headings. A minimal outlined "View full photo album" link below the strip opens the full
-Picdrop album in a new tab, with a short browse-and-download description.
+Picdrop album in a new tab. The button is centered with no supporting description.
 
 Edit photo order, handwritten captions, alt text, and the album URL in
 `src/content/photos.ts`. The 17 square WebP crops in
