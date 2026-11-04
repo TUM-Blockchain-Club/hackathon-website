@@ -21,3 +21,6 @@ integration is in `src/components/sections/photo-gallery.tsx`.
 The hero box thanks participants and links to the same full album with a
 "View all photos" primary action, opening in a new tab. Hero text lives in
 `src/content/home.ts`; the album URL remains in `src/content/photos.ts`.
+
+Link directly to `/photos` for a dedicated page displaying the same gallery.
+The homepage section also remains available at `/#photos`.
