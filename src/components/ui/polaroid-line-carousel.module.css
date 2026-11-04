@@ -1,0 +1,115 @@
+.carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--pl-bg);
+  color: var(--pl-ink);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+  outline: none;
+  cursor: grab;
+  isolation: isolate;
+  border: 0;
+}
+.carousel[data-drag="1"] {
+  cursor: grabbing;
+}
+.carousel:focus-visible {
+  outline: 2px solid var(--tbc-yellow);
+  outline-offset: 4px;
+}
+.carousel :global(.pl-chain) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.carousel :global(.pl-card) {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--pl-cw);
+  transform-origin: 50% 0;
+  will-change: transform;
+  cursor: inherit;
+}
+.carousel :global(.pl-print) {
+  margin-top: 26px;
+  background: #f9f6f0;
+  padding: 11px 11px 0;
+  box-shadow:
+    0 2px 4px #0003,
+    0 22px 40px -12px #000b;
+  transition:
+    transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 0.5s ease;
+}
+.carousel :global(.pl-card[data-on="0"] .pl-print) {
+  transform: scale(0.92);
+  filter: saturate(0.72) brightness(0.85);
+}
+.carousel :global(.pl-shot) {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #27232e;
+}
+.carousel :global(.pl-shot img) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+.carousel :global(.pl-note) {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  font:
+    italic 400 17px/1.1 Georgia,
+    serif;
+  color: #302b38;
+  white-space: normal;
+  text-align: center;
+  overflow: hidden;
+}
+.carousel :global(.pl-logo) {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  width: 44px;
+  height: 44px;
+  margin-left: -22px;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 3px #0006);
+}
+.carousel :global(.pl-sr) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .carousel {
+    height: 500px !important;
+  }
+  .carousel :global(.pl-note) {
+    font-size: 15px;
+    height: 46px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .carousel :global(.pl-print) {
+    transition: none;
+  }
+}

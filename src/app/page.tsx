@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 
+import { PhotoGallery } from "@/components/sections/photo-gallery";
 import { SectionShell } from "@/components/primitives/section-shell";
 import { CurrentYearSponsors } from "@/components/sections/current-year-sponsors";
 import { ThankYouBanner } from "@/components/sections/countdown-banner";
@@ -97,6 +98,8 @@ export default function HomePage() {
         primaryCta={homeContent.primaryCta}
         secondaryCta={homeContent.secondaryCta}
       />
+
+      <PhotoGallery />
       <ThankYouBanner />
       {/* 1. Prize Pool */}
       <SectionShell>
