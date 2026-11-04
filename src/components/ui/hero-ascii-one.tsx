@@ -33,8 +33,6 @@ export function HeroAsciiOne({
   eyebrow,
   date,
   location,
-  headline,
-  subhead,
   primaryCta,
   secondaryCta,
   partnerInquiry,
@@ -95,33 +93,10 @@ export function HeroAsciiOne({
             aria-hidden="true"
           />
 
-          {headline && (
-            <h1 className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">
-              {headline}
-            </h1>
-          )}
-          {subhead && (
-            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-white/75 sm:text-base">
-              {subhead}
-            </p>
-          )}
-
           {/* Date & Location block */}
-          <div
-            className={cn(
-              "flex flex-col items-center gap-1.5 sm:gap-2",
-              headline && "mt-4",
-            )}
-          >
+          <div className="flex flex-col items-center gap-1.5 sm:gap-2">
             {displayDate && (
-              <p
-                className={cn(
-                  "font-display font-bold tracking-tight text-white",
-                  headline
-                    ? "text-base sm:text-lg"
-                    : "text-2xl sm:text-3xl [@media(max-height:500px)]:text-2xl",
-                )}
-              >
+              <p className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl [@media(max-height:500px)]:text-2xl">
                 {displayDate}
               </p>
             )}

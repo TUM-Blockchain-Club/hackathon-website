@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 
+import { ThankYouBanner } from "@/components/sections/countdown-banner";
 import { SectionShell } from "@/components/primitives/section-shell";
 import PolaroidLineCarousel from "@/components/ui/polaroid-line-carousel";
 import { hackathonPhotos, photoAlbum } from "@/content/photos";
@@ -7,6 +8,7 @@ import { hackathonPhotos, photoAlbum } from "@/content/photos";
 export function PhotoGallery() {
   return (
     <div id="photos" className="scroll-mt-28">
+      <ThankYouBanner />
       <SectionShell>
         <div className="relative">
           <PolaroidLineCarousel

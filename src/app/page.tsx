@@ -4,7 +4,6 @@ import { ArrowRight, Calendar } from "lucide-react";
 import { PhotoGallery } from "@/components/sections/photo-gallery";
 import { SectionShell } from "@/components/primitives/section-shell";
 import { CurrentYearSponsors } from "@/components/sections/current-year-sponsors";
-import { ThankYouBanner } from "@/components/sections/countdown-banner";
 import { PrizeMainPool } from "@/components/sections/prize-main-pool";
 import { SpeakersJudges } from "@/components/sections/speakers-judges";
 import { TrackWinners } from "@/components/sections/track-winners";
@@ -100,7 +99,6 @@ export default function HomePage() {
       />
 
       <PhotoGallery />
-      <ThankYouBanner />
       {/* 1. Prize Pool */}
       <SectionShell>
         <PrizeMainPool tracks={prizeTracks} showDetailsLink />

@@ -10,9 +10,9 @@ export const homeContent = {
     href: siteConfig.sponsorFormUrl,
   },
   eyebrow: `${siteConfig.venue} // ${siteConfig.dateLabel}`,
-  headline: "Thanks for hacking with us",
+  headline: "Where blockchain meets AI, and ideas become reality overnight.",
   subhead:
-    "Relive the hackathon. Browse and download your photos from the full album.",
+    "An in-person hackathon in Munich, hosted by the team behind Europe's largest student-led Web3 event.",
   primaryCta: {
     label: "View all photos",
     href: photoAlbum.url,
